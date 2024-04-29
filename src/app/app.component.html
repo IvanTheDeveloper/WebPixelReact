@@ -1,0 +1,6 @@
+<app-header></app-header>
+<div [ngClass]="{'darkmode': darkmodeEnabled, 'lightmode': !darkmodeEnabled}">
+    <button (click)="darkmodeEnabled = !darkmodeEnabled">toggle</button>
+    <router-outlet></router-outlet>
+</div>
+<app-footer></app-footer>

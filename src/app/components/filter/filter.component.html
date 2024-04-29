@@ -1,0 +1,29 @@
+<div class="container mat-elevation-z8">
+
+    <!-- Generic text fields example -->
+    <div *ngFor="let field of displayedFields">
+        <mat-form-field>
+            <mat-label>{{ field | titlecase }}</mat-label>
+            <input matInput [(ngModel)]="this[field]">
+        </mat-form-field>
+    </div>
+
+    <!-- Number field example -->
+    <mat-form-field>
+        <mat-label>ID</mat-label>
+        <input matInput [(ngModel)]="id" type="number" placeholder="0" min="0" max="100" step="1">
+    </mat-form-field>
+
+    <!-- Select field example -->
+    <mat-form-field>
+        <mat-label>Enabled</mat-label>
+        <mat-select matInput [(ngModel)]="enabled">
+            <mat-option value="true">Yes</mat-option>
+            <mat-option value="false">No</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="applyFilter()">Aplicar filtro</button>
+    <button mat-raised-button color="primary" (click)="resetFields()">Vaciar campos</button>
+
+</div>

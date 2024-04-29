@@ -1,0 +1,18 @@
+/*  Run command "ng generate environments", then paste database config from firebase project console, it should look something like this:
+
+export const environment = {
+
+    firebaseConfig: {
+        apiKey: "",
+        authDomain: "",
+        databaseURL: "",
+        projectId: "",
+        storageBucket: "",
+        messagingSenderId: "",
+        appId: "",
+        measurementId: ""
+    },
+
+};
+
+*/

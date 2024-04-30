@@ -3,6 +3,8 @@
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. 1" #input>
 </mat-form-field>
 
+<button mat-raised-button (click)="deleteSelected()">Delete selected item/s</button>
+
 <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort cdkDropList cdkDropListOrientation="horizontal"
         (cdkDropListDropped)="drop($event)">

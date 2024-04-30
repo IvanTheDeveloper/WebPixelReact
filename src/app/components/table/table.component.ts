@@ -4,6 +4,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 
 const NAMES: string[] = [
   'Maia',
@@ -41,7 +44,8 @@ export class TableComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(public dialog: MatDialog,
+    private snackBar: MatSnackBar,) {
     // Create 100 users
     const users = Array.from({ length: 100 }, (_, k) => createNewUser(k + 1));
 
@@ -52,6 +56,30 @@ export class TableComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  deleteSelected(): void {
+    const length = this.selection.selected.length
+    if (length > 0) {
+      const dialogRef = this.dialog.open(DeleteDialogComponent, {
+        data: { title: 'users', quantity: length }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.dataSource.data = this.dataSource.data.filter(item => !this.selection.selected.includes(item));
+          this.selection.clear();
+          this.showSnackbar('Successfully deleted ' + length + ' users')
+        }
+      })
+    } else {
+      this.showSnackbar('No users selected')
+    }
+  }
+
+  showSnackbar(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+    })
   }
 
   applyFilter(event: Event) {

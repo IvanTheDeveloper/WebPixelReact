@@ -24,6 +24,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -41,6 +43,7 @@ import { ProfesorFormComponent } from './components/profesor-form/profesor-form.
 import { NoResultsComponent } from './components/no-results/no-results.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { FilterComponent } from './components/filter/filter.component';
+import { TableComponent } from './components/table/table.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +63,7 @@ import { FilterComponent } from './components/filter/filter.component';
     NoResultsComponent,
     PaginatorComponent,
     FilterComponent,
+    TableComponent,
   ],
   imports: [
     BrowserModule,
@@ -87,6 +91,9 @@ import { FilterComponent } from './components/filter/filter.component';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatCheckboxModule,
+    CdkDrag,
+    CdkDropList,
   ],
   providers: [],
   bootstrap: [AppComponent]

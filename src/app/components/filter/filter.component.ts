@@ -24,7 +24,7 @@ export class FilterComponent {
 
   public applyFilter() {
     this.filteredList = this.dataList.filter(item => {
-      return this.allFields.every(field => {
+      return this.displayedFields.every(field => {
         const value = item[field].toLowerCase()
         return value.includes(this[field].toLowerCase())
       })
@@ -32,7 +32,7 @@ export class FilterComponent {
   }
 
   public resetFields() {
-    this.allFields.forEach(field => {
+    this.displayedFields.forEach(field => {
       this[field] = ''
     })
     this.filteredList = this.dataList

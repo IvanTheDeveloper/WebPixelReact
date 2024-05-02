@@ -10,7 +10,7 @@ export const authenticatedUsersGuard: CanActivateFn = (route, state) => {
   if (login.isAuthenticated()) {
     return true
   } else {
-    router.navigateByUrl('/login')
+    router.navigateByUrl('/unauthorized')
     return false
   }
 

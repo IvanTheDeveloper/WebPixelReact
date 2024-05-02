@@ -1,0 +1,47 @@
+<div class="background">
+
+    <mat-card class="mat-elevation-z8">
+        <mat-card-header>
+            <mat-card-title>Change Username</mat-card-title>
+            <mat-card-subtitle>This is your current public alias, which is visible by everyone in this
+                platform.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-form-field appearance="outline">
+                <mat-label>{{displayName}}</mat-label>
+                <input matInput placeholder="Your new name here" [(ngModel)]="newDisplayName">
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-stroked-button color="warn" (click)="newDisplayName = ''"
+                [disabled]="!(newDisplayName?.length! > 0)">Discard</button>
+            <button mat-flat-button color="primary" (click)="updateDisplayName()"
+                [disabled]="!(newDisplayName?.length! > 0)">Update</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-divider></mat-divider>
+
+    <mat-card class="mat-elevation-z8">
+        <mat-card-header>
+            <mat-card-title>Change Profile Picture</mat-card-title>
+            <mat-card-subtitle>This is your current public user avatar, which is visible by everyone in this
+                platform.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-form-field appearance="outline">
+                <mat-label>{{photoUrl}}</mat-label>
+                <input matInput placeholder="Your new name here" [(ngModel)]="newPhotoUrl">
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-stroked-button color="warn" (click)="newPhotoUrl = ''"
+                [disabled]="!(newPhotoUrl?.length! > 0)">Discard</button>
+            <button mat-flat-button color="primary" (click)="updateDisplayName()"
+                [disabled]="!(newPhotoUrl?.length! > 0)">Update</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-divider></mat-divider>
+
+</div>

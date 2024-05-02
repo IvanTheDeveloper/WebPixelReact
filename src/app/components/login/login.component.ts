@@ -52,7 +52,7 @@ export class LoginComponent {
     this.auth.updateCookieToken()
     await new Promise(f => setTimeout(f, 1000))
     this.router.navigateByUrl('/main')
-    this.openSnackBar("Bienvenido " + this.auth.getUsername())
+    this.openSnackBar("Bienvenido " + this.auth.getDisplayName())
   }
 
   loginGoogle() {

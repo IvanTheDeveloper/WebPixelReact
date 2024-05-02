@@ -1,0 +1,49 @@
+.bg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px;
+    gap: 100px;
+}
+
+.title {
+    h1 {
+        font-family: 'Pixel';
+        font-size: xxx-large;
+        color: rgb(134, 57, 97);
+
+        span {
+            color: rgb(0, 126, 126);
+        }
+    }
+}
+
+.description {
+    font-family: 'Pixel';
+
+    div {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        margin-left: 300px;
+        margin-right: 300px;
+
+        h2 {
+            margin-top: 50px;
+            font-size: xx-large;
+            color: rgb(134, 57, 97);
+            font-family: 'Pixel'; //wtf
+        }
+
+        p {
+            font-size: x-large;
+            line-height: 2;
+            margin-top: 10px;
+
+            span {
+                color: rgb(0, 126, 126);
+            }
+        }
+    }
+}

@@ -1,8 +1,13 @@
-* {
+.router-container {
     min-height: 100%;
+    position: relative;
 }
 
-.darkmode {
+app-footer {
+    bottom: 0;
+}
+
+/*.darkmode {
     background-color: #333333;
     color: #ffffff;
 }
@@ -10,4 +15,4 @@
 .lightmode {
     background-color: #ffffff;
     color: #000000;
-}
+}*/

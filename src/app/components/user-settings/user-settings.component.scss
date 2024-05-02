@@ -1,0 +1,43 @@
+.background {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px;
+    gap: 100px;
+}
+
+mat-divider {
+    width: 95%;
+}
+
+mat-card {
+    display: flex;
+    width: 1000px;
+    max-height: 400px;
+    border-radius: 10px;
+    //border: ppx solid black;
+}
+
+mat-card-header {
+    align-self: start;
+}
+
+mat-card-content {
+    align-self: center;
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    mat-form-field {
+        align-self: center;
+        max-width: 900px;
+        width: 100%;
+        border-radius: 50px;
+    }
+}
+
+mat-card-actions {
+    align-self: end;
+    gap: 20px;
+}

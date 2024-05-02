@@ -23,7 +23,7 @@ export class AlumnosDataService {
     return this.objectList;
   }
 
-  updateObject(obj: any) {
+  updateObject(obj: any): Observable<any> {
     const token = this.cookieService.get(this.COOKIE_KEY)
     return this.http.put(this.firebaseUrl + '/' + this.firebaseFolder + '/' + obj.id + '.json?auth=' + token, obj);
   }
@@ -43,7 +43,7 @@ export class AlumnosDataService {
     return this.http.put(this.firebaseUrl + '/' + this.firebaseFolder + '/' + obj.id + '.json?auth=' + token, obj);
   }
 
-  deleteObject(id: string) {
+  deleteObject(id: string): Observable<any> {
     const token = this.cookieService.get(this.COOKIE_KEY)
     let httpOptions = {
       headers: new HttpHeaders({

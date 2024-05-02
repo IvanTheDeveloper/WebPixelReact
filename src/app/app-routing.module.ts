@@ -9,21 +9,43 @@ import { ProfesorListComponent } from './components/profesor-list/profesor-list.
 import { AlumnoListComponent } from './components/alumno-list/alumno-list.component';
 import { CardListComponent } from './components/card-list/card-list.component';
 import { TableComponent } from './components/table/table.component';
+import { UserSettingsComponent } from './components/user-settings/user-settings.component';
+import { HomeComponent } from './components/home/home.component';
+import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
+import { adminGuard } from './guards/admin.guard';
+import { DownloadComponent } from './components/download/download.component';
+import { AboutComponent } from './components/about/about.component';
 
-const landingPage = '/login' //when the user IS NOT logged in
-const mainPage = '/orlas' //when the user IS logged in
-const notFoundPage = undefined
+const landing = '' //when the user IS NOT logged in
+const home = 'home' //when the user IS logged in
+const notAuthenticated = 'unauthorized'
+const notFound = '404'
+
+const login = 'login'
+const register = 'register'
+const userSettings = 'settings'
+const admin = 'table'
+const download = 'download'
+const about = 'about'
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [unauthenticatedUsersGuard] },
   { path: 'orlas', component: CardListComponent },
-  { path: 'tabla', component: TableComponent },
   { path: 'alumnos', component: AlumnoListComponent, canActivate: [authenticatedUsersGuard] },
   { path: 'profesores', component: ProfesorListComponent, canActivate: [authenticatedUsersGuard] },
-  { path: '', redirectTo: landingPage, pathMatch: 'full' }, //default page for welcoming
-  { path: 'main', redirectTo: mainPage, pathMatch: 'full' }, //main website page
-  { path: '**', redirectTo: notFoundPage, component: PageNotFoundComponent }, //view when the url is invalid
+
+  { path: download, component: DownloadComponent },
+  { path: about, component: AboutComponent },
+  { path: login, component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
+  { path: register, component: RegisterComponent, canActivate: [unauthenticatedUsersGuard] },
+  { path: userSettings, component: UserSettingsComponent, canActivate: [authenticatedUsersGuard] },
+  { path: admin, component: TableComponent, canActivate: [adminGuard] },
+
+  { path: '', redirectTo: landing, pathMatch: 'full' }, //default page for welcoming
+  { path: landing, component: HomeComponent },
+  { path: home, component: HomeComponent },
+  { path: notAuthenticated, component: NotAuthenticatedComponent },
+  { path: notFound, component: PageNotFoundComponent },
+  { path: '**', redirectTo: notFound }, //view when the url is invalid
 ]
 
 @NgModule({

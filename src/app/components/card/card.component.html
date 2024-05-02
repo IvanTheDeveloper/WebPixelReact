@@ -6,7 +6,8 @@
         <mat-card-subtitle>{{dataSource?.asignatura}}</mat-card-subtitle>
     </mat-card-header>
     <div class="img-container">
-        <img mat-card-image class="img" src="{{dataSource?.image ?? placeholderImg}}" onerror="this.src=='placeholderImg'" alt="image">
+        <img mat-card-image class="img" src="{{dataSource?.image ?? placeholderImg}}"
+            onerror="this.src=='placeholderImg'" alt="image">
         <div class="overlay"><span>ID: {{dataSource?.id}}</span></div>
     </div>
     <mat-card-content>

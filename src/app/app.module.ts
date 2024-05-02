@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FirebaseModule } from './firebase/firebase.module';
 
+import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -25,7 +26,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -44,6 +45,14 @@ import { NoResultsComponent } from './components/no-results/no-results.component
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { FilterComponent } from './components/filter/filter.component';
 import { TableComponent } from './components/table/table.component';
+import { UserSettingsComponent } from './components/user-settings/user-settings.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { EasterEggComponent } from './components/easter-egg/easter-egg.component';
+import { HomeComponent } from './components/home/home.component';
+import { TestComponent } from './components/test/test.component';
+import { AboutComponent } from './components/about/about.component';
+import { DownloadComponent } from './components/download/download.component';
+import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +73,14 @@ import { TableComponent } from './components/table/table.component';
     PaginatorComponent,
     FilterComponent,
     TableComponent,
+    UserSettingsComponent,
+    ConfirmationDialogComponent,
+    EasterEggComponent,
+    HomeComponent,
+    TestComponent,
+    AboutComponent,
+    DownloadComponent,
+    NotAuthenticatedComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,6 +103,7 @@ import { TableComponent } from './components/table/table.component';
     MatMenuModule,
     MatSidenavModule,
     MatCardModule,
+    MatTabsModule,
     MatTooltipModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,

@@ -1,0 +1,111 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px;
+    gap: 100px;
+    font-family: 'Pixel';
+    background-color: #171717;
+    color: white;
+
+    h1 {
+        font-size: xxx-large;
+        font-weight: bolder;
+        font-family: 'Pixel';
+        color: rgb(252, 147, 201);
+    }
+
+    .instructions {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+
+        h3 {
+            font-size: x-large;
+            font-weight: bold;
+            font-family: 'Pixel';
+            color: rgb(252, 147, 201);
+        }
+
+        p {
+            font-size: large;
+            line-height: 2;
+        }
+
+
+
+    }
+
+    mat-card {
+        background-color: #4050b5;
+        padding: 10px;
+        border: 2px solid #ffffff;
+        border-radius: 10px;
+
+        mat-card-content {
+            display: flex;
+            flex-direction: column;
+
+            span {
+                color: rgb(54, 200, 200);
+            }
+
+        }
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 50px;
+    }
+}
+
+span {
+    color: rgb(54, 200, 200);
+    position: relative;
+    z-index: 1;
+    transition: all 0.5s;
+}
+
+span:hover {
+    color: #4050b5;
+}
+
+span:hover:after {
+    position: absolute;
+    z-index: 2;
+}
+
+span.click:hover:after {
+    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F1199795866437959691.gif%3Fv%3D1&w=64&q=75');
+    top: -100%;
+    left: 30%;
+}
+
+span.exe:hover:after {
+    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F852167683780116480.gif%3Fv%3D1&w=64&q=75');
+    top: -100%;
+    left: 30%;
+}
+
+span.extract:hover:after {
+    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F855305969617600523.gif%3Fv%3D1&w=64&q=75');
+    top: -100%;
+    left: 30%;
+}
+
+span.wizard:hover:after {
+    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F931572905840627782.gif%3Fv%3D1&w=64&q=75');
+    top: 100%;
+    left: 50%;
+}
+
+span.download:hover:after {
+    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F410073980117188609.gif%3Fv%3D1&w=64&q=75');
+    top: -100%;
+    left: 30%;
+    width: 10px;
+    height: 1%;
+    /* Cambia el valor de acuerdo al tamaño deseado */
+}

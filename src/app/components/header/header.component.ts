@@ -29,23 +29,11 @@ export class HeaderComponent {
     this.update()
   }
 
-  tabChanged(event: MatTabChangeEvent) {
-    switch (event.index) {
-      case 0:
-        this.router.navigateByUrl('/home');
-        break;
-      case 1:
-        this.router.navigateByUrl('/download');
-        break;
-      case 2:
-        this.router.navigateByUrl('/about');
-        break;
-      case 3:
-        this.router.navigateByUrl('/table');
-        break;
-      default:
-        break;
-    }
+  scrollToBottom(): void {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
   }
 
 }

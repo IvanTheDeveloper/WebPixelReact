@@ -1,48 +1,115 @@
-.bg {
+.parallax-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+
+    #down {
+        position: absolute;
+        left: 0;
+        top: -100px;
+        width: 100%;
+        height: 55%;
+        background-image: url('https://wallpapers.com/images/hd/hollow-knight-blue-butterflies-htthva79qwf3msbg.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: 0;
+    }
+
+    #up {
+        position: absolute;
+        top: 1685px;
+        right: 500px;
+        z-index: 1;
+    }
+
+    #left {
+        position: absolute;
+        top: 1180px;
+        left: -300px;
+        z-index: 1;
+    }
+
+    #right {
+        position: absolute;
+        top: 1720px;
+        right: -800px;
+        z-index: 1;
+    }
+
+}
+
+.content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 100px;
     gap: 100px;
-}
+    position: relative;
+    z-index: 2;
 
-.title {
     h1 {
         font-family: 'Pixel';
         font-size: xxx-large;
-        color: rgb(134, 57, 97);
+        color: rgb(252, 147, 201);
+        text-shadow: -4px 4px 0px rgb(0, 0, 0);
+        transition: all 1s;
 
         span {
-            color: rgb(0, 126, 126);
+            color: rgb(54, 200, 200);
         }
     }
-}
 
-.description {
-    font-family: 'Pixel';
+    h1:hover {
+        transform: scale(1.5);
+        text-shadow: -4px 4px 10px rgb(0, 0, 0);
+    }
 
-    div {
+    iframe {
+        --iframe-height: 500px;
+        height: var(--iframe-height);
+        width: calc((560/315) * var(--iframe-height));
+    }
+
+
+    .description {
         display: flex;
         flex-direction: column;
-        text-align: center;
-        margin-left: 300px;
-        margin-right: 300px;
+        font-family: 'Pixel';
+        color: #ffffff;
+        text-shadow: -4px 4px 0px rgb(0, 0, 0);
+        gap: 100px;
 
-        h2 {
-            margin-top: 50px;
-            font-size: xx-large;
-            color: rgb(134, 57, 97);
-            font-family: 'Pixel'; //wtf
-        }
+        div {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            margin-left: 300px;
+            margin-right: 300px;
 
-        p {
-            font-size: x-large;
-            line-height: 2;
-            margin-top: 10px;
+            h2 {
+                font-size: xx-large;
+                color: rgb(252, 147, 201);
+                font-family: 'Pixel'; //wtf
+                transition: all 0.5s;
+            }
 
-            span {
-                color: rgb(0, 126, 126);
+            p {
+                font-size: x-large;
+                line-height: 2;
+                margin-top: 10px;
+                transition: all 0.5s;
+
+                span {
+                    color: rgb(54, 200, 200);
+                }
+            }
+
+            h2:hover,
+            p:hover {
+                transform: scale(1.1);
+                text-shadow: -4px 4px 4px rgb(0, 0, 0);
             }
         }
     }

@@ -1,1 +1,95 @@
-<p>download works!</p>
+<mat-tab-group (selectedTabChange)="tabChanged($event)" [selectedIndex]="selectedTabIndex" backgroundColor="primary">
+    <mat-tab label="Windows {{platform == 'Windows' ? '(Current Platform)' : ''}}"></mat-tab>
+    <mat-tab label="MacOS {{platform == 'MacOS' ? '(Current Platform)' : ''}}"></mat-tab>
+    <mat-tab label="Linux {{platform == 'Linux' ? '(Current Platform)' : ''}}"></mat-tab>
+</mat-tab-group>
+
+<div class="content">
+
+    <h1>How to play:</h1>
+    <div *ngIf="selectedTabIndex == 0" class="instructions">
+        <div>
+            <h3>Portable version:</h3>
+            <p>Press the relative download button and wait until process finishes, then open windows file explorer and
+                navigate to your <span class="download">downloads</span> folder (Usually its "C:\users\you\downloads" by
+                default).</p>
+            <p>After that, right click on the file you just downloaded and select one of the <span
+                    class="extract">extract</span>
+                options (depending of your computer, you may need to have installed a compressor such as WinRar).</p>
+            <p>Lasty, open the new extracted folder and double click the <span class="exe">.exe</span> file that has the
+                same name
+                as the game and the program will start.</p>
+
+        </div>
+        <div>
+            <h3>Installer version:</h3>
+            <p>Press the relative download button and wait until process finishes, then open windows file explorer and
+                navigate to your <span class="download">downloads</span> folder (Usually its "C:\users\you\downloads" by
+                default).</p>
+            <p>After that, <span class="click">double click</span> on the file you just downloaded and a window will
+                pop-up (You may
+                first be prompted to run the program as administrator), so just follow
+                the <span class="wizard">install wizard</span> instrucions.
+            </p>
+        </div>
+    </div>
+
+    <div *ngIf="selectedTabIndex == 1">
+        <span> b Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil at sapiente reprehenderit rerum amet,
+            quo
+            libero voluptate neque culpa totam nesciunt blanditiis ducimus suscipit doloremque et? Provident,
+            distinctio.
+            Obcaecati, doloribus.</span>
+    </div>
+
+    <div *ngIf="selectedTabIndex == 2">
+        <span>c Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil at sapiente reprehenderit rerum amet, quo
+            libero voluptate neque culpa totam nesciunt blanditiis ducimus suscipit doloremque et? Provident,
+            distinctio.
+            Obcaecati, doloribus.</span>
+    </div>
+
+    <mat-card>
+        <mat-card-content>
+            <p>Device: <span>{{platform}}</span> (browser)</p>
+            <p>Architecture: <span>{{architecture}}</span> bits</p>
+            <p>Language: <span>{{language}}</span></p>
+        </mat-card-content>
+    </mat-card>
+
+    <div class="buttons">
+        <a href="{{url}}" download="game.jpg">
+            <button mat-stroked-button color="accent">Download portable</button>
+        </a>
+        <a href="{{url}}" download="game.jpg">
+            <button mat-stroked-button color="accent">Download installer</button>
+        </a>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<!--
+<div class="content">
+
+    <div>
+        <input type="file" (change)="onFileSelected($event)" #fileUpload hidden>
+        <button mat-fab (click)="fileUpload.click()" color="primary">
+            <mat-icon>cloud_upload</mat-icon>
+        </button>
+        <span>{{fileName ? (isUploading ? 'Uploading' : 'Uploaded') + ' file "' + fileName + '"' : 'No
+            fileselected'}}</span>
+    </div>
+
+    <div *ngIf="isUploading">
+        <mat-progress-bar mode="buffer" dir="rtl"></mat-progress-bar>
+        <mat-icon (click)="cancelUpload()">delete_forever</mat-icon>
+    </div>
+
+</div>
+-->

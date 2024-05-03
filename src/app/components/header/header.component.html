@@ -2,15 +2,16 @@
     <button mat-icon-button [matMenuTriggerFor]="menu" (click)="update()">
         <mat-icon>menu</mat-icon>
     </button>
-    <span>Pixel React</span>
+    <h1>Pixel React</h1>
     <span class="example-spacer"></span>
 
-    <mat-tab-group (selectedTabChange)="tabChanged($event)" backgroundColor="primary">
-        <mat-tab label="Home"></mat-tab>
-        <mat-tab label="Download"></mat-tab>
-        <mat-tab label="About Us"></mat-tab>
-        <mat-tab label="Admin"></mat-tab>
-    </mat-tab-group>
+    <nav mat-tab-nav-bar backgroundColor="primary">
+        <a mat-tab-link routerLink="/home" routerLinkActive #rl1="routerLinkActive" [active]="rl1.isActive">Home</a>
+        <a mat-tab-link routerLink="/download" routerLinkActive #rl2="routerLinkActive"
+            [active]="rl2.isActive">Download</a>
+        <a mat-tab-link routerLink="/about" routerLinkActive #rl3="routerLinkActive" [active]="rl3.isActive">About</a>
+        <a mat-tab-link routerLink="/table" routerLinkActive #rl4="routerLinkActive" [active]="rl4.isActive">Admin</a>
+    </nav>
 
     <span class="example-spacer"></span>
     <span *ngIf="userAuthenticated" matTooltip="Yep, thats you!">{{username ?? 'user'}} (role)</span>
@@ -33,5 +34,9 @@
     <button mat-menu-item (click)="navLogout()" *ngIf="userAuthenticated">
         <mat-icon>logout</mat-icon>
         <span>Logout</span>
+    </button>
+    <button mat-menu-item (click)="scrollToBottom()">
+        <mat-icon>info</mat-icon>
+        <span>About</span>
     </button>
 </mat-menu>

@@ -9,14 +9,19 @@
         <a mat-tab-link routerLink="/home" routerLinkActive #rl1="routerLinkActive" [active]="rl1.isActive">Home</a>
         <a mat-tab-link routerLink="/download" routerLinkActive #rl2="routerLinkActive"
             [active]="rl2.isActive">Download</a>
-        <a mat-tab-link routerLink="/about" routerLinkActive #rl3="routerLinkActive" [active]="rl3.isActive">About</a>
-        <a mat-tab-link routerLink="/table" routerLinkActive #rl4="routerLinkActive" [active]="rl4.isActive">Admin</a>
+        <a mat-tab-link routerLink="/about" routerLinkActive #rl3="routerLinkActive" [active]="rl3.isActive">About
+            Us</a>
+        <a mat-tab-link routerLink="/table" routerLinkActive #rl4="routerLinkActive" [active]="rl4.isActive"
+            *ngIf="userAuthenticated">Admin</a>
     </nav>
 
     <span class="example-spacer"></span>
-    <span *ngIf="userAuthenticated" matTooltip="Yep, thats you!">{{username ?? 'user'}} (role)</span>
-</mat-toolbar>
+    <div>
+        <span *ngIf="userAuthenticated" matTooltip="Yep, thats you!">{{username ?? 'user'}} (role)</span>
+        <span *ngIf="!userAuthenticated">Browsing as a guest</span>
+    </div>
 
+</mat-toolbar>
 
 <mat-menu #menu>
     <button mat-menu-item routerLink="/register" *ngIf="!userAuthenticated">
@@ -31,7 +36,7 @@
         <mat-icon>settings</mat-icon>
         <span>Settings</span>
     </button>
-    <button mat-menu-item (click)="navLogout()" *ngIf="userAuthenticated">
+    <button mat-menu-item routerLink="/login" (click)="logout()" *ngIf="userAuthenticated">
         <mat-icon>logout</mat-icon>
         <span>Logout</span>
     </button>

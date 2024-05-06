@@ -2,48 +2,52 @@
   <mat-card>
     <mat-progress-bar mode="indeterminate" *ngIf="progressBar"></mat-progress-bar>
     <mat-card-header class="centerer">
-      <mat-card-title>Registro</mat-card-title>
+      <mat-card-title>Create new account</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
       <form [formGroup]="fieldForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="fill">
-          <mat-label>Correo</mat-label>
-          <input matInput formControlName="email" placeholder="Introduce tu correo electónico">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="Introduce your email">
           <mat-icon matSuffix></mat-icon>
-          <mat-error *ngIf="email?.hasError('required')">Este campo es obligatorio</mat-error>
-          <mat-error *ngIf="email?.hasError('email')">El correo no es válido</mat-error>
+          <mat-error *ngIf="email?.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="email?.hasError('email')">Invalid email</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
-          <mat-label>Contraseña</mat-label>
+          <mat-label>Password</mat-label>
           <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'"
-            placeholder="Introduce tu nueva contraseña">
-          <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{ hidePassword ? 'visibility_off' :
+            placeholder="Create a new password">
+          <mat-icon matSuffix style="transform: rotate(90deg);" (click)="genPwd()"
+            matTooltip="Generate safe password">key</mat-icon>
+          <mat-icon matSuffix (click)="hidePassword = !hidePassword" matTooltip="{{ hidePassword ? 'reveal password' :
+          'hide password'}}">{{ hidePassword ? 'visibility_off' :
             'visibility'}}</mat-icon>
-          <mat-error *ngIf="password?.hasError('required')">Este campo es obligatorio.</mat-error>
-          <mat-error *ngIf="password?.hasError('pattern'); else passwordElseBlock">La contraseña debe contener al menos una mayúscula, una minúscula, un número y un símbolo.</mat-error>
-          <ng-template #passwordElseBlock><mat-error *ngIf="password?.hasError('minlength') || password?.hasError('maxlength')">La contraseña
-              debe tener entre 8 y 30 caracteres.</mat-error></ng-template>
+          <mat-error *ngIf="password?.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="password?.hasError('pattern'); else passwordElseBlock">Password must have at least an
+            uppercase and a lowercase letters, a number and a symbol</mat-error>
+          <ng-template #passwordElseBlock><mat-error
+              *ngIf="password?.hasError('minlength') || password?.hasError('maxlength')">Password must
+              have a length between 8 and 30 characters</mat-error></ng-template>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
-          <mat-label>Repite tu contraseña</mat-label>
+          <mat-label>Confirm password</mat-label>
           <input matInput formControlName="confirmPassword" [type]="hideConfirmPassword ? 'password' : 'text'"
-            placeholder="Introduce tu contraseña de nuevo">
-          <mat-icon matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">{{ hideConfirmPassword ?
-            'visibility_off' : 'visibility' }}</mat-icon>
-          <mat-error *ngIf="confirmPassword?.hasError('required'); else confirmPasswordElseBlock">Este campo es
-            obligatorio.</mat-error>
-          <ng-template #confirmPasswordElseBlock><mat-error *ngIf="!doPasswordsMatch()">Las contraseñas no
-              coinciden</mat-error></ng-template>
+            placeholder="Repeat your password">
+          <mat-icon matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" matTooltip="{{ hideConfirmPassword ? 'reveal password' :
+          'hide password'}}">{{ hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error *ngIf="confirmPassword?.hasError('required'); else confirmPasswordElseBlock">Required</mat-error>
+          <ng-template #confirmPasswordElseBlock><mat-error *ngIf="!doPasswordsMatch()">Passwords do not
+              match</mat-error></ng-template>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit">Registrarse</button>
+        <button mat-raised-button color="primary" type="submit">Register</button>
       </form>
 
       <div class="centerer">
-        <p>¿Ya tienes cuenta? <a routerLink="/login">¡Inicia sesión!</a></p>
+        <p>Already have an account? <a routerLink="/login">Log in!</a></p>
       </div>
     </mat-card-content>
   </mat-card>

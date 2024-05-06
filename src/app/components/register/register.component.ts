@@ -65,18 +65,80 @@ export class RegisterComponent {
     }
   }
 
+  genPwd() {
+    const numbers = "0123456789";
+
+    const upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+    const specialCharacters = "@#$%&¿?¡!*^-_";
+    const regexUpper = /[A-Z]{1, 7}$/g;
+    const regexLower = /[a-z]{1, 7}$/g;
+    const regexDigit = /[0-9]{1, 7}$/g;
+    const regexSplCharacters = /[@#$%&¿?¡!*^-_]{1, 7}$/g;
+    const pwndMinLength = 8;
+    const pwndMaxLength = 30;
+    let generatedPassword = "";
+
+    const characterList = numbers + upperCaseLetters + lowerCaseLetters + specialCharacters;
+    const characterListLength = characterList.length;
+
+    const generateRandom = () => crypto.getRandomValues(new Uint32Array(1))[0] / 2 ** 32;
+
+    if (!regexLower.test(generatedPassword)) {
+      const characterIndex = Math.round(generateRandom() * (lowerCaseLetters.length - 1));
+      generatedPassword = generatedPassword + lowerCaseLetters.charAt(characterIndex);
+    }
+    if (!regexUpper.test(generatedPassword)) {
+      const characterIndex = Math.round(generateRandom() * (upperCaseLetters.length - 1));
+      generatedPassword = generatedPassword + upperCaseLetters.charAt(characterIndex);
+    }
+    if (!regexDigit.test(generatedPassword)) {
+      const characterIndex = Math.round(generateRandom() * (numbers.length - 1));
+      generatedPassword = generatedPassword + numbers.charAt(characterIndex);
+    }
+    if (!regexSplCharacters.test(generatedPassword)) {
+      const characterIndex = Math.round(generateRandom() * (specialCharacters.length - 1));
+      generatedPassword = generatedPassword + specialCharacters.charAt(characterIndex);
+    }
+
+    for (let i = 0; i < Math.round(generateRandom() * (pwndMaxLength - pwndMinLength)) + pwndMinLength; i++) {
+      const characterIndex = Math.round(generateRandom() * (characterListLength - 1));
+      generatedPassword = generatedPassword + characterList.charAt(characterIndex);
+    }
+
+    this.fieldForm.get('password')?.setValue(generatedPassword)
+    navigator.clipboard.writeText(generatedPassword)
+    this.openSnackBar('Password copied to clipboard!')
+  }
+
+  downloadTxtFile() {
+    const text = 'Email: ' + this.email?.getRawValue() + '\n' + 'Password: ' + this.password?.getRawValue() + '\n' + 'Login here: ' + location.origin + '/login'
+    const fileName = 'credentials.txt';
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(link);
+  }
+
+
   onSubmit(): void {
     if (this.fieldForm.valid) {
       const email = this.fieldForm.get('email')?.value;
       const password = this.fieldForm.get('password')?.value;
       this.auth.register(email, password).then(
         () => {
+          this.downloadTxtFile()
           this.LoginActions()
         }
       ).catch(
         error => {
-          const errorMessage = error.code == 'auth/email-already-in-use' ? 'ya existe un usuario con ese correo' : 'desconocido'
-          this.openSnackBar("Error al registrarse: " + errorMessage)
+          const errorMessage = error.code == 'auth/email-already-in-use' ? 'There is already an account with that email' : 'Unknown'
+          this.openSnackBar("Register error: " + errorMessage)
         }
       )
     }
@@ -86,8 +148,8 @@ export class RegisterComponent {
     this.progressBar = true
     this.auth.updateCookieToken()
     await new Promise(f => setTimeout(f, 1000))
-    this.router.navigateByUrl('/main')
-    this.openSnackBar("Bienvenido " + this.auth.getDisplayName())
+    this.router.navigateByUrl('/home')
+    this.openSnackBar('Welcome ' + this.auth.getDisplayName() + '!')
   }
 
   openSnackBar(text: string) {
@@ -95,7 +157,7 @@ export class RegisterComponent {
       duration: 5000,
       horizontalPosition: 'center',
       verticalPosition: 'bottom'
-    });
+    })
   }
 
 }

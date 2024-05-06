@@ -1,0 +1,20 @@
+.container {
+    background-color: #333333;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    gap: 3%;
+    padding: 1%;
+
+    img {
+        display: flex;
+        align-self: center;
+        width: 3%;
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+    }
+
+}

@@ -17,16 +17,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -53,6 +54,8 @@ import { TestComponent } from './components/test/test.component';
 import { AboutComponent } from './components/about/about.component';
 import { DownloadComponent } from './components/download/download.component';
 import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
+import { DevComponent } from './components/dev/dev.component';
+import { ScamComponent } from './components/scam/scam.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +84,8 @@ import { NotAuthenticatedComponent } from './components/not-authenticated/not-au
     AboutComponent,
     DownloadComponent,
     NotAuthenticatedComponent,
+    DevComponent,
+    ScamComponent,
   ],
   imports: [
     BrowserModule,
@@ -110,6 +115,7 @@ import { NotAuthenticatedComponent } from './components/not-authenticated/not-au
     MatFormFieldModule,
     MatSelectModule,
     MatCheckboxModule,
+    MatSlideToggleModule,
     CdkDrag,
     CdkDropList,
   ],

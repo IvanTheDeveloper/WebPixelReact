@@ -40,8 +40,8 @@ export class LoginComponent {
         }
       ).catch(
         error => {
-          const errorMessage = error.code == 'auth/invalid-credential' ? 'credenciales inválidas' : 'desconocido'
-          this.openSnackBar("Error al iniciar sesión: " + errorMessage)
+          const errorMessage = error.code == 'auth/invalid-credential' ? 'invalid credentials' : 'unknown'
+          this.openSnackBar("Error signing in: " + errorMessage)
         }
       )
     }
@@ -51,8 +51,8 @@ export class LoginComponent {
     this.progressBar = true
     this.auth.updateCookieToken()
     await new Promise(f => setTimeout(f, 1000))
-    this.router.navigateByUrl('/main')
-    this.openSnackBar("Bienvenido " + this.auth.getDisplayName())
+    this.router.navigateByUrl('/home')
+    this.openSnackBar('Welcome ' + this.auth.getDisplayName() + '!')
   }
 
   loginGoogle() {
@@ -63,7 +63,7 @@ export class LoginComponent {
     ).catch(
       error => {
         const test = error.code == 'auth/cancelled-popup-request' || error.code == 'auth/popup-closed-by-user'
-        test ? '' : this.openSnackBar('Error al iniciar sesión con google')
+        test ? '' : this.openSnackBar('Error signing in with google')
       }
     )
   }

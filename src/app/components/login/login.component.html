@@ -2,39 +2,39 @@
     <mat-card>
         <mat-progress-bar mode="indeterminate" *ngIf="progressBar"></mat-progress-bar>
         <mat-card-header class="centerer">
-            <mat-card-title>Inicio de sesión</mat-card-title>
+            <mat-card-title>Sign in</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
             <form [formGroup]="fieldForm" (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="fill">
-                    <mat-label>Correo</mat-label>
-                    <input matInput formControlName="email" placeholder="Introduce tu email">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" placeholder="Introduce your email">
                     <mat-icon matSuffix></mat-icon>
-                    <mat-error *ngIf="email?.hasError('required')">Este campo es obligatorio</mat-error>
-                    <mat-error *ngIf="email?.hasError('email')">El correo no es válido</mat-error>
+                    <mat-error *ngIf="email?.hasError('required')">Required</mat-error>
+                    <mat-error *ngIf="email?.hasError('email')">Invalid email</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">
-                    <mat-label>Contraseña</mat-label>
+                    <mat-label>Password</mat-label>
                     <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'"
-                        placeholder="Introduce tu contraseña">
-                    <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{ hidePassword ? 'visibility_off' :
-                        'visibility' }}</mat-icon>
-                    <mat-error *ngIf="password?.hasError('required')">Este campo es obligatorio.</mat-error>
-                    <mat-error *ngIf="password?.hasError('pattern'); else elseBlock">La contraseña debe contener al
-                        menos una mayúscula, una minúscula, un número y un símbolo.</mat-error>
+                        placeholder="Introduce your password">
+                    <mat-icon matSuffix (click)="hidePassword = !hidePassword" matTooltip="{{ hidePassword ? 'reveal password' :
+                    'hide password'}}">{{ hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    <mat-error *ngIf="password?.hasError('required')">Required</mat-error>
+                    <mat-error *ngIf="password?.hasError('pattern'); else elseBlock">Password must have at least an
+                        uppercase and a lowercase letters, a number and a symbol</mat-error>
                     <ng-template #elseBlock><mat-error
-                            *ngIf="password?.hasError('minlength') || password?.hasError('maxlength')">La contraseña
-                            debe tener entre 8 y 30 caracteres.</mat-error></ng-template>
+                            *ngIf="password?.hasError('minlength') || password?.hasError('maxlength')">Password must
+                            have a length between 8 and 30 characters</mat-error></ng-template>
                 </mat-form-field>
 
-                <button mat-raised-button color="primary" type="submit">Acceder</button>
-                <button mat-raised-button color="primary" (click)="loginGoogle()">Acceder mediante Google</button>
+                <button mat-raised-button color="primary" type="submit">Login</button>
+                <button mat-raised-button color="primary" (click)="loginGoogle()">Login with Google</button>
             </form>
 
             <div class="centerer">
-                <p>¿No tienes cuenta? <a routerLink="/register">¡Regístrate ahora!</a></p>
+                <p>Don't have an account? <a routerLink="/register">¡Register now!</a></p>
             </div>
         </mat-card-content>
     </mat-card>

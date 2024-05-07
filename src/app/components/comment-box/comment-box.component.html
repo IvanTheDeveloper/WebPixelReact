@@ -1,0 +1,27 @@
+<div class="container">
+
+    <form [formGroup]="formController">
+        <mat-form-field>
+            <mat-label>Leave a comment</mat-label>
+            <textarea matInput cdkTextareaAutosize formControlName="message"></textarea>
+            <div *ngIf="message?.invalid && (message?.dirty && message?.touched)">
+                <mat-error *ngIf="message?.hasError('required')">Cannot publish an empty comment</mat-error>
+                <mat-error *ngIf="message?.hasError('maxlength')">Maximum length is 1000 characters</mat-error>
+            </div>
+
+        </mat-form-field>
+        <button mat-raised-button (click)="onSubmit()" color="primary"
+            [disabled]="!formController.valid">Publish</button>
+    </form>
+
+    <div *ngIf="progressSpinner" class="spinner">
+        <mat-spinner mode="indeterminate" [diameter]="200"></mat-spinner>
+    </div>
+
+    <div class="list" *ngIf="!progressSpinner">
+        <div *ngFor="let item of objectList">
+            <app-comment [comment]="item"></app-comment>
+        </div>
+    </div>
+
+</div>

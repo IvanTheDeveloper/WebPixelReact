@@ -56,6 +56,8 @@ import { DownloadComponent } from './components/download/download.component';
 import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
 import { DevComponent } from './components/dev/dev.component';
 import { ScamComponent } from './components/scam/scam.component';
+import { CommentBoxComponent } from './components/comment-box/comment-box.component';
+import { CommentComponent } from './components/comment/comment.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +88,8 @@ import { ScamComponent } from './components/scam/scam.component';
     NotAuthenticatedComponent,
     DevComponent,
     ScamComponent,
+    CommentBoxComponent,
+    CommentComponent,
   ],
   imports: [
     BrowserModule,

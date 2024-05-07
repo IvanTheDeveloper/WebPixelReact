@@ -41,12 +41,12 @@ export class DownloadComponent {
   }
 
   onFileSelected(event: any) {
-    /*const filePath = `game/widows/installer.exe`;
-    filePath = `game/linux/portable.zip`;*/
+    /*const filePath = `releasaes/widows/installer.exe`;
+    filePath = `releases/linux/portable.zip`;*/
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;
-      const filePath = `game/${Date.now()}_${this.fileName}`;
+      const filePath = `releasaes/${Date.now()}_${this.fileName}`;
       this.task = this.uploadFileService.uploadFile(filePath, file)
       this.isUploading = true
       this.task.then(

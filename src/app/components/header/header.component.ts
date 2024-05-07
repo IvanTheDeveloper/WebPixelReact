@@ -30,7 +30,7 @@ export class HeaderComponent {
     this.auth.logout()
   }
 
-  scrollToBottom(): void {
+  scrollToBottom() {
     window.scrollTo({
       top: document.body.scrollHeight,
       behavior: 'smooth'

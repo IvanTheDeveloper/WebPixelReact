@@ -5,9 +5,6 @@ import { authenticatedUsersGuard } from './guards/authenticated-users.guard';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { ProfesorListComponent } from './components/profesor-list/profesor-list.component';
-import { AlumnoListComponent } from './components/alumno-list/alumno-list.component';
-import { CardListComponent } from './components/card-list/card-list.component';
 import { TableComponent } from './components/table/table.component';
 import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 import { HomeComponent } from './components/home/home.component';
@@ -15,8 +12,9 @@ import { NotAuthenticatedComponent } from './components/not-authenticated/not-au
 import { adminGuard } from './guards/admin.guard';
 import { DownloadComponent } from './components/download/download.component';
 import { AboutComponent } from './components/about/about.component';
+import { CommentBoxComponent } from './components/comment-box/comment-box.component';
 
-const landing = '' //when the user IS NOT logged in
+const landing = 'landing' //when the user IS NOT logged in
 const home = 'home' //when the user IS logged in
 const notAuthenticated = 'unauthorized'
 const notFound = '404'
@@ -29,9 +27,7 @@ const download = 'download'
 const about = 'about'
 
 const routes: Routes = [
-  { path: 'orlas', component: CardListComponent },
-  { path: 'alumnos', component: AlumnoListComponent, canActivate: [authenticatedUsersGuard] },
-  { path: 'profesores', component: ProfesorListComponent, canActivate: [authenticatedUsersGuard] },
+  { path: 'comments', component: CommentBoxComponent },
 
   { path: download, component: DownloadComponent },
   { path: about, component: AboutComponent },

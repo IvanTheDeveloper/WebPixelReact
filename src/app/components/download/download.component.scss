@@ -77,35 +77,20 @@ span:hover:after {
     z-index: 2;
 }
 
-span.click:hover:after {
+span.dclick:hover:after {
     content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F1199795866437959691.gif%3Fv%3D1&w=64&q=75');
     top: -100%;
     left: 30%;
 }
 
-span.exe:hover:after {
-    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F852167683780116480.gif%3Fv%3D1&w=64&q=75');
-    top: -100%;
-    left: 30%;
-}
-
-span.extract:hover:after {
-    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F855305969617600523.gif%3Fv%3D1&w=64&q=75');
-    top: -100%;
-    left: 30%;
+span.rclick:hover:after {
+    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F1170652589809999952.gif%3Fv%3D1&w=64&q=75');
+    top: -190%;
+    left: 10%;
 }
 
 span.wizard:hover:after {
-    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F931572905840627782.gif%3Fv%3D1&w=64&q=75');
+    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F835219413103804436.gif%3Fv%3D1&w=64&q=75');
     top: 100%;
-    left: 50%;
-}
-
-span.download:hover:after {
-    content: url('https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F410073980117188609.gif%3Fv%3D1&w=64&q=75');
-    top: -100%;
-    left: 30%;
-    width: 10px;
-    height: 1%;
-    /* Cambia el valor de acuerdo al tamaño deseado */
+    left: 40%;
 }

@@ -5,6 +5,7 @@ import { CommentService } from 'src/app/services/comment.service';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isNullOrEmpty } from 'src/app/others/utils';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-comment',
@@ -12,28 +13,21 @@ import { isNullOrEmpty } from 'src/app/others/utils';
   styleUrls: ['./comment.component.scss']
 })
 export class CommentComponent {
+  readonly placeholderImg: string = 'assets/images/placeholder_img.svg'
   @Input() comment: any
   author: any
+
+  isModOrAdmin = false
   isLoading = false
-  readonly placeholderImg: string = 'assets/images/placeholder_img.svg'
-  currentUid: any
+  isCommentDeleted = false
+  editModeEnabled = false
+  editedMessage = ''
+
+  currentUid!: string
   upvoted!: boolean
   downvoted!: boolean
 
-  editModeEnabled = false
-  editedMessage = ''
-  isCommentDeleted = false
-
-  defaultUser = {
-    data: {
-      username: 'deleted'
-    },
-    images: {
-      avatarUrl: 'https://cdn-icons-png.flaticon.com/512/21/21104.png'
-    }
-  }
-
-  constructor(private auth: AuthService, private commentService: CommentService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
+  constructor(private auth: AuthService, private commentService: CommentService, private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     if (isNullOrEmpty(this.comment)) {
@@ -51,10 +45,6 @@ export class CommentComponent {
     })
   }
 
-  private dd(obj: any) {
-    alert('obj: ' + JSON.stringify(obj))
-  }
-
   getComment() {
     const id = this.route.snapshot.paramMap.get('id') ?? ''
     this.commentService.getObjectById(id).subscribe(
@@ -67,19 +57,15 @@ export class CommentComponent {
   }
 
   getUser() {
-    this.auth.getDbUserById(this.comment.authorId).then(
-      (result) => {
-        isNullOrEmpty(result) ? this.author = this.defaultUser : this.author = result
-      },
-      () => {
-        this.author = this.defaultUser
-      }
-    )
+    this.auth.getDbUserById(this.comment.authorId).then((result) => this.author = result)
   }
 
   initData() {
     this.getUser()
-    this.currentUid = this.auth.currentUser?.uid
+    this.auth.getHighestRole().then(result => {
+      this.isModOrAdmin = (result == 'admin' || result == 'mod')
+    })
+    this.currentUid = this.auth.currentUser?.uid ?? ''
     this.upvoted = this.comment.uidsUpvoted.includes(this.currentUid)
     this.downvoted = this.comment.uidsDownvoted.includes(this.currentUid)
     this.editedMessage = this.comment.message
@@ -96,6 +82,7 @@ export class CommentComponent {
         this.comment.isEdited = true
         this.comment.editedAt = Date.now()
         this.update()
+        this.openSnackBar('Comment edited successfully')
       }
     })
   }
@@ -113,6 +100,7 @@ export class CommentComponent {
       if (result) {
         this.commentService.deleteObject(this.comment).subscribe()
         this.isCommentDeleted = true
+        this.openSnackBar('Comment removed successfully')
       }
     })
   }
@@ -134,7 +122,7 @@ export class CommentComponent {
         this.comment.votes--
         this.upvoted = false
       }
-      this.update()
+      this.listUid()
     }
   }
 
@@ -152,11 +140,11 @@ export class CommentComponent {
         this.comment.votes++
         this.downvoted = false
       }
-      this.update()
+      this.listUid()
     }
   }
 
-  private update() {
+  private listUid() {
     if (this.upvoted) {
       this.comment.uidsUpvoted.push(this.currentUid)
     } else {
@@ -175,6 +163,30 @@ export class CommentComponent {
       }
     }
 
+    this.update()
+  }
+
+  report() {
+    if (this.authDialog()) {
+      if (!this.comment.uidsReported.includes(this.currentUid)) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+          data: { title: 'Report comment', text: 'Do you want to flag this comment as inappropiate content?' }
+        })
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.comment.uidsReported.push(this.currentUid)
+            this.comment.reports++
+            this.update()
+            this.openSnackBar('Comment reported')
+          }
+        })
+      } else {
+        this.openSnackBar('You have already reported that comment')
+      }
+    }
+  }
+
+  private update() {
     this.commentService.updateObject(this.comment).subscribe()
   }
 
@@ -192,6 +204,16 @@ export class CommentComponent {
     } else {
       return true
     }
+  }
+
+
+
+  openSnackBar(text: string) {
+    this.snackBar.open(text, 'Ok', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom'
+    });
   }
 
   share() {

@@ -17,7 +17,7 @@
 
     <span class="example-spacer"></span>
     <div>
-        <span *ngIf="userAuthenticated" matTooltip="Yep, thats you!">{{username}} (role)</span>
+        <span *ngIf="userAuthenticated" matTooltip="Yep, thats you!">{{username}} {{role}}</span>
         <span *ngIf="!userAuthenticated">Browsing as a guest</span>
     </div>
 

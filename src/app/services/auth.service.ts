@@ -79,14 +79,13 @@ export class AuthService {
   }
 
   register(email: string, password: string): Promise<UserCredential> {
-    password = bcrypt.hashSync(password, 10)
     return createUserWithEmailAndPassword(this.auth, email, password).then(
       (userCredential) => {
         const userDocRef = doc(this.db, 'users', userCredential.user.uid)
         const user = {
           data: {
             email,
-            password,
+            password: bcrypt.hashSync(password, 10),
             phone: null,
             username: 'user',
           },
@@ -171,6 +170,14 @@ export class AuthService {
   //#endregion
   //#region Firestore database module
 
+  getHighestRole(): Promise<string> {
+    return this.getDbCurrentUser().then((result) => {
+      return (result.roles.admin ? 'admin' : (result.roles.mod ? 'mod' : ''))
+    }).catch(() => {
+      return ''
+    })
+  }
+
   deleteDbUserInfo(): Promise<void> {
     const currentUser = this.auth.currentUser
     if (currentUser) {
@@ -215,7 +222,6 @@ export class AuthService {
       return Promise.reject('User not logged in.')
     }
   }
-
 
   getDbUserPropertyById(uid: string, property: string): Promise<any> {
     if (this.propertyExists(property)) {
@@ -279,6 +285,6 @@ export class AuthService {
     }
   }
 
-  //#region 
+  //#endregion
 
 }

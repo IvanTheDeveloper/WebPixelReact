@@ -9,7 +9,8 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HeaderComponent {
   userAuthenticated: boolean = true
-  username: any = ''
+  username = ''
+  role = ''
 
   constructor(private auth: AuthService, private router: Router) { }
 
@@ -23,7 +24,10 @@ export class HeaderComponent {
 
   update() {
     this.userAuthenticated = this.auth.isAuthenticated()
-    this.username = this.auth.currentUser?.displayName
+    this.username = this.auth.currentUser?.displayName ?? 'You'
+    this.auth.getHighestRole().then(result => {
+      this.role = (result != '' ? `(${result})` : '')
+    })
   }
 
   logout() {

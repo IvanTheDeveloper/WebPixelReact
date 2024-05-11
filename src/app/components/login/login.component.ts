@@ -41,7 +41,8 @@ export class LoginComponent {
         }
       ).catch(
         error => {
-          const errorMessage = error.code == 'auth/invalid-credential' ? 'invalid credentials' : 'unknown'
+          this.progressBar = false
+          const errorMessage = (error.code == 'auth/invalid-credential' ? 'invalid credentials' : 'Unknown: ' + error)
           this.openSnackBar("Error signing in: " + errorMessage)
         }
       )

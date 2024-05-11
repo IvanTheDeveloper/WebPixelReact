@@ -14,7 +14,6 @@ import { Router } from '@angular/router';
 export class CommentBoxComponent {
   objectList: any[] = []
   progressSpinner = true
-
   formController!: FormGroup
 
   constructor(private dataService: CommentService, private auth: AuthService, public dialog: MatDialog, private formBuilder: FormBuilder, private router: Router) { }
@@ -66,6 +65,8 @@ export class CommentBoxComponent {
         votes: 0,
         uidsUpvoted: [''],
         uidsDownvoted: [''],
+        reports: 0,
+        uidsReported: [''],
         isEdited: false,
         editedAt: null,
         createdAt: Date.now(),

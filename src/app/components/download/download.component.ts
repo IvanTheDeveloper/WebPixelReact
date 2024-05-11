@@ -16,7 +16,7 @@ export class DownloadComponent {
   fileName = ''
   isUploading = false
   task!: Promise<string>
-  url = ''
+  url = 'https://firebasestorage.googleapis.com/v0/b/ivandevwebsite.appspot.com/o/releases%2FTest.zip?alt=media&token=02370c7e-b38b-46d7-ba1f-df7964472a15'
 
   constructor(private uploadFileService: UploadFileService) { }
 
@@ -46,12 +46,13 @@ export class DownloadComponent {
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;
-      const filePath = `releasaes/${Date.now()}_${this.fileName}`;
+      const filePath = `releases/${this.fileName}`; //${Date.now()}_
       this.task = this.uploadFileService.uploadFile(filePath, file)
       this.isUploading = true
       this.task.then(
         (result) => {
           this.url = result;
+          alert(this.url)
           this.reset()
         }
       ).catch((error) => {

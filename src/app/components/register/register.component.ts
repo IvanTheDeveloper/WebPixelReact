@@ -128,6 +128,7 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.fieldForm.valid) {
+      this.progressBar = true
       const email = this.fieldForm.get('email')?.value;
       const password = this.fieldForm.get('password')?.value;
       this.auth.register(email, password).then(
@@ -137,7 +138,8 @@ export class RegisterComponent {
         }
       ).catch(
         error => {
-          const errorMessage = error.code == 'auth/email-already-in-use' ? 'There is already an account with that email' : 'Unknown'
+          this.progressBar = false
+          const errorMessage = (error.code == 'auth/email-already-in-use' ? 'There is already an account with that email' : 'Unknown: ' + error)
           this.openSnackBar("Register error: " + errorMessage)
         }
       )
@@ -145,11 +147,11 @@ export class RegisterComponent {
   }
 
   async LoginActions() {
-    this.progressBar = true
     this.auth.updateCookieToken()
     await new Promise(f => setTimeout(f, 1000))
     this.router.navigateByUrl('/home')
-    this.openSnackBar('Welcome ' + this.auth.getDisplayName() + '!')
+    this.openSnackBar('Welcome ' + this.auth.currentUser?.displayName + '!')
+    this.progressBar = false
   }
 
   openSnackBar(text: string) {

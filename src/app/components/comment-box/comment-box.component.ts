@@ -4,7 +4,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Timestamp } from 'firebase/firestore';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-comment-box',
@@ -17,7 +17,7 @@ export class CommentBoxComponent {
 
   formController!: FormGroup
 
-  constructor(private dataService: CommentService, public dialog: MatDialog, private auth: AuthService, private formBuilder: FormBuilder) { }
+  constructor(private dataService: CommentService, private auth: AuthService, public dialog: MatDialog, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
     this.getComments()
@@ -49,35 +49,38 @@ export class CommentBoxComponent {
   }
 
   onSubmit() {
-    if (this.formController.valid) {
+    if (!this.auth.isAuthenticated()) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-        data: { title: 'Publish comment', text: 'Are you sure? Comments cannot be deleted' }
+        data: { title: 'Oops', text: 'You must be authenticated to perform this action. Do you want to sign in?' }
       })
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          const comment = {
-            id: null,
-            authorId: this.auth.getUid(),
-            message: this.message?.value,
-            votes: 0,
-            usersUpvoted: [''],
-            usersDownvoted: [''],
-            isEdited: false,
-            editedAt: null,
-            createdAt: Date.now(),
-          }
-          this.dataService.addObject(comment).subscribe(
-            (result) => {
-              this.getComments()
-              this.formController.reset()
-            },
-            (error) => {
-              alert(error)
-            }
-          )
+          this.router.navigateByUrl('/login')
         }
       })
+    } else if (this.formController.valid) {
+      const comment = {
+        id: null,
+        authorId: this.auth.currentUser?.uid,
+        message: this.message?.value,
+        votes: 0,
+        usersUpvoted: [''],
+        usersDownvoted: [''],
+        isEdited: false,
+        editedAt: null,
+        createdAt: Date.now(),
+      }
+      this.dataService.addObject(comment).subscribe(
+        (result) => {
+          this.getComments()
+          this.formController.reset()
+        },
+        (error) => {
+          alert(error)
+        }
+      )
     }
   }
+
 
 }

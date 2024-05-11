@@ -23,7 +23,7 @@ export class HeaderComponent {
 
   update() {
     this.userAuthenticated = this.auth.isAuthenticated()
-    this.username = this.auth.getDisplayName()
+    this.username = this.auth.currentUser?.displayName
   }
 
   logout() {

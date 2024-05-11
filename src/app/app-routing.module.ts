@@ -13,6 +13,7 @@ import { adminGuard } from './guards/admin.guard';
 import { DownloadComponent } from './components/download/download.component';
 import { AboutComponent } from './components/about/about.component';
 import { CommentBoxComponent } from './components/comment-box/comment-box.component';
+import { CommentComponent } from './components/comment/comment.component';
 
 const landing = 'landing' //when the user IS NOT logged in
 const home = 'home' //when the user IS logged in
@@ -28,6 +29,7 @@ const about = 'about'
 
 const routes: Routes = [
   { path: 'comments', component: CommentBoxComponent },
+  { path: 'comment/:id', component: CommentComponent },
 
   { path: download, component: DownloadComponent },
   { path: about, component: AboutComponent },

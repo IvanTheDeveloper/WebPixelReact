@@ -32,6 +32,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.fieldForm.valid) {
+      this.progressBar = true
       const email = this.fieldForm.get('email')?.value
       const password = this.fieldForm.get('password')?.value
       this.auth.login(email, password).then(
@@ -48,11 +49,11 @@ export class LoginComponent {
   }
 
   async LoginActions() {
-    this.progressBar = true
     this.auth.updateCookieToken()
     await new Promise(f => setTimeout(f, 1000))
     this.router.navigateByUrl('/home')
-    this.openSnackBar('Welcome ' + this.auth.getDisplayName() + '!')
+    this.openSnackBar('Welcome ' + this.auth.currentUser?.displayName + '!')
+    this.progressBar = false
   }
 
   loginGoogle() {

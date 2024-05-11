@@ -23,12 +23,17 @@ export class CommentService {
     return this.objectList
   }
 
+  getObjectById(id: string): Observable<any> {
+    const token = this.cookieService.get(this.COOKIE_KEY)
+    return this.http.get(this.firebaseUrl + '/' + this.firebaseFolder + '/' + id + '.json?auth=' + token)
+  }
+
   getObjectList(): Observable<any> {
     const token = this.cookieService.get(this.COOKIE_KEY)
     return this.http.get(this.firebaseUrl + '/' + this.firebaseFolder + '.json?auth=' + token)
   }
 
-  saveObjectList(objList: any): Observable<any> { //objList must be a dictionary (key-value)
+  addObjectList(objList: any): Observable<any> { //objList must be a dictionary (key-value)
     const token = this.cookieService.get(this.COOKIE_KEY)
     return this.http.put(this.firebaseUrl + '/' + this.firebaseFolder + '.json?auth=' + token, objList)
   }

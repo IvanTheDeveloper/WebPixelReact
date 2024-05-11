@@ -31,10 +31,10 @@ export class UserSettingsComponent {
   }
 
   refresh() {
-    this.photoUrl = this.auth.getPhotoUrl()
-    this.displayName = this.auth.getDisplayName()
-    this.phoneNumber = this.auth.getPhoneNumber()
-    this.email = this.auth.getEmail()
+    this.photoUrl = this.auth.currentUser?.photoURL
+    this.displayName = this.auth.currentUser?.displayName
+    this.phoneNumber = this.auth.currentUser?.phoneNumber
+    this.email = this.auth.currentUser?.email
   }
 
   updateDisplayName() {
@@ -44,7 +44,7 @@ export class UserSettingsComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.auth.updateDisplayName(this.newDisplayName)
+        this.auth.setAuthCurrentUserProperty('displayName', this.displayName)
         this.refresh()
         this.newDisplayName = ''
       }

@@ -5,16 +5,27 @@ mat-card {
     border: 2px solid #000000;
     border-radius: 10px;
 
-}
+    .menu {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
 
-.actions {
-    display: flex;
-    align-self: flex-end;
-    gap: 20px;
-}
+    .votes {
+        display: flex;
+        align-items: center;
 
-.menu {
-    position: absolute;
-    top: 0;
-    right: 0;
+        .share {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+    }
+
+    .actions {
+        display: flex;
+        align-self: flex-end;
+        gap: 20px;
+    }
+
 }

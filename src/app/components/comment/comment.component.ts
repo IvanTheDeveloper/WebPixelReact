@@ -13,88 +13,76 @@ import { isNullOrEmpty } from 'src/app/others/utils';
 })
 export class CommentComponent {
   @Input() comment: any
-  user: any
+  author: any
+  isLoading = false
   readonly placeholderImg: string = 'assets/images/placeholder_img.svg'
+  currentUid: any
   upvoted!: boolean
   downvoted!: boolean
 
-  editMode = false
+  editModeEnabled = false
   editedMessage = ''
-  deleted = false
-  uid: any = undefined
+  isCommentDeleted = false
 
   defaultUser = {
     data: {
-      username: 'user'
+      username: 'deleted'
     },
     images: {
       avatarUrl: 'https://cdn-icons-png.flaticon.com/512/21/21104.png'
     }
   }
 
-  defaultComment = {
-    id: null,
-    authorId: '',
-    message: '',
-    votes: 0,
-    usersUpvoted: [''],
-    usersDownvoted: [''],
-    isEdited: false,
-    editedAt: null,
-    createdAt: Date.now(),
-  }
-
-  constructor(private auth: AuthService, private commentService: CommentService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute) {
-    isNullOrEmpty(this.comment) ? this.comment = this.defaultComment : ''
-    isNullOrEmpty(this.user) ? this.user = this.defaultUser : ''
-  }
+  constructor(private auth: AuthService, private commentService: CommentService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.uid = this.auth.currentUser?.uid
-    isNullOrEmpty(this.comment) ? this.getComment() : this.initData()
+    if (isNullOrEmpty(this.comment)) {
+      this.wait()
+    } else {
+      this.initData()
+    }
+  }
+
+  async wait() {
+    this.isLoading = true
+    await new Promise(f => setTimeout(f, 1000))
+    this.auth.getDbCurrentUser().then(() => {
+      this.getComment()
+    })
+  }
+
+  private dd(obj: any) {
+    alert('obj: ' + JSON.stringify(obj))
   }
 
   getComment() {
     const id = this.route.snapshot.paramMap.get('id') ?? ''
-    this.commentService.getObjectById(id).subscribe(data => {
-      alert(JSON.stringify(data))
-      this.comment = data
-      this.initData()
-    })
+    this.commentService.getObjectById(id).subscribe(
+      (data) => {
+        this.comment = data ?? this.router.navigateByUrl('/404')
+        this.initData()
+        this.isLoading = false
+      }
+    )
   }
 
   getUser() {
-    this.user = this.auth.getDbUserById(this.comment.userId)
+    this.auth.getDbUserById(this.comment.authorId).then(
+      (result) => {
+        isNullOrEmpty(result) ? this.author = this.defaultUser : this.author = result
+      },
+      () => {
+        this.author = this.defaultUser
+      }
+    )
   }
 
   initData() {
-    this.upvoted = this.comment.usersUpvoted.includes(this.uid)
-    this.downvoted = this.comment.usersDownvoted.includes(this.uid)
+    this.getUser()
+    this.currentUid = this.auth.currentUser?.uid
+    this.upvoted = this.comment.uidsUpvoted.includes(this.currentUid)
+    this.downvoted = this.comment.uidsDownvoted.includes(this.currentUid)
     this.editedMessage = this.comment.message
-  }
-
-  share() {
-    const urlToShare = location.origin + '/comment/' + this.comment.id
-    const navigator: any = window.navigator;
-
-    if (navigator.share) {
-      // If Web Share API is supported, use it to share
-      navigator.share({
-        title: 'Game Review',
-        text: 'Check out this comment!',
-        url: urlToShare
-      })
-        .then(() => console.log('Successful share'))
-        .catch((error: any) => console.log('Error sharing:', error));
-    } else {
-      // Fallback for browsers that don't support Web Share API
-      const dummyInput = document.createElement('input');
-      document.body.appendChild(dummyInput);
-      dummyInput.value = urlToShare;
-      dummyInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(dummyInput);
-    }
   }
 
   edit() {
@@ -103,7 +91,7 @@ export class CommentComponent {
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.editMode = false
+        this.editModeEnabled = false
         this.comment.message = this.editedMessage
         this.comment.isEdited = true
         this.comment.editedAt = Date.now()
@@ -113,7 +101,7 @@ export class CommentComponent {
   }
 
   cancel() {
-    this.editMode = false
+    this.editModeEnabled = false
     this.editedMessage = this.comment.message
   }
 
@@ -124,14 +112,17 @@ export class CommentComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.commentService.deleteObject(this.comment).subscribe()
-        this.deleted = true
+        this.isCommentDeleted = true
       }
     })
   }
 
-  upvote() {
-    if (this.authDialog())
+  isAuthor() {
+    return this.comment.authorId == this.currentUid
+  }
 
+  upvote() {
+    if (this.authDialog()) {
       if (!this.upvoted) {
         this.comment.votes++
         this.upvoted = true
@@ -143,11 +134,12 @@ export class CommentComponent {
         this.comment.votes--
         this.upvoted = false
       }
-    this.update()
+      this.update()
+    }
   }
 
   downvote() {
-    if (this.authDialog())
+    if (this.authDialog()) {
 
       if (!this.downvoted) {
         this.comment.votes--
@@ -160,34 +152,33 @@ export class CommentComponent {
         this.comment.votes++
         this.downvoted = false
       }
-    this.update()
+      this.update()
+    }
   }
 
-  update() {
-    if (!isNullOrEmpty(this.comment))
-
-      if (this.upvoted) {
-        this.comment.usersUpvoted.push(this.auth.currentUser?.uid)
-      } else {
-        const index = this.comment.usersUpvoted.indexOf(this.auth.currentUser?.uid)
-        if (index != -1) {
-          this.comment.usersUpvoted.splice(index, 1)
-        }
+  private update() {
+    if (this.upvoted) {
+      this.comment.uidsUpvoted.push(this.currentUid)
+    } else {
+      const index = this.comment.uidsUpvoted.indexOf(this.currentUid)
+      if (index != -1) {
+        this.comment.uidsUpvoted.splice(index, 1)
       }
+    }
 
     if (this.downvoted) {
-      this.comment.usersDownvoted.push(this.auth.currentUser?.uid)
+      this.comment.uidsDownvoted.push(this.currentUid)
     } else {
-      const index = this.comment.usersDownvoted.indexOf(this.auth.currentUser?.uid)
+      const index = this.comment.uidsDownvoted.indexOf(this.currentUid)
       if (index != -1) {
-        this.comment.usersDownvoted.splice(index, 1)
+        this.comment.uidsDownvoted.splice(index, 1)
       }
     }
 
     this.commentService.updateObject(this.comment).subscribe()
   }
 
-  authDialog() {
+  private authDialog() {
     if (!this.auth.isAuthenticated()) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: { title: 'Oops', text: 'You must be authenticated to perform this action. Do you want to sign in?' }
@@ -203,8 +194,26 @@ export class CommentComponent {
     }
   }
 
-  isAuthor() {
-    return this.comment.authorId == this.auth.currentUser?.uid
+  share() {
+    const urlToShare = location.origin + '/comment/' + this.comment.id
+    const navigator: any = window.navigator;
+
+    if (navigator.share) {
+      // If Web Share API is supported, use it to share
+      navigator.share({
+        title: 'Game Review',
+        text: 'Check out this comment!',
+        url: urlToShare
+      }).catch((error: any) => console.log('Error sharing:', error));
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      const dummyInput = document.createElement('input');
+      document.body.appendChild(dummyInput);
+      dummyInput.value = urlToShare;
+      dummyInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummyInput);
+    }
   }
 
 }

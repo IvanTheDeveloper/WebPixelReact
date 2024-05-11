@@ -1,8 +1,10 @@
-<mat-card *ngIf="!deleted">
+<mat-progress-spinner *ngIf="isLoading" mode="indeterminate" diameter="100"></mat-progress-spinner>
+
+<mat-card *ngIf="!isCommentDeleted && !isLoading">
     <mat-card-header>
-        <img mat-card-avatar [src]="user?.images.avatarUrl ?? placeholderImg" onerror="this.src=='placeholderImg'"
+        <img mat-card-avatar [src]="author?.images.avatarUrl ?? placeholderImg" onerror="this.src=='placeholderImg'"
             alt="profile picture">
-        <mat-card-title>{{user?.data.username ?? 'Guest'}}</mat-card-title>
+        <mat-card-title>{{author?.data.username ?? 'user'}}</mat-card-title>
 
         <mat-card-subtitle>
             {{comment?.createdAt | date:'dd-MM-yyyy'}}
@@ -10,19 +12,19 @@
         </mat-card-subtitle>
 
         <div *ngIf="isAuthor()" class="menu">
-            <button mat-icon-button [disabled]="editMode" [matMenuTriggerFor]="menu">
+            <button mat-icon-button [disabled]="editModeEnabled" [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>
             </button>
         </div>
     </mat-card-header>
 
     <mat-card-content>
-        <span *ngIf="!editMode">{{comment?.message}}</span>
-        <input matInput *ngIf="editMode" [(ngModel)]="editedMessage" type="text">
+        <span *ngIf="!editModeEnabled">{{comment?.message}}</span>
+        <input matInput *ngIf="editModeEnabled" [(ngModel)]="editedMessage" type="text">
     </mat-card-content>
 
     <mat-card-actions>
-        <div *ngIf="!editMode" class="votes">
+        <div *ngIf="!editModeEnabled" class="votes">
             <button mat-icon-button (click)="upvote()"
                 [color]="upvoted ? 'warn' : 'basic'"><mat-icon>thumb_up</mat-icon></button>
             <span>{{comment.votes}}</span>
@@ -32,7 +34,7 @@
                 <mat-icon>share</mat-icon></button>
         </div>
 
-        <div *ngIf="editMode" class="actions">
+        <div *ngIf="editModeEnabled" class="actions">
             <button mat-stroked-button (click)="cancel()" color="basic">Discard changes</button>
             <button mat-stroked-button (click)="edit()" color="primary">Apply changes</button>
         </div>
@@ -40,7 +42,7 @@
 </mat-card>
 
 <mat-menu #menu>
-    <button mat-menu-item (click)="editMode = true">
+    <button mat-menu-item (click)="editModeEnabled = true">
         <mat-icon>edit</mat-icon>
         <span>Edit</span>
     </button>

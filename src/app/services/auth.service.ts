@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Auth, GoogleAuthProvider, UserCredential, createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from '@angular/fire/auth';
+import { Auth, GoogleAuthProvider, UserCredential, createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword, updateProfile } from '@angular/fire/auth';
 import { Firestore, collection, collectionData, getFirestore, doc, updateDoc, setDoc, getDoc, deleteDoc } from '@angular/fire/firestore';
+const bcrypt = require('bcryptjs'); // wtf? que es esto me quiero morir
 
 @Injectable({
   providedIn: 'root'
@@ -76,8 +77,9 @@ export class AuthService {
       }
     )
   }
+
   register(email: string, password: string): Promise<UserCredential> {
-    password = require('bcryptjs').hashSync(password, 10) //wtf es esto me quiero morir
+    password = bcrypt.hashSync(password, 10)
     return createUserWithEmailAndPassword(this.auth, email, password).then(
       (userCredential) => {
         const userDocRef = doc(this.db, 'users', userCredential.user.uid)
@@ -153,6 +155,7 @@ export class AuthService {
       if (this.defaultAuthProperties.includes(property)) {
         //this.setDbCurrentUserProperty(property, value)
         return updateProfile(currentUser, { [property]: value })
+        //return updatePassword(currentUser, value)
       } else {
         return Promise.reject('Invalid property.')
       }
@@ -184,29 +187,50 @@ export class AuthService {
 
   getDbUserById(uid: string): Promise<any> {
     const userRef = doc(this.db, 'users', uid)
-    return getDoc(userRef)
+    return getDoc(userRef).then((docSnapshot) => {
+      if (docSnapshot.exists()) {
+        return docSnapshot.data()
+      } else {
+        return Promise.reject('User document does not exist.')
+      }
+    }).catch((error) => {
+      return Promise.reject('Error fetching user data: ' + error)
+    })
   }
 
   getDbCurrentUser(): Promise<any> {
     const userId = this.auth.currentUser?.uid
     if (userId) {
       const userRef = doc(this.db, 'users', userId)
-      return getDoc(userRef)
+      return getDoc(userRef).then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          return docSnapshot.data()
+        } else {
+          return Promise.reject('User document does not exist.')
+        }
+      }).catch((error) => {
+        return Promise.reject('Error fetching user data: ' + error)
+      })
     } else {
       return Promise.reject('User not logged in.')
     }
   }
 
+
   getDbUserPropertyById(uid: string, property: string): Promise<any> {
-    if (uid) {
-      if (this.propertyExists(property)) {
-        const userRef = doc(this.db, 'users', uid, property)
-        return getDoc(userRef)
-      } else {
-        return Promise.reject('Invalid property.')
-      }
+    if (this.propertyExists(property)) {
+      const userRef = doc(this.db, 'users', uid, property)
+      return getDoc(userRef).then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          return docSnapshot.data()
+        } else {
+          return Promise.reject('Property does not exist for the user.')
+        }
+      }).catch((error) => {
+        return Promise.reject('Error fetching user property: ' + error)
+      })
     } else {
-      return Promise.reject('User not logged in.')
+      return Promise.reject('Invalid property.')
     }
   }
 
@@ -228,6 +252,9 @@ export class AuthService {
     const userId = this.auth.currentUser?.uid
     if (userId) {
       if (this.propertyExists(property)) {
+        if (property == 'password') {
+          property = bcrypt.hashSync(property, 10)
+        }
         const userRef = doc(this.db, 'users', userId)
         return setDoc(userRef, { [property]: value }, { merge: true })
       } else {

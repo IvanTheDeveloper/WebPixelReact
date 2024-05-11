@@ -64,14 +64,14 @@ export class CommentBoxComponent {
         authorId: this.auth.currentUser?.uid,
         message: this.message?.value,
         votes: 0,
-        usersUpvoted: [''],
-        usersDownvoted: [''],
+        uidsUpvoted: [''],
+        uidsDownvoted: [''],
         isEdited: false,
         editedAt: null,
         createdAt: Date.now(),
       }
       this.dataService.addObject(comment).subscribe(
-        (result) => {
+        () => {
           this.getComments()
           this.formController.reset()
         },

@@ -28,7 +28,6 @@ const download = 'download'
 const about = 'about'
 
 const routes: Routes = [
-  { path: 'comments', component: CommentBoxComponent },
   { path: 'comment/:id', component: CommentComponent },
 
   { path: download, component: DownloadComponent },

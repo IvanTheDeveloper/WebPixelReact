@@ -1,14 +1,23 @@
-.footer-toolbar {
+footer {
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: space-around;
     text-align: center;
-    height: 100px;
+    padding: 2%;
+    background-color: rgb(157, 193, 192);
 }
 
-.name {
+.column {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
 }

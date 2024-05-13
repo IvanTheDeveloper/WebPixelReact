@@ -13,11 +13,17 @@ import { DownloadComponent } from './components/download/download.component';
 import { AboutComponent } from './components/about/about.component';
 import { CommentComponent } from './components/comment/comment.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
 
 const landing = 'home' //when the user IS NOT logged in
 const home = 'home' //when the user IS logged in
 const notAuthenticated = 'unauthorized'
 const notFound = '404'
+
+const cookieConsent = 'cookies'
+const privacyPolicy = 'privacy-policy'
+const termsAndConditions = 'terms-of-use'
 
 const login = 'login'
 const register = 'register'
@@ -39,6 +45,9 @@ const routes: Routes = [
   { path: '', redirectTo: landing, pathMatch: 'full' }, //default page for welcoming
   { path: landing, component: HomeComponent },
   { path: home, component: HomeComponent },
+  { path: cookieConsent, component: HomeComponent },
+  { path: privacyPolicy, component: PrivacyPolicyComponent },
+  { path: termsAndConditions, component: TermsAndConditionsComponent },
   { path: notAuthenticated, component: NotAuthenticatedComponent },
   { path: notFound, component: PageNotFoundComponent },
   { path: '**', redirectTo: notFound }, //view when the url is invalid

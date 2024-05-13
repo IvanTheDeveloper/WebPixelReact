@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FirebaseModule } from './firebase/firebase.module';
+import { CookieConsentModule } from './cookie-consent/cookie-consent.module';
 
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
@@ -60,6 +61,8 @@ import { CommentBoxComponent } from './components/comment-box/comment-box.compon
 import { CommentComponent } from './components/comment/comment.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { FormDialogComponent } from './components/form-dialog/form-dialog.component';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
 
 @NgModule({
   declarations: [
@@ -94,12 +97,15 @@ import { FormDialogComponent } from './components/form-dialog/form-dialog.compon
     CommentComponent,
     AdminComponent,
     FormDialogComponent,
+    PrivacyPolicyComponent,
+    TermsAndConditionsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FirebaseModule,
+    CookieConsentModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,

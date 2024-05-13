@@ -32,9 +32,6 @@
             font-size: large;
             line-height: 2;
         }
-
-
-
     }
 
     mat-card {
@@ -48,6 +45,11 @@
             flex-direction: column;
 
             span {
+                color: rgb(54, 200, 200);
+            }
+
+            button {
+                font-family: 'Pixel';
                 color: rgb(54, 200, 200);
             }
 

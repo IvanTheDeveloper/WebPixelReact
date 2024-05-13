@@ -1,0 +1,44 @@
+<h1 mat-dialog-title>Release new version</h1>
+<div mat-dialog-content>
+    <form [formGroup]="checkoutForm">
+
+        <mat-form-field>
+            <mat-label>Platform</mat-label>
+            <mat-select matInput formControlName="platform" (openedChange)="this.getLatestVersion()">
+                <mat-option value="windows">Windows</mat-option>
+                <mat-option value="mac">MacOS</mat-option>
+                <mat-option value="linux">Linux</mat-option>
+            </mat-select>
+            <mat-error *ngIf="platform?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Version</mat-label>
+            <input matInput formControlName="version" type="number" step="0.01" [min]="latestVersion"
+                [disabled]="!platform?.valid" [value]="latestVersion">
+            <mat-error *ngIf="version?.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="version?.hasError('min')">New version must be higher than the latest</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Changelog</mat-label>
+            <textarea matInput cdkTextareaAutosize formControlName="changelog" type="text"></textarea>
+            <mat-error *ngIf="changelog?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>{{file?.value ? file?.value.name : 'File'}}</mat-label>
+            <input matInput disabled>
+            <input #fileInput hidden type="file" (change)="onFileSelected($event)">
+            <button mat-icon-button matSuffix (click)="fileInput.click()">
+                <mat-icon>cloud_upload</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <div mat-dialog-actions>
+            <button mat-button (click)="cancelClick()">Cancel</button>
+            <button mat-button [disabled]="!checkoutForm.valid" (click)="onSubmit()">Submit</button>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,12 @@
+<div class="content">
+
+    <button mat-raised-button (click)="addObject()">Release game update</button>
+
+    <div *ngIf="isUploading">
+        <mat-progress-bar mode="buffer" dir="rtl"></mat-progress-bar>
+        <mat-icon (click)="cancelUpload()">delete_forever</mat-icon>
+    </div>
+
+</div>
+
+<app-table></app-table>

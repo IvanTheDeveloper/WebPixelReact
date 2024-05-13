@@ -9,7 +9,7 @@
     <h1>How to play:</h1>
     <div *ngIf="selectedTabIndex == 0" class="instructions">
         <div>
-            <h3>Portable version:</h3>
+            <h3>Portable:</h3>
             <p>Press the relative download button and wait until process finishes, then open windows file explorer and
                 navigate to your <span>downloads</span> folder (Usually its "C:\users\you\downloads" by
                 default).</p>
@@ -24,7 +24,7 @@
 
         </div>
         <div>
-            <h3>Installer version:</h3>
+            <h3>Installer:</h3>
             <p>Press the relative download button and wait until process finishes, then open windows file explorer and
                 navigate to your <span>downloads</span> folder (Usually its "C:\users\you\downloads" by
                 default).</p>
@@ -55,41 +55,28 @@
         <mat-card-content>
             <p>Device: <span>{{platform}}</span> (browser)</p>
             <p>Architecture: <span>{{architecture}}</span> bits</p>
-            <p>Language: <span>{{language}}</span></p>
+            <p>Language: <span>{{language}}</span>
+
+                <mat-menu #languageMenu="matMenu">
+                    <button mat-menu-item>English</button>
+                    <button mat-menu-item>French</button>
+                    <button mat-menu-item>Spanish</button>
+                </mat-menu>
+                <mat-icon [matMenuTriggerFor]="languageMenu">arrow</mat-icon>
+
+            </p>
+            <p>Version: <span>version</span></p>
         </mat-card-content>
     </mat-card>
 
+
     <div class="buttons">
-        <a href="{{url}}" download="game.jpg">
+        <a [href]="url" download="game.jpg">
             <button mat-stroked-button color="accent">Download portable</button>
         </a>
-        <a href="{{url}}" download="game.jpg">
+        <a [href]="url" download="game.jpg">
             <button mat-stroked-button color="accent">Download installer</button>
         </a>
     </div>
 
 </div>
-
-
-
-
-
-<!--
-<div class="content">
-
-    <div>
-        <input type="file" (change)="onFileSelected($event)" #fileUpload hidden>
-        <button mat-fab (click)="fileUpload.click()" color="primary">
-            <mat-icon>cloud_upload</mat-icon>
-        </button>
-        <span>{{fileName ? (isUploading ? 'Uploading' : 'Uploaded') + ' file "' + fileName + '"' : 'No
-            fileselected'}}</span>
-    </div>
-
-    <div *ngIf="isUploading">
-        <mat-progress-bar mode="buffer" dir="rtl"></mat-progress-bar>
-        <mat-icon (click)="cancelUpload()">delete_forever</mat-icon>
-    </div>
-
-</div>
--->

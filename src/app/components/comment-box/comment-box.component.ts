@@ -15,6 +15,7 @@ export class CommentBoxComponent {
   objectList: any[] = []
   progressSpinner = true
   formController!: FormGroup
+  selected = false
 
   constructor(private dataService: CommentService, private auth: AuthService, public dialog: MatDialog, private formBuilder: FormBuilder, private router: Router) { }
 

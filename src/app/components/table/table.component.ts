@@ -7,6 +7,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { UploadFileService } from 'src/app/services/upload-file.service';
+import { GameReleaseService } from 'src/app/services/game-release.service';
+import { dd } from 'src/app/others/utils';
+import { RealtimeDatabaseService } from 'src/app/services/realtime-database.service';
 
 const NAMES: string[] = [
   'Maia',
@@ -14,11 +18,6 @@ const NAMES: string[] = [
   'Olivia',
   'Atticus',
   'Amelia',
-  'Jack',
-  'Charlotte',
-  'Theodore',
-  'Isla',
-  'Oliver',
 ];
 
 function createNewUser(id: number): any {
@@ -46,16 +45,13 @@ export class TableComponent implements AfterViewInit {
 
   constructor(public dialog: MatDialog,
     private snackBar: MatSnackBar,) {
-    // Create 100 users
-    const users = Array.from({ length: 100 }, (_, k) => createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+    const users = Array.from({ length: 10 }, (_, k) => createNewUser(k + 1));
+    this.dataSource = new MatTableDataSource(users)
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator
+    this.dataSource.sort = this.sort
   }
 
   deleteSelected(): void {

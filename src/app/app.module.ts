@@ -58,6 +58,8 @@ import { DevComponent } from './components/dev/dev.component';
 import { ScamComponent } from './components/scam/scam.component';
 import { CommentBoxComponent } from './components/comment-box/comment-box.component';
 import { CommentComponent } from './components/comment/comment.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { FormDialogComponent } from './components/form-dialog/form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +92,8 @@ import { CommentComponent } from './components/comment/comment.component';
     ScamComponent,
     CommentBoxComponent,
     CommentComponent,
+    AdminComponent,
+    FormDialogComponent,
   ],
   imports: [
     BrowserModule,

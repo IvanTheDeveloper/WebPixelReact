@@ -1,57 +1,67 @@
-<mat-progress-spinner *ngIf="isLoading" mode="indeterminate" diameter="100"></mat-progress-spinner>
+<div *ngIf="isDetailedView()" class="wave-container">
+    <div class="wave down w1"></div>
+    <div class="wave down w2"></div>
+    <div class="wave up w3"></div>
+    <div class="wave up w4"></div>
+</div>
 
-<mat-card *ngIf="!isCommentDeleted && !isLoading">
-    <mat-card-header>
-        <img mat-card-avatar [src]="author?.images.avatarUrl ?? placeholderImg" onerror="this.src=='placeholderImg'"
-            alt="profile picture">
-        <mat-card-title>{{author?.data.username ?? 'Deleted user'}}</mat-card-title>
+<div class="comment">
+    <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" diameter="100"></mat-progress-spinner>
 
-        <mat-card-subtitle>
-            {{comment?.createdAt | date:'dd-MM-yyyy'}}
-            <span *ngIf="comment?.isEdited">(Edited: {{comment?.editedAt | date:'dd-MM-yyyy'}})</span>
-        </mat-card-subtitle>
+    <mat-card *ngIf="!isCommentDeleted && !isLoading">
+        <mat-card-header>
+            <img mat-card-avatar [src]="author?.images.avatarUrl ?? placeholderImg" onerror="this.src=='placeholderImg'"
+                alt="profile picture">
+            <mat-card-title>{{author?.data.username ?? 'Deleted user'}}</mat-card-title>
 
-        <div class="menu">
-            <button mat-icon-button [disabled]="editModeEnabled" [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-        </div>
-    </mat-card-header>
+            <mat-card-subtitle>
+                {{comment?.createdAt | date:'dd-MM-yyyy'}}
+                <span *ngIf="comment?.isEdited">(Edited: {{comment?.editedAt | date:'dd-MM-yyyy'}})</span>
+            </mat-card-subtitle>
 
-    <mat-card-content>
-        <span *ngIf="!editModeEnabled">{{comment?.message}}</span>
-        <input matInput *ngIf="editModeEnabled" [(ngModel)]="editedMessage" type="text">
-    </mat-card-content>
+            <div class="menu">
+                <button mat-icon-button [disabled]="editModeEnabled" [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </div>
+        </mat-card-header>
 
-    <mat-card-actions>
-        <div *ngIf="!editModeEnabled" class="votes">
-            <button mat-icon-button (click)="upvote()"
-                [color]="upvoted ? 'warn' : 'basic'"><mat-icon>thumb_up</mat-icon></button>
-            <span>{{comment.votes}}</span>
-            <button mat-icon-button (click)="downvote()"
-                [color]="downvoted ? 'primary' : 'basic'"><mat-icon>thumb_down</mat-icon></button>
-            <button mat-icon-button (click)="share()" class="share">
-                <mat-icon>share</mat-icon></button>
-        </div>
+        <mat-card-content>
+            <span *ngIf="!editModeEnabled">{{comment?.message}}</span>
+            <input matInput *ngIf="editModeEnabled" [(ngModel)]="editedMessage" type="text">
+        </mat-card-content>
 
-        <div *ngIf="editModeEnabled" class="actions">
-            <button mat-stroked-button (click)="cancel()" color="basic">Discard changes</button>
-            <button mat-stroked-button (click)="edit()" color="primary">Apply changes</button>
-        </div>
-    </mat-card-actions>
-</mat-card>
+        <mat-card-actions>
+            <div *ngIf="!editModeEnabled" class="votes">
+                <button mat-icon-button (click)="upvote()"
+                    [color]="upvoted ? 'warn' : 'basic'"><mat-icon>thumb_up</mat-icon></button>
+                <span>{{comment.votes}}</span>
+                <button mat-icon-button (click)="downvote()"
+                    [color]="downvoted ? 'primary' : 'basic'"><mat-icon>thumb_down</mat-icon></button>
+                <button mat-icon-button (click)="share()" class="share">
+                    <mat-icon>share</mat-icon></button>
+            </div>
 
-<mat-menu #menu>
-    <button mat-menu-item *ngIf="!isAuthor()" (click)="report()">
-        <mat-icon>report</mat-icon>
-        <span>Report</span>
-    </button>
-    <button mat-menu-item *ngIf="isAuthor()" (click)="editModeEnabled = true">
-        <mat-icon>edit</mat-icon>
-        <span>Edit</span>
-    </button>
-    <button mat-menu-item *ngIf="isAuthor() || isModOrAdmin" (click)="remove()">
-        <mat-icon>delete</mat-icon>
-        <span>Delete</span>
-    </button>
-</mat-menu>
+            <div *ngIf="editModeEnabled" class="actions">
+                <button mat-stroked-button (click)="cancel()" color="basic">Discard changes</button>
+                <button mat-stroked-button (click)="edit()" color="primary">Apply changes</button>
+            </div>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-menu #menu>
+        <button mat-menu-item *ngIf="!isAuthor()" (click)="report()">
+            <mat-icon>report</mat-icon>
+            <span>Report</span>
+        </button>
+        <button mat-menu-item *ngIf="isAuthor()" (click)="editModeEnabled = true">
+            <mat-icon>edit</mat-icon>
+            <span>Edit</span>
+        </button>
+        <button mat-menu-item *ngIf="isAuthor() || isModOrAdmin" (click)="remove()">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+        </button>
+    </mat-menu>
+
+</div>

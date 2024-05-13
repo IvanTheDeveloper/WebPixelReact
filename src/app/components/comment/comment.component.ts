@@ -23,9 +23,9 @@ export class CommentComponent {
   editModeEnabled = false
   editedMessage = ''
 
-  currentUid!: string
-  upvoted!: boolean
-  downvoted!: boolean
+  currentUid: string | null = null
+  upvoted = false
+  downvoted = false
 
   constructor(private auth: AuthService, private commentService: CommentService, private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
@@ -56,6 +56,10 @@ export class CommentComponent {
     )
   }
 
+  isDetailedView() {
+    return location.pathname.indexOf('/comment/') != -1
+  }
+
   getUser() {
     this.auth.getDbUserById(this.comment.authorId).then((result) => this.author = result)
   }
@@ -65,7 +69,7 @@ export class CommentComponent {
     this.auth.getHighestRole().then(result => {
       this.isModOrAdmin = (result == 'admin' || result == 'mod')
     })
-    this.currentUid = this.auth.currentUser?.uid ?? ''
+    this.currentUid = this.auth.currentUser?.uid ?? null
     this.upvoted = this.comment.uidsUpvoted.includes(this.currentUid)
     this.downvoted = this.comment.uidsDownvoted.includes(this.currentUid)
     this.editedMessage = this.comment.message

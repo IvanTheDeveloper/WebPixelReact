@@ -47,7 +47,7 @@ form {
     top: 0%;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 0;
 }
 
 .up {
@@ -57,15 +57,16 @@ form {
 
 .down {
     background: url('../../../assets/images/wave-down.png') repeat-x, rgb(0, 0, 0, 0);
-    opacity: 0.5;
 }
 
 .w1 {
     animation: waveAnimation 9.9s infinite alternate;
+    opacity: 1;
 }
 
 .w2 {
     animation: waveAnimation 8.6s infinite alternate-reverse;
+    opacity: 0.8;
 }
 
 .w3 {

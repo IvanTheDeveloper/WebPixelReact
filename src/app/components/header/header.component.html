@@ -12,12 +12,14 @@
         <a mat-tab-link routerLink="/about" routerLinkActive #rl3="routerLinkActive" [active]="rl3.isActive">About
             Us</a>
         <a mat-tab-link routerLink="/admin" routerLinkActive #rl4="routerLinkActive" [active]="rl4.isActive"
-            *ngIf="userAuthenticated">Admin</a>
+            *ngIf="role == 'admin'">Admin</a>
     </nav>
 
     <span class="example-spacer"></span>
-    <div>
-        <span *ngIf="userAuthenticated" matTooltip="Yep, thats you!">{{username}} {{role}}</span>
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 10px;">
+        <img *ngIf="avatar" [src]="avatar" width="30px" style="border-radius: 50%;">
+        <span *ngIf="userAuthenticated" matTooltip="Yep, thats you!">{{username}} {{role ? '('+role+')' :
+            ''}}</span>
         <span *ngIf="!userAuthenticated">Browsing as a guest</span>
     </div>
 
@@ -43,5 +45,9 @@
     <button mat-menu-item (click)="scrollToBottom()">
         <mat-icon>info</mat-icon>
         <span>Contact</span>
+    </button>
+    <button mat-menu-item (click)="darkMode = !darkMode">
+        <mat-icon>{{darkMode ? 'light_mode' : 'dark_mode'}}</mat-icon>
+        <span>{{darkMode ? 'Light mode' : 'Dark mode'}}</span>
     </button>
 </mat-menu>

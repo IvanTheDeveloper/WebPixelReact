@@ -11,17 +11,18 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  progressBar: boolean = false
+  isLoading: boolean = false
   fieldForm: FormGroup
   hidePassword: boolean = true
   hideConfirmPassword: boolean = true
+  downloadCredentials: boolean = false
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router, private snackBar: MatSnackBar) {
-
     this.fieldForm = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30), Validators.pattern(pwdRegExp)]),
       confirmPassword: new FormControl('', [Validators.required]),
+      username: new FormControl('', [Validators.required]),
     }, {
       validators: this.validate('password', 'confirmPassword')
     })
@@ -37,6 +38,10 @@ export class RegisterComponent {
 
   get confirmPassword() {
     return this.fieldForm.get('confirmPassword')
+  }
+
+  get username() {
+    return this.fieldForm.get('username')
   }
 
   doPasswordsMatch() {
@@ -128,17 +133,15 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.fieldForm.valid) {
-      this.progressBar = true
-      const email = this.fieldForm.get('email')?.value;
-      const password = this.fieldForm.get('password')?.value;
-      this.auth.register(email, password).then(
+      this.isLoading = true
+      this.auth.register(this.email?.value, this.password?.value, this.username?.value).then(
         () => {
-          this.downloadTxtFile()
+          (this.downloadCredentials ? this.downloadTxtFile() : '')
           this.LoginActions()
         }
       ).catch(
         error => {
-          this.progressBar = false
+          this.isLoading = false
           const errorMessage = (error.code == 'auth/email-already-in-use' ? 'There is already an account with that email' : 'Unknown: ' + error)
           this.openSnackBar("Register error: " + errorMessage)
         }
@@ -151,7 +154,7 @@ export class RegisterComponent {
     await new Promise(f => setTimeout(f, 1000))
     this.router.navigateByUrl('/home')
     this.openSnackBar('Welcome ' + this.auth.currentUser?.displayName + '!')
-    this.progressBar = false
+    this.isLoading = false
   }
 
   openSnackBar(text: string) {

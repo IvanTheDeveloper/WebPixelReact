@@ -1,13 +1,21 @@
 <div class="container">
   <mat-card>
-    <mat-progress-bar mode="indeterminate" *ngIf="progressBar"></mat-progress-bar>
+    <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
     <mat-card-header class="centerer">
       <mat-card-title>Create new account</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
       <form [formGroup]="fieldForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="fill">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" placeholder="Create a new username">
+          <mat-icon matSuffix></mat-icon>
+          <mat-error *ngIf="username?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" placeholder="Introduce your email">
           <mat-icon matSuffix></mat-icon>
@@ -15,7 +23,7 @@
           <mat-error *ngIf="email?.hasError('email')">Invalid email</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
           <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'"
             placeholder="Create a new password">
@@ -32,7 +40,7 @@
               have a length between 8 and 30 characters</mat-error></ng-template>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Confirm password</mat-label>
           <input matInput formControlName="confirmPassword" [type]="hideConfirmPassword ? 'password' : 'text'"
             placeholder="Repeat your password">
@@ -43,6 +51,7 @@
               match</mat-error></ng-template>
         </mat-form-field>
 
+        <mat-checkbox [(ngModel)]="downloadCredentials" color="primary">Download credentials</mat-checkbox>
         <button mat-raised-button color="primary" type="submit">Register</button>
       </form>
 

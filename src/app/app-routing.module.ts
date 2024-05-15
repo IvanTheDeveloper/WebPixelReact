@@ -15,6 +15,7 @@ import { CommentComponent } from './components/comment/comment.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
+import { MainComponent } from './layouts/main/main.component';
 
 const landing = 'home' //when the user IS NOT logged in
 const home = 'home' //when the user IS logged in
@@ -33,23 +34,36 @@ const download = 'download'
 const about = 'about'
 
 const routes: Routes = [
-  { path: 'comment/:id', component: CommentComponent },
+  { path: '', redirectTo: landing, pathMatch: 'full' }, //default page on opening
+  //#region views with complex layout
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      { path: 'comment/:id', component: CommentComponent },
 
-  { path: download, component: DownloadComponent },
-  { path: about, component: AboutComponent },
-  { path: login, component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
-  { path: register, component: RegisterComponent, canActivate: [unauthenticatedUsersGuard] },
-  { path: userSettings, component: UserSettingsComponent, canActivate: [authenticatedUsersGuard] },
-  { path: admin, component: AdminComponent, canActivate: [adminGuard] },
+      { path: download, title: download, component: DownloadComponent },
+      { path: about, title: about, component: AboutComponent },
+      { path: login, title: login, component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
+      { path: register, title: register, component: RegisterComponent, canActivate: [unauthenticatedUsersGuard] },
+      { path: userSettings, title: userSettings, component: UserSettingsComponent, canActivate: [authenticatedUsersGuard] },
+      { path: admin, title: admin, component: AdminComponent, canActivate: [adminGuard] },
 
-  { path: '', redirectTo: landing, pathMatch: 'full' }, //default page for welcoming
-  { path: landing, component: HomeComponent },
-  { path: home, component: HomeComponent },
-  { path: cookieConsent, component: HomeComponent },
+      { path: landing, title: landing, component: HomeComponent },
+      { path: home, title: home, component: HomeComponent },
+      { path: cookieConsent, title: cookieConsent, component: HomeComponent },
+      { path: privacyPolicy, title: privacyPolicy, component: PrivacyPolicyComponent },
+      { path: termsAndConditions, title: termsAndConditions, component: TermsAndConditionsComponent },
+      { path: notAuthenticated, title: notAuthenticated, component: NotAuthenticatedComponent },
+      { path: notFound, title: notFound, component: PageNotFoundComponent },
+    ]
+  },
+  //#endregion
+  //#region views with naked components
   { path: privacyPolicy, component: PrivacyPolicyComponent },
   { path: termsAndConditions, component: TermsAndConditionsComponent },
-  { path: notAuthenticated, component: NotAuthenticatedComponent },
-  { path: notFound, component: PageNotFoundComponent },
+  { path: cookieConsent, component: TermsAndConditionsComponent },
+  //#endregion
   { path: '**', redirectTo: notFound }, //view when the url is invalid
 ]
 

@@ -63,6 +63,8 @@ import { AdminComponent } from './components/admin/admin.component';
 import { FormDialogComponent } from './components/form-dialog/form-dialog.component';
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
+import { MainComponent } from './layouts/main/main.component';
+import { CursorComponent } from './components/cursor/cursor.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +101,8 @@ import { TermsAndConditionsComponent } from './components/terms-and-conditions/t
     FormDialogComponent,
     PrivacyPolicyComponent,
     TermsAndConditionsComponent,
+    MainComponent,
+    CursorComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,13 @@
+<!--main.component.html-->
+<app-cursor></app-cursor>
+<app-header></app-header>
+<div class="router-container" ngClass="darkmode">
+    <router-outlet></router-outlet>
+    <app-easter-egg></app-easter-egg>
+</div>
+<app-footer></app-footer>
+<app-dev></app-dev>
+
+<!--
+[ngClass]="{'darkmode': darkmodeEnabled, 'lightmode': !darkmodeEnabled}">
+-->

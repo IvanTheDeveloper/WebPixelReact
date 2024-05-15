@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Auth, GoogleAuthProvider, UserCredential, createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword, updateProfile } from '@angular/fire/auth';
 import { Firestore, collection, collectionData, getFirestore, doc, updateDoc, setDoc, getDoc, deleteDoc } from '@angular/fire/firestore';
+import { HttpClient } from '@angular/common/http';
 const bcrypt = require('bcryptjs'); // wtf? que es esto me quiero morir
 
 @Injectable({
@@ -14,7 +15,7 @@ export class AuthService {
   private readonly imageList = ['avatarUrl', 'cursorUrl',]
   private readonly roleList = ['admin', 'mod', 'visitor',]
 
-  constructor(private cookieService: CookieService, private auth: Auth, private db: Firestore) { }
+  constructor(private cookieService: CookieService, private auth: Auth, private db: Firestore, private http: HttpClient) { }
 
   //#region Authentication module
 
@@ -78,19 +79,39 @@ export class AuthService {
     )
   }
 
-  register(email: string, password: string): Promise<UserCredential> {
+  private generateRandomAvatar(name: string) {
+    name = encodeURIComponent(name)
+    const color = this.getRandomHexColor()
+    return `https://ui-avatars.com/api/?background=${color}&name=${name}`
+    //'https://source.boringavatars.com'
+  }
+
+  private getRandomHexColor() {
+    const letters = '0123456789ABCDEF'
+    let color = ''
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)]
+    }
+    return color
+  }
+
+  register(email: string, password: string, username: string = 'user'): Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.auth, email, password).then(
       (userCredential) => {
+        const avatarUrl = this.generateRandomAvatar(username)
+        this.setAuthCurrentUserProperty('displayName', username)
+        this.setAuthCurrentUserProperty('photoURL', avatarUrl)
+
         const userDocRef = doc(this.db, 'users', userCredential.user.uid)
         const user = {
           data: {
             email,
             password: bcrypt.hashSync(password, 10),
             phone: null,
-            username: 'user',
+            username,
           },
           images: {
-            avatarUrl: null,
+            avatarUrl,
             cursorUrl: null,
           },
           roles: {

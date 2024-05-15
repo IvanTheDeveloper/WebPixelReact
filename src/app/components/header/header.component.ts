@@ -8,9 +8,11 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  userAuthenticated: boolean = true
-  username = ''
-  role = ''
+  userAuthenticated = false
+  username: string = ''
+  role: string | null = null
+  avatar: string | null = null
+  darkMode = false
 
   constructor(private auth: AuthService, private router: Router) { }
 
@@ -25,8 +27,9 @@ export class HeaderComponent {
   update() {
     this.userAuthenticated = this.auth.isAuthenticated()
     this.username = this.auth.currentUser?.displayName ?? 'You'
+    this.avatar = this.auth.currentUser?.photoURL ?? null
     this.auth.getHighestRole().then(result => {
-      this.role = (result != '' ? `(${result})` : '')
+      this.role = result
     })
   }
 

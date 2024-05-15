@@ -61,7 +61,7 @@ export class ProfesorListComponent {
   }
 
   addObject(): void {
-    const dialogRef = this.dialog.open(ProfesorFormComponent, {
+    const dialogRef = this.dialog.open(ProfesorListComponent, {
       width: '500px',
       data: { isAdd: true, info: {} as any }
     });

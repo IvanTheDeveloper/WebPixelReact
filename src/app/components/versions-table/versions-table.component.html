@@ -1,0 +1,28 @@
+<table mat-table matSort matPaginator [dataSource]="dataSource">
+
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header tex>Version</th>
+        <td mat-cell *matCellDef="let element">{{element.id}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="changelog">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Changes</th>
+        <td mat-cell *matCellDef="let element" class="scrollable">{{element.changelog}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let element">{{element.date | date:'dd-MM-yyyy'}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onSubmit(row)"></tr>
+
+    <tr *matNoDataRow>
+        <td [attr.colspan]=" displayedColumns.length">No releases available yet in this platform</td>
+    </tr>
+
+</table>
+
+<mat-paginator showFirstLastButtons [pageSizeOptions]="[1, 5, 10]" [pageSize]="5"
+    aria-label="Select page"></mat-paginator>

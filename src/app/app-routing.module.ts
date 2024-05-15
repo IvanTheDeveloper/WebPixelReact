@@ -22,9 +22,9 @@ const home = 'home' //when the user IS logged in
 const notAuthenticated = 'unauthorized'
 const notFound = '404'
 
-const cookieConsent = 'cookies'
+const cookieConsent = 'cookie-consent'
 const privacyPolicy = 'privacy-policy'
-const termsAndConditions = 'terms-of-use'
+const termsAndConditions = 'terms-and-conditions'
 
 const login = 'login'
 const register = 'register'
@@ -35,8 +35,7 @@ const about = 'about'
 
 const routes: Routes = [
   { path: '', redirectTo: landing, pathMatch: 'full' }, //default page on opening
-  //#region views with complex layout
-  {
+  { //views with complex layout
     path: '',
     component: MainComponent,
     children: [
@@ -52,18 +51,19 @@ const routes: Routes = [
       { path: landing, title: landing, component: HomeComponent },
       { path: home, title: home, component: HomeComponent },
       { path: cookieConsent, title: cookieConsent, component: HomeComponent },
-      { path: privacyPolicy, title: privacyPolicy, component: PrivacyPolicyComponent },
-      { path: termsAndConditions, title: termsAndConditions, component: TermsAndConditionsComponent },
       { path: notAuthenticated, title: notAuthenticated, component: NotAuthenticatedComponent },
       { path: notFound, title: notFound, component: PageNotFoundComponent },
     ]
   },
-  //#endregion
-  //#region views with naked components
-  { path: privacyPolicy, component: PrivacyPolicyComponent },
-  { path: termsAndConditions, component: TermsAndConditionsComponent },
-  { path: cookieConsent, component: TermsAndConditionsComponent },
-  //#endregion
+  { //views with naked components
+    path: '',
+    children: [
+      { path: privacyPolicy, component: PrivacyPolicyComponent },
+      { path: termsAndConditions, component: TermsAndConditionsComponent },
+      { path: cookieConsent, component: TermsAndConditionsComponent },
+
+    ],
+  },
   { path: '**', redirectTo: notFound }, //view when the url is invalid
 ]
 

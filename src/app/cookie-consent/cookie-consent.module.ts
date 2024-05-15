@@ -26,7 +26,7 @@ const cookieConfig: NgcCookieConsentConfig = {
     dismiss: 'Got it!',
     deny: 'Refuse cookies',
     link: 'Learn more',
-    href: 'https://cookiesandyou.com',
+    href: 'privacy-policy',
     policy: 'Cookie Policy'
   }
 }

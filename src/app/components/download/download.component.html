@@ -54,28 +54,43 @@
     <mat-card>
         <mat-card-content>
             <p>Device: <span>{{platform}}</span> (browser)</p>
-            <p>Architecture: <span>{{architecture}}</span> bits</p>
-            <p>Language: <span>{{language}}</span>
+            <p>Architecture: <button mat-button
+                    [matMenuTriggerFor]="architectureMenu"><span>{{architecture}}</span><mat-icon>arrow_drop_down</mat-icon></button>
+                bits
 
-                <mat-menu #languageMenu="matMenu">
+                <mat-menu #architectureMenu>
+                    <button mat-menu-item>x64</button>
+                    <button mat-menu-item>x32</button>
+                </mat-menu>
+
+            </p>
+            <p>Language: <button mat-button
+                    [matMenuTriggerFor]="languageMenu"><span>{{language}}</span><mat-icon>arrow_drop_down</mat-icon></button>
+
+                <mat-menu #languageMenu>
                     <button mat-menu-item>English</button>
                     <button mat-menu-item>French</button>
                     <button mat-menu-item>Spanish</button>
                 </mat-menu>
-                <mat-icon [matMenuTriggerFor]="languageMenu">arrow</mat-icon>
+
 
             </p>
-            <p>Version: <span>version</span></p>
+            <p>Version: <button mat-button
+                    (click)="dialogTable()"><span>{{version}}</span><mat-icon>arrow_drop_down</mat-icon></button></p>
         </mat-card-content>
     </mat-card>
 
 
     <div class="buttons">
-        <a [href]="url" download="game.jpg">
-            <button mat-stroked-button color="accent">Download portable</button>
+        <a [href]="url" download="game.zip">
+            <button mat-raised-button color="accent">Download portable
+                <mat-icon>download</mat-icon>
+            </button>
         </a>
-        <a [href]="url" download="game.jpg">
-            <button mat-stroked-button color="accent">Download installer</button>
+        <a [href]="url" download="game.exe">
+            <button mat-raised-button color="accent">Download installer
+                <mat-icon>download</mat-icon>
+            </button>
         </a>
     </div>
 

@@ -1,0 +1,16 @@
+.mat-mdc-row .mat-mdc-cell {
+    transition: all 0.2s;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+    background-color: rgb(255, 199, 246);
+}
+
+.scrollable {
+    max-width: 200px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: auto;
+}

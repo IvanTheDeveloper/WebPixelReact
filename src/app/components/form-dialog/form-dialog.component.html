@@ -6,7 +6,7 @@
             <mat-label>Platform</mat-label>
             <mat-select matInput formControlName="platform" (openedChange)="this.getLatestVersion()">
                 <mat-option value="windows">Windows</mat-option>
-                <mat-option value="mac">MacOS</mat-option>
+                <mat-option value="macos">MacOS</mat-option>
                 <mat-option value="linux">Linux</mat-option>
             </mat-select>
             <mat-error *ngIf="platform?.hasError('required')">Required</mat-error>

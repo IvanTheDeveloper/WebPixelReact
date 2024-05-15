@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { VersionsTableComponent } from '../versions-table/versions-table.component';
+import { RealtimeDatabaseService } from 'src/app/services/realtime-database.service';
+import { isNullOrEmpty } from 'src/app/others/utils';
 
 @Component({
   selector: 'app-download',
@@ -7,14 +11,16 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
   styleUrls: ['./download.component.scss']
 })
 export class DownloadComponent {
-  language = ''
-  architecture = ''
-  platform = ''
-  selectedTabIndex: number = 0;
+  protected language = ''
+  protected architecture = ''
+  protected platform = ''
+  private selectedPlatform = ''
+  protected version: string | null = null
+  private latestVersion = ''
+  protected selectedTabIndex: number = 0
+  protected url = ''
 
-  url = 'https://firebasestorage.googleapis.com/v0/b/ivandevwebsite.appspot.com/o/releases%2FTest.zip?alt=media&token=02370c7e-b38b-46d7-ba1f-df7964472a15'
-
-  constructor() { }
+  constructor(public dialog: MatDialog, private dataService: RealtimeDatabaseService) { }
 
   ngOnInit() {
     this.language = navigator.language
@@ -30,10 +36,53 @@ export class DownloadComponent {
       this.platform = 'Linux'
       this.selectedTabIndex = 2
     }
+    this.selectedPlatform = this.platform
+
+    this.getLatestVersion()
   }
 
   tabChanged(event: MatTabChangeEvent) {
-    this.selectedTabIndex = event.index;
+    if (event.index == 0) {
+      this.selectedPlatform = 'Windows'
+    } else if (event.index == 1) {
+      this.selectedPlatform = 'MacOS'
+    } else if (event.index == 2) {
+      this.selectedPlatform = 'Linux'
+    }
+    this.getLatestVersion()
+  }
+
+  getLatestVersion(): void {
+    this.dataService.get(`releases/${this.selectedPlatform.toLowerCase()}`).subscribe(
+      (response) => {
+        if (response) {
+          this.latestVersion = response.latestVersion
+          this.version = this.latestVersion + ' (latest)'
+          this.url = response[this.latestVersion]?.fileUrl
+        } else {
+          this.version = 'not available'
+        }
+      },
+      (error) => {
+        alert(error)
+        console.log(error)
+      }
+    )
+  }
+
+  dialogTable() {
+    const dialogRef = this.dialog.open(VersionsTableComponent, {
+      data: { platform: this.selectedPlatform, }
+    })
+    dialogRef.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.url = result.fileUrl;
+          this.version = result.id;
+          (this.latestVersion == this.version ? this.version += ' (latest)' : '');
+        }
+      }
+    )
   }
 
 }

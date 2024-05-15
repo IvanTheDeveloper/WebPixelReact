@@ -2,24 +2,26 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { unauthenticatedUsersGuard } from './guards/unauthenticated-users.guard';
 import { authenticatedUsersGuard } from './guards/authenticated-users.guard';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
+import { NotFoundComponent } from './components/basic/not-found/not-found.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
 import { UserSettingsComponent } from './components/user-settings/user-settings.component';
-import { HomeComponent } from './components/home/home.component';
-import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
+import { HomeComponent } from './components/basic/home/home.component';
+import { ForbiddenComponent } from './components/basic/forbidden/forbidden.component';
 import { adminGuard } from './guards/admin.guard';
 import { DownloadComponent } from './components/download/download.component';
-import { AboutComponent } from './components/about/about.component';
+import { AboutComponent } from './components/basic/about/about.component';
 import { CommentComponent } from './components/comment/comment.component';
 import { AdminComponent } from './components/admin/admin.component';
-import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
-import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
+import { PrivacyPolicyComponent } from './components/pdf/privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from './components/pdf/terms-and-conditions/terms-and-conditions.component';
 import { MainComponent } from './layouts/main/main.component';
+import { CookieConsentComponent } from './components/pdf/cookie-consent/cookie-consent.component';
+import { TestComponent } from './components/tools/test/test.component';
 
 const landing = 'home' //when the user IS NOT logged in
 const home = 'home' //when the user IS logged in
-const notAuthenticated = 'unauthorized'
+const forbidden = '403'
 const notFound = '404'
 
 const cookieConsent = 'cookie-consent'
@@ -32,6 +34,8 @@ const userSettings = 'settings'
 const admin = 'admin'
 const download = 'download'
 const about = 'about'
+
+const test = 'helloworld'
 
 const routes: Routes = [
   { path: '', redirectTo: landing, pathMatch: 'full' }, //default page on opening
@@ -50,9 +54,8 @@ const routes: Routes = [
 
       { path: landing, title: landing, component: HomeComponent },
       { path: home, title: home, component: HomeComponent },
-      { path: cookieConsent, title: cookieConsent, component: HomeComponent },
-      { path: notAuthenticated, title: notAuthenticated, component: NotAuthenticatedComponent },
-      { path: notFound, title: notFound, component: PageNotFoundComponent },
+      { path: forbidden, title: forbidden, component: ForbiddenComponent },
+      { path: notFound, title: notFound, component: NotFoundComponent },
     ]
   },
   { //views with naked components
@@ -60,8 +63,8 @@ const routes: Routes = [
     children: [
       { path: privacyPolicy, component: PrivacyPolicyComponent },
       { path: termsAndConditions, component: TermsAndConditionsComponent },
-      { path: cookieConsent, component: TermsAndConditionsComponent },
-
+      { path: cookieConsent, component: CookieConsentComponent },
+      { path: test, component: TestComponent },
     ],
   },
   { path: '**', redirectTo: notFound }, //view when the url is invalid

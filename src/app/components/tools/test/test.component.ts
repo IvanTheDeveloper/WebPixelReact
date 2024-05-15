@@ -7,4 +7,12 @@ import { Component } from '@angular/core';
 })
 export class TestComponent {
 
+  readonly keyValueArray = {
+    home: '/home',
+    about: '/about',
+    download: '/download',
+  };
+
+  //ARREGLAR LO DE LA API DE IMAGENES DE PERFIL PARA EL NEGRO DE DIEGO
+
 }

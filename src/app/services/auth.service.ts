@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Auth, GoogleAuthProvider, UserCredential, createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword, updateProfile } from '@angular/fire/auth';
 import { Firestore, collection, collectionData, getFirestore, doc, updateDoc, setDoc, getDoc, deleteDoc } from '@angular/fire/firestore';
+import { getRandomHexColor } from '../others/utils';
 const bcrypt = require('bcryptjs'); // wtf? que es esto me quiero morir
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly COOKIE_KEY = 'my_auth_token'
+  private readonly COOKIE_KEY = 'auth_token'
   private readonly defaultAuthProperties = ['email', 'displayName', 'phoneNumber', 'photoURL',]
   private readonly dataList = ['email', 'password', 'username', 'phone', 'address',]
   private readonly imageList = ['avatarUrl', 'cursorUrl',]
@@ -36,6 +37,11 @@ export class AuthService {
   signinWithGoogle(): Promise<UserCredential> {
     return signInWithPopup(this.auth, new GoogleAuthProvider()).then(
       (userCredential) => {
+        this.setAuthCurrentUserProperty('email', userCredential.user.email ?? '')
+        this.setAuthCurrentUserProperty('displayName', userCredential.user.displayName ?? '')
+        this.setAuthCurrentUserProperty('photoURL', userCredential.user.photoURL ?? '')
+        this.setAuthCurrentUserProperty('phoneNumber', userCredential.user.phoneNumber ?? '')
+
         const userDocRef = doc(this.db, 'users', userCredential.user.uid)
         return getDoc(userDocRef).then((docSnapshot) => {
           if (!docSnapshot.exists()) {
@@ -80,18 +86,9 @@ export class AuthService {
 
   private generateRandomAvatar(name: string) {
     name = encodeURIComponent(name)
-    const color = this.getRandomHexColor()
+    const color = getRandomHexColor()
     return `https://ui-avatars.com/api/?background=${color}&name=${name}`
-    //'https://source.boringavatars.com'
-  }
-
-  private getRandomHexColor() {
-    const letters = '0123456789ABCDEF'
-    let color = ''
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)]
-    }
-    return color
+    //return 'https://source.boringavatars.com'
   }
 
   register(email: string, password: string, username: string = 'user'): Promise<UserCredential> {

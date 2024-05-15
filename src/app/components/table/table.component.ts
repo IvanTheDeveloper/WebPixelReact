@@ -9,7 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadFileService } from 'src/app/services/upload-file.service';
 import { GameReleaseService } from 'src/app/services/game-release.service';
-import { dd } from 'src/app/others/utils';
+import { dump } from 'src/app/others/utils';
 import { RealtimeDatabaseService } from 'src/app/services/realtime-database.service';
 
 const NAMES: string[] = [

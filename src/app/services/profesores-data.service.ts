@@ -8,7 +8,7 @@ import { firebaseConfig } from '../firebase/firebase.module';
   providedIn: 'root'
 })
 export class ProfesoresDataService {
-  private readonly COOKIE_KEY = 'my_auth_token'
+  private readonly COOKIE_KEY = 'auth_token'
   private firebaseUrl = firebaseConfig.databaseURL
   private firebaseFolder = 'personas/profesores'
   private objectList: any[] = []

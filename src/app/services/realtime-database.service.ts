@@ -8,7 +8,7 @@ import { firebaseConfig } from '../firebase/firebase.module';
   providedIn: 'root'
 })
 export class RealtimeDatabaseService {
-  private readonly COOKIE_KEY = 'my_auth_token'
+  private readonly COOKIE_KEY = 'auth_token'
   private readonly firebaseUrl = firebaseConfig.databaseURL
   private readonly ObjRootDir = 'releases'
   public localObjList: any[] = [] //get data

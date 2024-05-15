@@ -72,7 +72,7 @@ export class CommentBoxComponent {
         editedAt: null,
         createdAt: Date.now(),
       }
-      this.dataService.addObject(comment).subscribe(
+      this.dataService.createObject(comment).subscribe(
         () => {
           this.getComments()
           this.formController.reset()

@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FirebaseModule } from './firebase/firebase.module';
-import { CookieConsentModule } from './cookie-consent/cookie-consent.module';
+import { CookiesModule } from './cookies/cookies.module';
 
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,40 +31,41 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
+import { HeaderComponent } from './components/basic/header/header.component';
+import { FooterComponent } from './components/basic/footer/footer.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { CardComponent } from './components/card/card.component';
 import { CardListComponent } from './components/card-list/card-list.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { NotFoundComponent } from './components/basic/not-found/not-found.component';
 import { AlumnoFormComponent } from './components/alumno-form/alumno-form.component';
 import { AlumnoListComponent } from './components/alumno-list/alumno-list.component';
 import { ProfesorListComponent } from './components/profesor-list/profesor-list.component';
 import { ProfesorFormComponent } from './components/profesor-form/profesor-form.component';
-import { NoResultsComponent } from './components/no-results/no-results.component';
+import { NoResultsComponent } from './components/basic/no-results/no-results.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { FilterComponent } from './components/filter/filter.component';
 import { TableComponent } from './components/table/table.component';
 import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
-import { EasterEggComponent } from './components/easter-egg/easter-egg.component';
-import { HomeComponent } from './components/home/home.component';
-import { TestComponent } from './components/test/test.component';
-import { AboutComponent } from './components/about/about.component';
+import { EasterEggComponent } from './components/tools/easter-egg/easter-egg.component';
+import { HomeComponent } from './components/basic/home/home.component';
+import { TestComponent } from './components/tools/test/test.component';
+import { AboutComponent } from './components/basic/about/about.component';
 import { DownloadComponent } from './components/download/download.component';
-import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
-import { DevComponent } from './components/dev/dev.component';
-import { ScamComponent } from './components/scam/scam.component';
+import { ForbiddenComponent } from './components/basic/forbidden/forbidden.component';
+import { DevComponent } from './components/tools/dev/dev.component';
+import { ScamComponent } from './components/tools/scam/scam.component';
 import { CommentBoxComponent } from './components/comment-box/comment-box.component';
 import { CommentComponent } from './components/comment/comment.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { FormDialogComponent } from './components/form-dialog/form-dialog.component';
-import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
-import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
+import { PrivacyPolicyComponent } from './components/pdf/privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from './components/pdf/terms-and-conditions/terms-and-conditions.component';
 import { MainComponent } from './layouts/main/main.component';
 import { VersionsTableComponent } from './components/versions-table/versions-table.component';
+import { CookieConsentComponent } from './components/pdf/cookie-consent/cookie-consent.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,7 @@ import { VersionsTableComponent } from './components/versions-table/versions-tab
     DeleteDialogComponent,
     CardComponent,
     CardListComponent,
-    PageNotFoundComponent,
+    NotFoundComponent,
     AlumnoFormComponent,
     AlumnoListComponent,
     ProfesorListComponent,
@@ -92,7 +93,7 @@ import { VersionsTableComponent } from './components/versions-table/versions-tab
     TestComponent,
     AboutComponent,
     DownloadComponent,
-    NotAuthenticatedComponent,
+    ForbiddenComponent,
     DevComponent,
     ScamComponent,
     CommentBoxComponent,
@@ -103,13 +104,14 @@ import { VersionsTableComponent } from './components/versions-table/versions-tab
     TermsAndConditionsComponent,
     MainComponent,
     VersionsTableComponent,
+    CookieConsentComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FirebaseModule,
-    CookieConsentModule,
+    CookiesModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,

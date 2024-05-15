@@ -3,13 +3,12 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { firebaseConfig } from '../firebase/firebase.module';
 import { Observable, map, switchMap } from 'rxjs';
-import { dd } from '../others/utils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameReleaseService {
-  private readonly COOKIE_KEY = 'my_auth_token'
+  private readonly COOKIE_KEY = 'auth_token'
   private readonly firebaseUrl = firebaseConfig.databaseURL
   private readonly ObjRootDir = 'releases'
   public localObjList: any[] = [] //get data

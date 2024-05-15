@@ -1,16 +1,40 @@
 export class Comment {
-    id: string
-    userId: string
+    id: string | null
+    authorId: string
     message: string
     votes: number
-    date: Date
+    uidsUpvoted: string[]
+    uidsDownvoted: string[]
+    reports: number
+    uidsReported: string[]
+    isEdited: boolean
+    editedAt: number     //timestamp
+    createdAt: number    //timestamp
 
-    constructor(id: string, userId: string, message: string, votes: number, date: Date) {
+    constructor(
+        id: string | null = null,
+        authorId: string,
+        message: string = '',
+        votes: number = 0,
+        uidsUpvoted: string[] = [''],
+        uidsDownvoted: string[] = [''],
+        reports: number = 0,
+        uidsReported: string[] = [''],
+        isEdited: boolean = false,
+        editedAt: number = Date.now(),
+        createdAt: number = Date.now(),
+    ) {
         this.id = id
-        this.userId = userId
+        this.authorId = authorId
         this.message = message
         this.votes = votes
-        this.date = date
+        this.uidsUpvoted = uidsUpvoted
+        this.uidsDownvoted = uidsDownvoted
+        this.reports = reports
+        this.uidsReported = uidsReported
+        this.isEdited = isEdited
+        this.editedAt = editedAt
+        this.createdAt = createdAt
     }
 
 }

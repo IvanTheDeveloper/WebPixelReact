@@ -3,6 +3,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { Auth, GoogleAuthProvider, UserCredential, createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword, updateProfile } from '@angular/fire/auth';
 import { Firestore, collection, collectionData, getFirestore, doc, updateDoc, setDoc, getDoc, deleteDoc } from '@angular/fire/firestore';
 import { getRandomHexColor } from '../others/utils';
+import { UploadFileService } from './upload-file.service';
+import { User } from '../models/user';
 const bcrypt = require('bcryptjs'); // wtf? que es esto me quiero morir
 
 @Injectable({
@@ -15,7 +17,7 @@ export class AuthService {
   private readonly imageList = ['avatarUrl', 'cursorUrl',]
   private readonly roleList = ['admin', 'mod', 'visitor',]
 
-  constructor(private cookieService: CookieService, private auth: Auth, private db: Firestore) { }
+  constructor(private cookieService: CookieService, private auth: Auth, private db: Firestore, private fileUploader: UploadFileService) { }
 
   //#region Authentication module
 
@@ -45,28 +47,11 @@ export class AuthService {
         const userDocRef = doc(this.db, 'users', userCredential.user.uid)
         return getDoc(userDocRef).then((docSnapshot) => {
           if (!docSnapshot.exists()) {
-            const user = {
-              data: {
-                email: userCredential.user.email,
-                password: null,
-                username: userCredential.user.displayName,
-                phone: userCredential.user.phoneNumber,
-                address: null,
-              },
-              images: {
-                avatarUrl: userCredential.user.photoURL,
-                cursorUrl: null,
-              },
-              roles: {
-                admin: false,
-                mod: false,
-              },
-              records: {
-                accountCreated: Date.now(),
-                lastLogin: Date.now(),
-              },
-            }
-            return setDoc(userDocRef, user, { merge: true }).then(
+            const user = new User({
+              email: userCredential.user.email!, username: userCredential.user.displayName!,
+              phone: userCredential.user.phoneNumber!, avatarUrl: userCredential.user.photoURL!
+            })
+            return setDoc(userDocRef, { ...user }, { merge: true }).then(
               () => {
                 return userCredential
               },
@@ -94,40 +79,23 @@ export class AuthService {
   register(email: string, password: string, username: string = 'user'): Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.auth, email, password).then(
       (userCredential) => {
-        const avatarUrl = this.generateRandomAvatar(username)
+        const generatedImg = this.generateRandomAvatar(username)
         this.setAuthCurrentUserProperty('displayName', username)
-        this.setAuthCurrentUserProperty('photoURL', avatarUrl)
+        return this.fileUploader.uploadFileByUrl(`images/${Date.now()}_${username}`, generatedImg).then((avatarUrl) => {
+          this.setAuthCurrentUserProperty('photoURL', avatarUrl)
 
-        const userDocRef = doc(this.db, 'users', userCredential.user.uid)
-        const user = {
-          data: {
-            email,
-            password: bcrypt.hashSync(password, 10),
-            phone: null,
-            username,
-          },
-          images: {
-            avatarUrl,
-            cursorUrl: null,
-          },
-          roles: {
-            admin: false,
-            mod: false,
-          },
-          records: {
-            accountCreated: Date.now(),
-            lastLogin: Date.now(),
-          },
-        }
-        return setDoc(userDocRef, user, { merge: true }).then(
-          () => {
-            return userCredential
-          },
-          (error) => {
-            deleteUser(userCredential.user)
-            return Promise.reject(error)
-          }
-        )
+          const userDocRef = doc(this.db, 'users', userCredential.user.uid)
+          const user = new User({ email, password: bcrypt.hashSync(password, 10), username, avatarUrl })
+          return setDoc(userDocRef, { ...user }, { merge: true }).then(
+            () => {
+              return userCredential
+            },
+            (error) => {
+              deleteUser(userCredential.user)
+              return Promise.reject(error)
+            }
+          )
+        })
       }
     )
   }

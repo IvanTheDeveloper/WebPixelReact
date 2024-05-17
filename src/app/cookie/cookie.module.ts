@@ -13,12 +13,12 @@ const cookieConfig: NgcCookieConsentConfig = {
   theme: 'classic',
   palette: {
     popup: {
-      background: '#000000',
+      background: '#3F51B5',
       text: '#ffffff',
       link: '#ffffff'
     },
     button: {
-      background: '#f1d600',
+      background: '#FC93C9',
       text: '#000000',
       border: 'transparent'
     }
@@ -41,7 +41,7 @@ const cookieConfig: NgcCookieConsentConfig = {
     NgcCookieConsentModule.forRoot(cookieConfig),
   ]
 })
-export class CookiesModule implements OnInit, OnDestroy {
+export class CookieModule implements OnInit, OnDestroy {
 
   //keep refs to subscriptions to be able to unsubscribe later
   private popupOpenSubscription!: Subscription;

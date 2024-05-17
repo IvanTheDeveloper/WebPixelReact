@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { routingTable } from '../app-routing.module';
 
 export const adminGuard: CanActivateFn = (route, state) => {
 
@@ -11,7 +12,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
     if (result == 'admin') {
       return true
     } else {
-      router.navigateByUrl('/404')
+      router.navigate([routingTable.forbidden])
       return false
     }
   })

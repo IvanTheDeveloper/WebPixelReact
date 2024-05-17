@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { routingTable } from '../app-routing.module';
 
 export const unauthenticatedUsersGuard: CanActivateFn = (route, state) => {
 
@@ -8,7 +9,7 @@ export const unauthenticatedUsersGuard: CanActivateFn = (route, state) => {
   const router = inject(Router)
 
   if (login.isAuthenticated()) {
-    router.navigateByUrl('/home')
+    router.navigate([routingTable.home])
     return false
   } else {
     return true

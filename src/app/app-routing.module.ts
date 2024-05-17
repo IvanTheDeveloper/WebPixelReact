@@ -18,56 +18,58 @@ import { TermsAndConditionsComponent } from './components/pdf/terms-and-conditio
 import { MainComponent } from './layouts/main/main.component';
 import { CookieConsentComponent } from './components/pdf/cookie-consent/cookie-consent.component';
 import { TestComponent } from './components/tools/test/test.component';
+import { UnauthorizedComponent } from './components/basic/unauthorized/unauthorized.component';
 
-const landing = 'home' //when the user IS NOT logged in
-const home = 'home' //when the user IS logged in
-const forbidden = '403'
-const notFound = '404'
-
-const cookieConsent = 'cookie-consent'
-const privacyPolicy = 'privacy-policy'
-const termsAndConditions = 'terms-and-conditions'
-
-const login = 'login'
-const register = 'register'
-const userSettings = 'settings'
-const admin = 'admin'
-const download = 'download'
-const about = 'about'
-
-const test = 'helloworld'
+export const routingTable = {
+  landing: 'home', //when the user IS NOT logged in
+  home: 'home', //when the user IS logged in
+  notFound: '404',
+  forbidden: '403',
+  unauthorized: '401',
+  cookieConsent: 'legal/cookie-consent',
+  privacyPolicy: 'legal/privacy-policy',
+  termsAndConditions: 'legal/terms-and-conditions',
+  login: 'login',
+  register: 'register',
+  userSettings: 'settings',
+  download: 'download',
+  about: 'about',
+  admin: 'admin',
+  test: 'helloworld'
+};
 
 const routes: Routes = [
-  { path: '', redirectTo: landing, pathMatch: 'full' }, //default page on opening
+  { path: '', redirectTo: routingTable.landing, pathMatch: 'full' }, //default page on opening
   { //views with complex layout
     path: '',
     component: MainComponent,
     children: [
+      { path: routingTable.landing, title: 'Welcome', component: HomeComponent },
+      { path: routingTable.home, title: 'Pixel React', component: HomeComponent },
+      { path: routingTable.notFound, title: 'Not Found', component: NotFoundComponent },
+      { path: routingTable.forbidden, title: 'Forbidden', component: ForbiddenComponent },
+      { path: routingTable.unauthorized, title: 'Unauthorized', component: UnauthorizedComponent },
+
+      { path: routingTable.login, title: 'Login', component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
+      { path: routingTable.register, title: 'Register', component: RegisterComponent, canActivate: [unauthenticatedUsersGuard] },
+      { path: routingTable.userSettings, title: 'Settings', component: UserSettingsComponent, canActivate: [authenticatedUsersGuard] },
+      { path: routingTable.admin, title: 'Admin', component: AdminComponent, canActivate: [adminGuard] },
+
+      { path: routingTable.about, title: 'About Us', component: AboutComponent },
+      { path: routingTable.download, title: 'Download', component: DownloadComponent },
       { path: 'comment/:id', component: CommentComponent },
-
-      { path: download, title: download, component: DownloadComponent },
-      { path: about, title: about, component: AboutComponent },
-      { path: login, title: login, component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
-      { path: register, title: register, component: RegisterComponent, canActivate: [unauthenticatedUsersGuard] },
-      { path: userSettings, title: userSettings, component: UserSettingsComponent, canActivate: [authenticatedUsersGuard] },
-      { path: admin, title: admin, component: AdminComponent, canActivate: [adminGuard] },
-
-      { path: landing, title: landing, component: HomeComponent },
-      { path: home, title: home, component: HomeComponent },
-      { path: forbidden, title: forbidden, component: ForbiddenComponent },
-      { path: notFound, title: notFound, component: NotFoundComponent },
     ]
   },
   { //views with naked components
     path: '',
     children: [
-      { path: privacyPolicy, component: PrivacyPolicyComponent },
-      { path: termsAndConditions, component: TermsAndConditionsComponent },
-      { path: cookieConsent, component: CookieConsentComponent },
-      { path: test, component: TestComponent },
+      { path: routingTable.cookieConsent, component: CookieConsentComponent },
+      { path: routingTable.privacyPolicy, component: PrivacyPolicyComponent },
+      { path: routingTable.termsAndConditions, component: TermsAndConditionsComponent },
+      { path: routingTable.test, component: TestComponent },
     ],
   },
-  { path: '**', redirectTo: notFound }, //view when the url is invalid
+  { path: '**', redirectTo: routingTable.notFound }, //view when the url is invalid
 ]
 
 @NgModule({

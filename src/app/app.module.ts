@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FirebaseModule } from './firebase/firebase.module';
-import { CookiesModule } from './cookies/cookies.module';
+import { CookieModule } from './cookie/cookie.module';
 
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
@@ -66,6 +66,10 @@ import { TermsAndConditionsComponent } from './components/pdf/terms-and-conditio
 import { MainComponent } from './layouts/main/main.component';
 import { VersionsTableComponent } from './components/versions-table/versions-table.component';
 import { CookieConsentComponent } from './components/pdf/cookie-consent/cookie-consent.component';
+import { RouterComponent } from './components/router/router.component';
+import { TestDirDirective } from './directives/test-dir.directive';
+import { CountryFlagEmojiPipe } from './pipes/country-flag-emoji.pipe';
+import { UnauthorizedComponent } from './components/basic/unauthorized/unauthorized.component';
 
 @NgModule({
   declarations: [
@@ -105,13 +109,17 @@ import { CookieConsentComponent } from './components/pdf/cookie-consent/cookie-c
     MainComponent,
     VersionsTableComponent,
     CookieConsentComponent,
+    RouterComponent,
+    TestDirDirective,
+    CountryFlagEmojiPipe,
+    UnauthorizedComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FirebaseModule,
-    CookiesModule,
+    CookieModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,

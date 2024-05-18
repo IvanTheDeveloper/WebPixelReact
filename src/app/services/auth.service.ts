@@ -119,6 +119,15 @@ export class AuthService {
     return signOut(this.auth)
   }
 
+  changePassword(password: string) {
+    const currentUser = this.auth.currentUser
+    if (currentUser) {
+      return updatePassword(currentUser, password)
+    } else {
+      return Promise.reject('No user signed in.')
+    }
+  }
+
   deleteAccount(): Promise<void> {
     const currentUser = this.auth.currentUser
     if (currentUser) {

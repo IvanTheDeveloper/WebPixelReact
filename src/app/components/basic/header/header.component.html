@@ -6,12 +6,14 @@
     <span class="example-spacer"></span>
 
     <nav mat-tab-nav-bar backgroundColor="primary">
-        <a mat-tab-link routerLink="/home" routerLinkActive #rl1="routerLinkActive" [active]="rl1.isActive">Home</a>
-        <a mat-tab-link routerLink="/download" routerLinkActive #rl2="routerLinkActive"
+        <a mat-tab-link [routerLink]="routes.home" routerLinkActive #rl1="routerLinkActive"
+            [active]="rl1.isActive">Home</a>
+        <a mat-tab-link [routerLink]="routes.download" routerLinkActive #rl2="routerLinkActive"
             [active]="rl2.isActive">Download</a>
-        <a mat-tab-link routerLink="/about" routerLinkActive #rl3="routerLinkActive" [active]="rl3.isActive">About
+        <a mat-tab-link [routerLink]="routes.about" routerLinkActive #rl3="routerLinkActive"
+            [active]="rl3.isActive">About
             Us</a>
-        <a mat-tab-link routerLink="/admin" routerLinkActive #rl4="routerLinkActive" [active]="rl4.isActive"
+        <a mat-tab-link [routerLink]="routes.admin" routerLinkActive #rl4="routerLinkActive" [active]="rl4.isActive"
             *ngIf="role == 'admin'">Admin</a>
     </nav>
 
@@ -26,19 +28,19 @@
 </mat-toolbar>
 
 <mat-menu #menu>
-    <button mat-menu-item routerLink="/register" *ngIf="!userAuthenticated">
+    <button mat-menu-item [routerLink]="routes.register" *ngIf="!userAuthenticated">
         <mat-icon>person</mat-icon>
         <span>Register</span>
     </button>
-    <button mat-menu-item routerLink="/login" *ngIf="!userAuthenticated">
+    <button mat-menu-item [routerLink]="routes.login" *ngIf="!userAuthenticated">
         <mat-icon>login</mat-icon>
         <span>Login</span>
     </button>
-    <button mat-menu-item routerLink="/settings" *ngIf="userAuthenticated">
+    <button mat-menu-item [routerLink]="routes.userSettings" *ngIf="userAuthenticated">
         <mat-icon>settings</mat-icon>
         <span>Settings</span>
     </button>
-    <button mat-menu-item routerLink="/login" (click)="logout()" *ngIf="userAuthenticated">
+    <button mat-menu-item [routerLink]="routes.login" (click)="logout()" *ngIf="userAuthenticated">
         <mat-icon>logout</mat-icon>
         <span>Logout</span>
     </button>

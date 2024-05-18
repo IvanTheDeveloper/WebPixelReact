@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Functions, httpsCallable } from '@angular/fire/functions';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { routingTable } from 'src/app/app-routing.module';
 
 @Component({

@@ -1,5 +1,5 @@
-export function isNullOrEmpty(s: string): boolean {
-    return (s == null || s == undefined || s == '')
+export function isNullOrEmpty(any: any): boolean {
+    return (any == null || any == undefined || any == '')
 }
 
 export function dump(obj: any) {

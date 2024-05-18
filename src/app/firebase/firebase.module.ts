@@ -7,6 +7,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { getFunctions, provideFunctions } from '@angular/fire/functions';
 
 //import { environment } from 'src/environments/environment'; //prod
 import { environment } from 'src/environments/environment.development'; //dev
@@ -22,6 +23,7 @@ export const firebaseConfig = environment.firebaseConfig;
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
+    provideFunctions(() => getFunctions())
   ]
 })
 export class FirebaseModule { }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { routingTable } from 'src/app/app-routing.module';
 
 @Component({
   selector: 'app-header',
@@ -8,6 +9,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  routes = routingTable
+
   userAuthenticated = false
   username: string = ''
   role: string | null = null

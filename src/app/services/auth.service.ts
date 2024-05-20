@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Auth, GoogleAuthProvider, User, UserCredential, createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signInWithPopup, signOut, updateCurrentUser, updateEmail, updatePassword, updatePhoneNumber, updateProfile } from '@angular/fire/auth';
+import { Auth, GoogleAuthProvider, User, UserCredential, createUserWithEmailAndPassword, deleteUser, fetchSignInMethodsForEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateCurrentUser, updateEmail, updatePassword, updatePhoneNumber, updateProfile } from '@angular/fire/auth';
 import { Firestore, collection, collectionData, getFirestore, doc, updateDoc, setDoc, getDoc, deleteDoc } from '@angular/fire/firestore';
-import { dump, generateRandomAvatar, getRandomHexColor } from '../others/utils';
+import { dump, generateRandomAvatar, getRandomHexColor, withTimeout } from '../others/utils';
 import { StorageService } from './storage.service';
 import { MyUser } from '../models/user';
 const bcrypt = require('bcryptjs'); // wtf? que es esto me quiero morir
@@ -14,22 +14,15 @@ export const COOKIE_KEY = 'auth_token'
 })
 export class AuthService {
   private readonly MAX_TIME = Infinity
-  private readonly defaultAuthProperties = ['email', 'displayName', 'phoneNumber', 'photoURL',]
-  private readonly properties = ['email', 'password', 'username', 'phone', 'address', 'avatarUrl', 'cursorUrl', 'admin', 'mod', 'visitor',]
+  private readonly DEFAULT_AUTH_PROPERTIES = ['email', 'displayName', 'phoneNumber', 'photoURL',]
+  private readonly USER_PROPERTIES = ['email', 'password', 'username', 'phone', 'address', 'avatarUrl', 'cursorUrl', 'admin', 'mod', 'visitor',]
 
   constructor(private cookieService: CookieService, private auth: Auth, private db: Firestore, private fileUploader: StorageService) { }
 
   //#region Authentication module
 
-  private updateCookieToken(): void {
-    const me = this.auth.currentUser
-    if (me) {
-      me.getIdToken().then((token) => {
-        this.cookieService.set(COOKIE_KEY, token)
-      }).catch(
-        (error) => console.log('Couldnt retrieve token: ' + error)
-      )
-    }
+  get currentUser() {
+    return this.auth.currentUser
   }
 
   isAuthenticated(): boolean {
@@ -39,8 +32,14 @@ export class AuthService {
 
   async signinWithGoogle(): Promise<UserCredential> {
     const userCredential = await signInWithPopup(this.auth, new GoogleAuthProvider())
-    const user = MyUser.createFromAuthUserWithDefaults(userCredential.user) //arreglar esto
-    user.lastLoginAt = Date.now()
+    const alreadyExists = await this.checkUserExists(userCredential.user)
+    let user: MyUser
+    if (alreadyExists) {
+      user = new MyUser(userCredential.user)
+      user.lastLoginAt = Date.now()
+    } else {
+      user = MyUser.createFromAuthUserWithDefaults(userCredential.user)
+    }
     await this.updateDbUser(user)
     this.updateCookieToken()
     return userCredential
@@ -52,45 +51,20 @@ export class AuthService {
     const path = `images/${userCredential.user.uid}_${Date.now()}`
     const url = await this.fileUploader.uploadFile(generatedImg, path)
     const user = MyUser.createFromAuthUserWithDefaults(userCredential.user)
-    user.username = username
     user.avatarUrl = url
-    await this.updateAuthUser(user)
-    alert(bcrypt.compareSync(user.password, bcrypt.hashSync(password, 10)))
-    user.password = bcrypt.hashSync(password, 10)
-    await this.updateDbUser(user)
+    user.username = username
+    user.password = password
+    await this.updateUser(user)
     this.updateCookieToken()
     return userCredential
   }
 
   async login(email: string, password: string): Promise<UserCredential> {
-    const userCredential = await this.withTimeout(signInWithEmailAndPassword(this.auth, email, password), this.MAX_TIME)
+    const userCredential = await signInWithEmailAndPassword(this.auth, email, password)
     const user = new MyUser({ lastLoginAt: Date.now() })
-    await this.withTimeout(this.updateDbUser(user), this.MAX_TIME)
+    await this.updateDbUser(user)
     this.updateCookieToken()
     return userCredential
-  }
-
-  private withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
-    const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject("operation timed out"), timeoutMs)
-    )
-    return Promise.race([promise, timeout]);
-  }
-
-  async updateAuthUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
-    if (user) {
-      const { email, password, phoneNumber: phone, displayName: username, photoURL: avatarUrl } = newUserData
-      if (email && email != user.email) await updateEmail(user, email)
-      if (password) await updatePassword(user, password)
-      if (phone && phone != user.phoneNumber) await updatePhoneNumber(user, phone)
-      if (username && username != user.displayName) await updateProfile(user, { displayName: username })
-      if (avatarUrl && avatarUrl != user.photoURL) await updateProfile(user, { photoURL: avatarUrl })
-    }
-  }
-
-  async updateDbUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
-    const userDocRef = doc(this.db, 'users', user.uid)
-    await setDoc(userDocRef, { ...newUserData }, { merge: true })
   }
 
   async logout(): Promise<void> {
@@ -98,6 +72,47 @@ export class AuthService {
     this.cookieService.delete(COOKIE_KEY)
   }
 
+  async deleteAccount(user: any = this.auth.currentUser): Promise<void> {
+    await user.delete()
+    await this.deleteDbUserInfo()
+  }
+
+  async updateUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
+    await this.updateAuthUser(newUserData, user)
+    if (newUserData.password) newUserData.password = bcrypt.hashSync(newUserData.password, 10)
+    await this.updateDbUser(newUserData, user)
+  }
+
+  private async updateAuthUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
+    const { email, password, phone, username, avatarUrl } = newUserData
+    if (email && email != user.email) await updateEmail(user, email)
+    if (password) await updatePassword(user, password)
+    if (phone && phone != user.phoneNumber) await updatePhoneNumber(user, phone)
+    if (username && username != user.displayName) await updateProfile(user, { displayName: username })
+    if (avatarUrl && avatarUrl != user.photoURL) await updateProfile(user, { photoURL: avatarUrl })
+  }
+
+  private async updateDbUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
+    const userDocRef = doc(this.db, 'users', user.uid)
+    await setDoc(userDocRef, { ...newUserData }, { merge: true })
+  }
+
+  private async updateCookieToken(): Promise<void> {
+    const me = this.auth.currentUser
+    if (me) {
+      const token = await me.getIdToken()
+      this.cookieService.set(COOKIE_KEY, token)
+    }
+  }
+
+  private async checkUserExists(user: any = this.auth.currentUser): Promise<boolean> {
+    const userDocRef = doc(this.db, 'users', user.uid)
+    const docSnapshot = await getDoc(userDocRef)
+    const exists = docSnapshot.exists()
+    return exists
+  }
+
+  //esta funcion se tiene que ir
   changePassword(password: string) {
     const currentUser = this.auth.currentUser
     if (currentUser) {
@@ -107,24 +122,11 @@ export class AuthService {
     }
   }
 
-  deleteAccount(): Promise<void> {
-    const currentUser = this.auth.currentUser
-    if (currentUser) {
-      return currentUser.delete().then((result) => {
-        //this.deleteDbUserInfo()
-        return result
-      }).catch((error) => {
-        return Promise.reject(error)
-      })
-    } else {
-      return Promise.reject('No user signed in.')
-    }
-  }
-
+  //esta funcion se tiene que ir
   setAuthCurrentUserProperty(property: string, value: string): Promise<void> {
     const currentUser = this.auth.currentUser
     if (currentUser) {
-      if (this.defaultAuthProperties.includes(property)) {
+      if (this.DEFAULT_AUTH_PROPERTIES.includes(property)) {
         //this.setDbCurrentUserProperty(property, value)
         return updateProfile(currentUser, { [property]: value })
         //return updatePassword(currentUser, value)
@@ -134,10 +136,6 @@ export class AuthService {
     } else {
       return Promise.reject('No user signed in.')
     }
-  }
-
-  get currentUser() {
-    return this.auth.currentUser
   }
 
   //#endregion
@@ -245,7 +243,7 @@ export class AuthService {
   }
 
   private propertyExists(path: string) {
-    return this.properties.includes(path)
+    return this.USER_PROPERTIES.includes(path)
   }
 
   //#endregion

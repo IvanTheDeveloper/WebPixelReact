@@ -42,6 +42,7 @@ export class DownloadComponent {
   }
 
   tabChanged(event: MatTabChangeEvent) {
+    this.selectedTabIndex = event.index
     if (event.index == 0) {
       this.selectedPlatform = 'Windows'
     } else if (event.index == 1) {

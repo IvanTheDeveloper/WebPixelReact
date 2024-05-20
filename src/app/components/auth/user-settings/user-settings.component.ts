@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { isNullOrEmpty } from 'src/app/others/utils';
 import { MatSnackBar } from '@angular/material/snack-bar';

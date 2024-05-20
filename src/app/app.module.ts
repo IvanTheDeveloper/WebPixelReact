@@ -45,7 +45,7 @@ import { NoResultsComponent } from './components/basic/no-results/no-results.com
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { FilterComponent } from './components/filter/filter.component';
 import { TableComponent } from './components/table/table.component';
-import { UserSettingsComponent } from './components/user-settings/user-settings.component';
+import { UserSettingsComponent } from './components/auth/user-settings/user-settings.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { EasterEggComponent } from './components/tools/easter-egg/easter-egg.component';
 import { HomeComponent } from './components/basic/home/home.component';

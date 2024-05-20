@@ -5,7 +5,7 @@ import { authenticatedUsersGuard } from './guards/authenticated-users.guard';
 import { NotFoundComponent } from './components/basic/not-found/not-found.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
-import { UserSettingsComponent } from './components/user-settings/user-settings.component';
+import { UserSettingsComponent } from './components/auth/user-settings/user-settings.component';
 import { HomeComponent } from './components/basic/home/home.component';
 import { ForbiddenComponent } from './components/basic/forbidden/forbidden.component';
 import { adminGuard } from './guards/admin.guard';

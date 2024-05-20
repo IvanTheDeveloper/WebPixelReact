@@ -13,9 +13,9 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent {
   routes = routingTable
-  goTo?: string
   isLoading: boolean = false
   hidePassword: boolean = true
+  _goTo: string
   fieldForm: FormGroup
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router, private snackBar: MatSnackBar) {
@@ -23,14 +23,10 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30), Validators.pattern(pwdRegExp)]]
     })
-  }
-
-  ngOnInit(): void {
     const queryParams = new URLSearchParams(window.location.search)
-    const param = queryParams.get('goto')
-    this.goTo = param && Object.values(this.routes).includes(param) ? param : this.routes.home
-    this.email?.setValue(queryParams.get('email'))
-    this.password?.setValue(queryParams.get('password'))
+    this._goTo = decodeURIComponent(queryParams.get('goto') ?? this.routes.home)
+    this.email?.setValue(decodeURIComponent(queryParams.get('email') ?? ''))
+    this.password?.setValue(decodeURIComponent(queryParams.get('password') ?? ''))
   }
 
   get email() {
@@ -82,7 +78,7 @@ export class LoginComponent {
 
   private async LoginActions() {
     await new Promise(f => setTimeout(f, 1000))
-    this.router.navigateByUrl(`/${this.goTo}`)
+    this.router.navigateByUrl(`/${this._goTo}`)
     this.openSnackBar('Welcome ' + this.auth.currentUser?.displayName + '!')
     this.isLoading = false
   }

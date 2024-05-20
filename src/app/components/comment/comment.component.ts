@@ -202,7 +202,10 @@ export class CommentComponent {
       })
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.router.navigate([routingTable.login])
+          this.router.navigate([routingTable.login], {
+            queryParams: { goto: `comment/${this.comment.id}` }
+          })
+
         }
       })
       return false
@@ -216,7 +219,7 @@ export class CommentComponent {
       duration: 5000,
       horizontalPosition: 'center',
       verticalPosition: 'bottom'
-    });
+    })
   }
 
   share() {

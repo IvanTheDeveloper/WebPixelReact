@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { routingTable } from 'src/app/app-routing.module';
 
 @Component({
   selector: 'app-not-found',
@@ -6,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./not-found.component.scss']
 })
 export class NotFoundComponent {
-  placeholderImg = 'assets/images/error404.svg'
+  readonly routes = routingTable
+  readonly placeholderImg = 'assets/images/error404.svg'
 
 }

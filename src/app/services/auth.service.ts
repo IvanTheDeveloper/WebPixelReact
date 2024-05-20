@@ -13,6 +13,7 @@ export const COOKIE_KEY = 'auth_token'
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly MAX_TIME = Infinity
   private readonly defaultAuthProperties = ['email', 'displayName', 'phoneNumber', 'photoURL',]
   private readonly properties = ['email', 'password', 'username', 'phone', 'address', 'avatarUrl', 'cursorUrl', 'admin', 'mod', 'visitor',]
 
@@ -38,52 +39,33 @@ export class AuthService {
 
   async signinWithGoogle(): Promise<UserCredential> {
     const userCredential = await signInWithPopup(this.auth, new GoogleAuthProvider())
-    const user = MyUser.createFromAuthUserWithDefaults(userCredential.user)
+    const user = MyUser.createFromAuthUserWithDefaults(userCredential.user) //arreglar esto
     user.lastLoginAt = Date.now()
-    await this.withTimeout(this.updateDbUser(user), 5000)
+    await this.updateDbUser(user)
     this.updateCookieToken()
     return userCredential
   }
 
-  defaultPfp() {
-
-  }
-
-  register(email: string, password: string, username: string = 'user'): Promise<UserCredential> {
-    return createUserWithEmailAndPassword(this.auth, email, password).then(
-      (userCredential) => {
-        this.updateCookieToken()
-
-        const generatedImg = generateRandomAvatar(username)
-        return this.fileUploader.uploadFile(generatedImg, `images/${username}_${Date.now()}`).then((url) => {
-
-          const user = MyUser.createFromAuthUserWithDefaults(userCredential.user)
-          user.username = username
-          user.avatarUrl = url
-          this.updateAuthUser(user)
-          user.passwordHash = bcrypt.hashSync(password, 10)
-          dump(user)
-          this.updateDbUser(user)
-
-          return userCredential
-          /*.then(
-            () => {
-              return userCredential
-            },
-            (error) => {
-              deleteUser(userCredential.user)
-              return Promise.reject(error)
-            }
-          )*/
-        })
-      }
-    )
+  async register(email: string, password: string, username: string = 'user'): Promise<UserCredential> {
+    const userCredential = await createUserWithEmailAndPassword(this.auth, email, password)
+    const generatedImg = generateRandomAvatar(username)
+    const path = `images/${userCredential.user.uid}_${Date.now()}`
+    const url = await this.fileUploader.uploadFile(generatedImg, path)
+    const user = MyUser.createFromAuthUserWithDefaults(userCredential.user)
+    user.username = username
+    user.avatarUrl = url
+    await this.updateAuthUser(user)
+    alert(bcrypt.compareSync(user.password, bcrypt.hashSync(password, 10)))
+    user.password = bcrypt.hashSync(password, 10)
+    await this.updateDbUser(user)
+    this.updateCookieToken()
+    return userCredential
   }
 
   async login(email: string, password: string): Promise<UserCredential> {
-    const userCredential = await this.withTimeout(signInWithEmailAndPassword(this.auth, email, password), 5000)
+    const userCredential = await this.withTimeout(signInWithEmailAndPassword(this.auth, email, password), this.MAX_TIME)
     const user = new MyUser({ lastLoginAt: Date.now() })
-    await this.withTimeout(this.updateDbUser(user), 5000)
+    await this.withTimeout(this.updateDbUser(user), this.MAX_TIME)
     this.updateCookieToken()
     return userCredential
   }
@@ -97,12 +79,12 @@ export class AuthService {
 
   async updateAuthUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
     if (user) {
-      const { email, password, phoneNumber, displayName, photoURL } = newUserData;
-      if (email && email != user.email) await updateEmail(user, email);
-      if (password) await updatePassword(user, password);
-      if (phoneNumber && phoneNumber != user.phoneNumber) await updatePhoneNumber(user, phoneNumber);
-      if (displayName && displayName != user.displayName) await updateProfile(user, { displayName });
-      if (photoURL && photoURL != user.photoURL) await updateProfile(user, { photoURL });
+      const { email, password, phoneNumber: phone, displayName: username, photoURL: avatarUrl } = newUserData
+      if (email && email != user.email) await updateEmail(user, email)
+      if (password) await updatePassword(user, password)
+      if (phone && phone != user.phoneNumber) await updatePhoneNumber(user, phone)
+      if (username && username != user.displayName) await updateProfile(user, { displayName: username })
+      if (avatarUrl && avatarUrl != user.photoURL) await updateProfile(user, { photoURL: avatarUrl })
     }
   }
 

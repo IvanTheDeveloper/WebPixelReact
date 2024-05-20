@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { routingTable } from 'src/app/app-routing.module';
 
 @Component({
   selector: 'app-home',
@@ -6,6 +7,7 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  readonly routes = routingTable
 
   constructor() { }
 

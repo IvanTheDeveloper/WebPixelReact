@@ -1,8 +1,9 @@
+type Hash = string
 export class MyUser {
     //data
     id?: string | null
     email?: string | null
-    passwordHash?: string | null
+    password?: Hash | null
     username?: string | null
     phone?: string | null
     address?: string | null
@@ -19,7 +20,7 @@ export class MyUser {
     constructor(data: Partial<MyUser> = {}) {
         if (data.id) this.id = data.id;
         if (data.email) this.email = data.email;
-        if (data.passwordHash) this.passwordHash = data.passwordHash;
+        if (data.password) this.password = data.password;
         if (data.username) this.username = data.username;
         if (data.phone) this.phone = data.phone;
         if (data.address) this.address = data.address;
@@ -35,7 +36,7 @@ export class MyUser {
         {
             id = null,
             email = null,
-            passwordHash: passwordHash = null,
+            password: password = null,
             username = null,
             phone = null,
             address = null,
@@ -50,7 +51,7 @@ export class MyUser {
         const user = new MyUser()
         user.id = id
         user.email = email
-        user.passwordHash = passwordHash
+        user.password = password
         user.username = username
         user.phone = phone
         user.address = address

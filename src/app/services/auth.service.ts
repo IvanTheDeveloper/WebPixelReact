@@ -1,92 +1,72 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Auth, GoogleAuthProvider, UserCredential, createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword, updateProfile } from '@angular/fire/auth';
+import { Auth, GoogleAuthProvider, User, UserCredential, createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword, signInWithPopup, signOut, updateCurrentUser, updateEmail, updatePassword, updatePhoneNumber, updateProfile } from '@angular/fire/auth';
 import { Firestore, collection, collectionData, getFirestore, doc, updateDoc, setDoc, getDoc, deleteDoc } from '@angular/fire/firestore';
-import { getRandomHexColor } from '../others/utils';
-import { UploadFileService } from './upload-file.service';
-import { User } from '../models/user';
+import { dump, generateRandomAvatar, getRandomHexColor } from '../others/utils';
+import { StorageService } from './storage.service';
+import { MyUser } from '../models/user';
 const bcrypt = require('bcryptjs'); // wtf? que es esto me quiero morir
+
+export const COOKIE_KEY = 'auth_token'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly COOKIE_KEY = 'auth_token'
   private readonly defaultAuthProperties = ['email', 'displayName', 'phoneNumber', 'photoURL',]
-  private readonly dataList = ['email', 'password', 'username', 'phone', 'address',]
-  private readonly imageList = ['avatarUrl', 'cursorUrl',]
-  private readonly roleList = ['admin', 'mod', 'visitor',]
+  private readonly properties = ['email', 'password', 'username', 'phone', 'address', 'avatarUrl', 'cursorUrl', 'admin', 'mod', 'visitor',]
 
-  constructor(private cookieService: CookieService, private auth: Auth, private db: Firestore, private fileUploader: UploadFileService) { }
+  constructor(private cookieService: CookieService, private auth: Auth, private db: Firestore, private fileUploader: StorageService) { }
 
   //#region Authentication module
 
-  updateCookieToken() {
-    const currentUser = this.auth.currentUser
-    if (currentUser) {
-      currentUser.getIdToken().then(
-        (token) => { this.cookieService.set(this.COOKIE_KEY, token) }
-      ).catch(
-        () => console.log('Couldnt retrieve token')
+  private updateCookieToken(): void {
+    const me = this.auth.currentUser
+    if (me) {
+      me.getIdToken().then((token) => {
+        this.cookieService.set(COOKIE_KEY, token)
+      }).catch(
+        (error) => console.log('Couldnt retrieve token: ' + error)
       )
     }
   }
 
   isAuthenticated(): boolean {
-    return this.cookieService.check(this.COOKIE_KEY)
+    //console.log(JSON.stringify(this.auth.currentUser?.toJSON()))
+    return this.cookieService.check(COOKIE_KEY)
   }
 
-  signinWithGoogle(): Promise<UserCredential> {
-    return signInWithPopup(this.auth, new GoogleAuthProvider()).then(
-      (userCredential) => {
-        this.setAuthCurrentUserProperty('email', userCredential.user.email ?? '')
-        this.setAuthCurrentUserProperty('displayName', userCredential.user.displayName ?? '')
-        this.setAuthCurrentUserProperty('photoURL', userCredential.user.photoURL ?? '')
-        this.setAuthCurrentUserProperty('phoneNumber', userCredential.user.phoneNumber ?? '')
-
-        const userDocRef = doc(this.db, 'users', userCredential.user.uid)
-        return getDoc(userDocRef).then((docSnapshot) => {
-          if (!docSnapshot.exists()) {
-            const user = new User({
-              email: userCredential.user.email!, username: userCredential.user.displayName!,
-              phone: userCredential.user.phoneNumber!, avatarUrl: userCredential.user.photoURL!
-            })
-            return setDoc(userDocRef, { ...user }, { merge: true }).then(
-              () => {
-                return userCredential
-              },
-              (error) => {
-                deleteUser(userCredential.user)
-                return Promise.reject(error)
-              }
-            )
-          } else {
-            this.updateLastLogin(userCredential.user.uid)
-            return userCredential
-          }
-        })
-      }
-    )
+  async signinWithGoogle(): Promise<UserCredential> {
+    const userCredential = await signInWithPopup(this.auth, new GoogleAuthProvider())
+    const user = MyUser.createFromAuthUserWithDefaults(userCredential.user)
+    user.lastLoginAt = Date.now()
+    await this.withTimeout(this.updateDbUser(user), 5000)
+    this.updateCookieToken()
+    return userCredential
   }
 
-  private generateRandomAvatar(name: string) {
-    name = encodeURIComponent(name)
-    const color = getRandomHexColor()
-    return `https://ui-avatars.com/api/?background=${color}&name=${name}`
-    //return 'https://source.boringavatars.com'
+  defaultPfp() {
+
   }
 
   register(email: string, password: string, username: string = 'user'): Promise<UserCredential> {
     return createUserWithEmailAndPassword(this.auth, email, password).then(
       (userCredential) => {
-        const generatedImg = this.generateRandomAvatar(username)
-        this.setAuthCurrentUserProperty('displayName', username)
-        return this.fileUploader.uploadFileByUrl(`images/${Date.now()}_${username}`, generatedImg).then((avatarUrl) => {
-          this.setAuthCurrentUserProperty('photoURL', avatarUrl)
+        this.updateCookieToken()
 
-          const userDocRef = doc(this.db, 'users', userCredential.user.uid)
-          const user = new User({ email, password: bcrypt.hashSync(password, 10), username, avatarUrl })
-          return setDoc(userDocRef, { ...user }, { merge: true }).then(
+        const generatedImg = generateRandomAvatar(username)
+        return this.fileUploader.uploadFile(generatedImg, `images/${username}_${Date.now()}`).then((url) => {
+
+          const user = MyUser.createFromAuthUserWithDefaults(userCredential.user)
+          user.username = username
+          user.avatarUrl = url
+          this.updateAuthUser(user)
+          user.passwordHash = bcrypt.hashSync(password, 10)
+          dump(user)
+          this.updateDbUser(user)
+
+          return userCredential
+          /*.then(
             () => {
               return userCredential
             },
@@ -94,29 +74,46 @@ export class AuthService {
               deleteUser(userCredential.user)
               return Promise.reject(error)
             }
-          )
+          )*/
         })
       }
     )
   }
 
-  login(email: string, password: string): Promise<UserCredential> {
-    return signInWithEmailAndPassword(this.auth, email, password).then(
-      (userCredential) => {
-        this.updateLastLogin(userCredential.user.uid)
-        return userCredential
-      }
+  async login(email: string, password: string): Promise<UserCredential> {
+    const userCredential = await this.withTimeout(signInWithEmailAndPassword(this.auth, email, password), 5000)
+    const user = new MyUser({ lastLoginAt: Date.now() })
+    await this.withTimeout(this.updateDbUser(user), 5000)
+    this.updateCookieToken()
+    return userCredential
+  }
+
+  private withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject("operation timed out"), timeoutMs)
     )
+    return Promise.race([promise, timeout]);
   }
 
-  private updateLastLogin(uid: string) {
-    const userDocRef = doc(this.db, 'users', uid)
-    setDoc(userDocRef, { records: { lastLogin: Date.now() } }, { merge: true })
+  async updateAuthUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
+    if (user) {
+      const { email, password, phoneNumber, displayName, photoURL } = newUserData;
+      if (email && email != user.email) await updateEmail(user, email);
+      if (password) await updatePassword(user, password);
+      if (phoneNumber && phoneNumber != user.phoneNumber) await updatePhoneNumber(user, phoneNumber);
+      if (displayName && displayName != user.displayName) await updateProfile(user, { displayName });
+      if (photoURL && photoURL != user.photoURL) await updateProfile(user, { photoURL });
+    }
   }
 
-  logout(): Promise<void> {
-    this.cookieService.delete(this.COOKIE_KEY)
-    return signOut(this.auth)
+  async updateDbUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
+    const userDocRef = doc(this.db, 'users', user.uid)
+    await setDoc(userDocRef, { ...newUserData }, { merge: true })
+  }
+
+  async logout(): Promise<void> {
+    await signOut(this.auth)
+    this.cookieService.delete(COOKIE_KEY)
   }
 
   changePassword(password: string) {
@@ -166,7 +163,7 @@ export class AuthService {
 
   getHighestRole(): Promise<string> {
     return this.getDbCurrentUser().then((result) => {
-      return (result.roles.admin ? 'admin' : (result.roles.mod ? 'mod' : ''))
+      return (result.admin ? 'admin' : (result.mod ? 'mod' : ''))
     }).catch(() => {
       return ''
     })
@@ -266,17 +263,7 @@ export class AuthService {
   }
 
   private propertyExists(path: string) {
-    const array = path.split('.')
-    const root = array[0]
-    const child = array[1]
-    if ((root == 'data' && this.dataList.includes(child)) ||
-      (root == 'images' && this.imageList.includes(child)) ||
-      (root == 'roles' && this.roleList.includes(child))) {
-      return true;
-    }
-    else {
-      return false
-    }
+    return this.properties.includes(path)
   }
 
   //#endregion

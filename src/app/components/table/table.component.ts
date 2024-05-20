@@ -7,10 +7,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { UploadFileService } from 'src/app/services/upload-file.service';
-import { GameReleaseService } from 'src/app/services/game-release.service';
-import { dump } from 'src/app/others/utils';
-import { RealtimeDatabaseService } from 'src/app/services/realtime-database.service';
 
 const NAMES: string[] = [
   'Maia',

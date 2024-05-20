@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
-import { UploadFileService } from 'src/app/services/upload-file.service';
-import { dump, isNullOrEmpty } from 'src/app/others/utils';
+import { StorageService } from 'src/app/services/storage.service';
+import { isNullOrEmpty } from 'src/app/others/utils';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { pwdRegExp } from 'src/app/others/password-rules';
 
@@ -24,7 +24,7 @@ export class UserSettingsComponent {
   newPhoneNumber: any
   newEmail: any
 
-  constructor(private auth: AuthService, public dialog: MatDialog, private fileUploader: UploadFileService, private snackBar: MatSnackBar) { }
+  constructor(private auth: AuthService, private storage: StorageService, public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.delay()
@@ -63,15 +63,15 @@ export class UserSettingsComponent {
 
   onFileSelected(event: any): void {
     const img = event.target.files[0]
-    this.newImage = URL.createObjectURL(img)
+    if (img.name.match(/\.(jpeg|jpg|gif|png|webp|svg)$/) == null) {
+      this.showSnackbar('The selected file is not an image')
+      this.newImage = ''
+    } else {
+      this.newImage = URL.createObjectURL(img)
+    }
   }
 
   updateImage() {
-    if (this.image.match(/\.(jpeg|jpg|gif|png)$/) == null) {
-      this.showSnackbar('The selected file is not an image', 'error-message')
-      return
-    }
-
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: { title: 'Change profile picture', text: 'Are you sure?' }
     })
@@ -79,28 +79,16 @@ export class UserSettingsComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const filePath = `images/${Date.now()}_${this.username}`
-        if (this.newImage instanceof File) {
-          this.fileUploader.uploadFile(filePath, this.newImage).then(
-            (url) => {
-              this.auth.setAuthCurrentUserProperty('photoURL', url)
-              this.refresh()
-              this.newImage = ''
-            }
-          ).catch((error) => {
-            console.log("Ha habido un error: " + error)
-          })
-        } else {
-          this.fileUploader.uploadFileByUrl(filePath, this.newImage).then(
-            (url) => {
-              this.auth.setAuthCurrentUserProperty('photoURL', url)
-              this.refresh()
-              this.newImage = ''
-              this.snackBar.open('Avatar successfully updated')
-            }
-          ).catch((error) => {
-            console.log("Ha habido un error: " + error)
-          })
-        }
+        this.storage.uploadFile(this.newImage, filePath).then(
+          (url) => {
+            this.auth.setAuthCurrentUserProperty('photoURL', url)
+            this.refresh()
+            this.newImage = ''
+          }
+        ).catch((error) => {
+          console.log("Ha habido un error: " + error)
+        })
+
       }
     })
   }
@@ -111,7 +99,7 @@ export class UserSettingsComponent {
 
   changePassword() {
     if (!this.isValidPwd()) {
-      this.showSnackbar('Invalid password', 'error-message')
+      this.showSnackbar('Invalid password')
       return
     }
 
@@ -127,10 +115,9 @@ export class UserSettingsComponent {
     })
   }
 
-  showSnackbar(mensaje: string, clase: string): void {
+  showSnackbar(mensaje: string): void {
     this.snackBar.open(mensaje, 'Ok', {
       duration: 3000,
-      panelClass: [clase]
     })
   }
 

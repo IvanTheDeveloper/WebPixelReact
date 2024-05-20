@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { routingTable } from 'src/app/app-routing.module';
+import { darkModeEnabled } from 'src/app/others/globalProperties';
+import { MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-header',
@@ -10,12 +12,12 @@ import { routingTable } from 'src/app/app-routing.module';
 })
 export class HeaderComponent {
   routes = routingTable
-
+  darkMode = darkModeEnabled
+  any: MatTabNavPanel = new MatTabNavPanel()
   userAuthenticated = false
-  username: string = ''
+  username: string | null = null
   role: string | null = null
   avatar: string | null = null
-  darkMode = false
 
   constructor(private auth: AuthService, private router: Router) { }
 
@@ -25,6 +27,12 @@ export class HeaderComponent {
         this.update()
       }
     })
+    this.delay()
+  }
+
+  async delay() {
+    await new Promise(f => setTimeout(f, 500))
+    this.update()
   }
 
   update() {

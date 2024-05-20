@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RealtimeDatabaseService } from 'src/app/services/realtime-database.service';
-import { UploadFileService } from 'src/app/services/upload-file.service';
+import { StorageService } from 'src/app/services/storage.service';
 import { FormDialogComponent } from '../form-dialog/form-dialog.component';
 
 @Component({
@@ -14,7 +14,7 @@ export class AdminComponent {
   isUploading = false
   task!: Promise<string>
 
-  constructor(private releasesDB: RealtimeDatabaseService, private fileUploader: UploadFileService, public dialog: MatDialog,) { }
+  constructor(private releasesDB: RealtimeDatabaseService, private storage: StorageService, public dialog: MatDialog,) { }
 
   addObject(): void {
     const dialogRef = this.dialog.open(FormDialogComponent, {
@@ -25,7 +25,7 @@ export class AdminComponent {
       if (resultObj) {
         this.isUploading = true
         const filePath = `releases/${resultObj.platform}/${Date.now()}_${resultObj.file.name}`
-        this.task = this.fileUploader.uploadFile(filePath, resultObj.file)
+        this.task = this.storage.uploadFile(resultObj.file, filePath)
         this.task.then((fileUrl) => {
           const version = resultObj.version.toString().replace('.', ',')
           const release = {
@@ -48,7 +48,7 @@ export class AdminComponent {
   cancelUpload() {
     this.task.then(
       (result) => {
-        this.fileUploader.deleteFile(result)
+        this.storage.deleteFile(result)
       }
     ).catch((error) => {
       console.log("error: " + error)

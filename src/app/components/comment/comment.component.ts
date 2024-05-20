@@ -6,6 +6,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 import { ActivatedRoute, Router } from '@angular/router';
 import { isNullOrEmpty } from 'src/app/others/utils';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { routingTable } from 'src/app/app-routing.module';
 
 @Component({
   selector: 'app-comment',
@@ -49,7 +50,7 @@ export class CommentComponent {
     const id = this.route.snapshot.paramMap.get('id') ?? ''
     this.commentService.getObjectById(id).subscribe(
       (data) => {
-        this.comment = data ?? this.router.navigateByUrl('/404')
+        this.comment = data ?? this.router.navigate([routingTable.notFound])
         this.initData()
         this.isLoading = false
       }
@@ -61,7 +62,7 @@ export class CommentComponent {
   }
 
   getUser() {
-    this.auth.getDbUserById(this.comment.authorId).then((result) => this.author = result)
+    this.auth.getDbUserById(this.comment.authorId).then((result) => this.author = result).catch((error) => error) //if error simply user deleted
   }
 
   initData() {
@@ -201,7 +202,7 @@ export class CommentComponent {
       })
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.router.navigateByUrl('/login')
+          this.router.navigate([routingTable.login])
         }
       })
       return false
@@ -209,8 +210,6 @@ export class CommentComponent {
       return true
     }
   }
-
-
 
   openSnackBar(text: string) {
     this.snackBar.open(text, 'Ok', {

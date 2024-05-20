@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RouterComponent } from './router.component';
+import { CustomTagComponent } from './custom-tag.component';
 
-describe('RouterComponent', () => {
-  let component: RouterComponent;
-  let fixture: ComponentFixture<RouterComponent>;
+describe('CustomTagComponent', () => {
+  let component: CustomTagComponent;
+  let fixture: ComponentFixture<CustomTagComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [RouterComponent]
+      declarations: [CustomTagComponent]
     });
-    fixture = TestBed.createComponent(RouterComponent);
+    fixture = TestBed.createComponent(CustomTagComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

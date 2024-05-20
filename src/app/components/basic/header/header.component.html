@@ -1,31 +1,37 @@
-<mat-toolbar color="primary" class="header-toolbar">
-    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="update()">
-        <mat-icon>menu</mat-icon>
-    </button>
-    <h1>Pixel React</h1>
-    <span class="example-spacer"></span>
+<header>
+    <mat-toolbar color="primary" class="header-toolbar">
+        <div class="row left">
+            <button mat-icon-button [matMenuTriggerFor]="menu" (click)="update()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <h1>Pixel React</h1>
+        </div>
 
-    <nav mat-tab-nav-bar backgroundColor="primary">
-        <a mat-tab-link [routerLink]="routes.home" routerLinkActive #rl1="routerLinkActive"
-            [active]="rl1.isActive">Home</a>
-        <a mat-tab-link [routerLink]="routes.download" routerLinkActive #rl2="routerLinkActive"
-            [active]="rl2.isActive">Download</a>
-        <a mat-tab-link [routerLink]="routes.about" routerLinkActive #rl3="routerLinkActive"
-            [active]="rl3.isActive">About
-            Us</a>
-        <a mat-tab-link [routerLink]="routes.admin" routerLinkActive #rl4="routerLinkActive" [active]="rl4.isActive"
-            *ngIf="role == 'admin'">Admin</a>
-    </nav>
+        <nav mat-tab-nav-bar [tabPanel]="tabPanel" backgroundColor="primary" class="ca">
+            <a mat-tab-link [routerLink]="routes.home" routerLinkActive #rl1="routerLinkActive"
+                [active]="rl1.isActive">Home</a>
+            <a mat-tab-link [routerLink]="routes.download" routerLinkActive #rl2="routerLinkActive"
+                [active]="rl2.isActive">Download</a>
+            <a mat-tab-link [routerLink]="routes.about" routerLinkActive #rl3="routerLinkActive" [active]="rl3.isActive"
+                tab>About
+                Us</a>
+            <a mat-tab-link [routerLink]="routes.admin" routerLinkActive #rl4="routerLinkActive" [active]="rl4.isActive"
+                *ngIf="role == 'admin'">Admin</a>
 
-    <span class="example-spacer"></span>
-    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 10px;">
-        <img *ngIf="avatar" [src]="avatar" width="30px" style="border-radius: 50%;">
-        <span *ngIf="userAuthenticated" matTooltip="Yep, thats you!">{{username}} {{role ? '('+role+')' :
-            ''}}</span>
-        <span *ngIf="!userAuthenticated">Browsing as a guest</span>
-    </div>
+            <mat-tab-nav-panel
+                #tabPanel><!--Esta etiqueta vacia es una chapuza para que el nav funcione, aqui dentro deberia ir el <router-outlet> y asi se podria controlar el darkMode tambien-->
+            </mat-tab-nav-panel>
+        </nav>
 
-</mat-toolbar>
+        <div class="row right">
+            <img *ngIf="userAuthenticated" [src]="avatar" width="30px" style="border-radius: 50%;">
+            <span *ngIf="userAuthenticated" matTooltip="Yep, thats you!">{{username}} {{role ? '('+role+')' :
+                ''}}</span>
+            <span *ngIf="!userAuthenticated">Browsing as a guest</span>
+        </div>
+
+    </mat-toolbar>
+</header>
 
 <mat-menu #menu>
     <button mat-menu-item [routerLink]="routes.register" *ngIf="!userAuthenticated">

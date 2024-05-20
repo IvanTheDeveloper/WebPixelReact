@@ -41,8 +41,6 @@ import { CardListComponent } from './components/card-list/card-list.component';
 import { NotFoundComponent } from './components/basic/not-found/not-found.component';
 import { AlumnoFormComponent } from './components/alumno-form/alumno-form.component';
 import { AlumnoListComponent } from './components/alumno-list/alumno-list.component';
-import { ProfesorListComponent } from './components/profesor-list/profesor-list.component';
-import { ProfesorFormComponent } from './components/profesor-form/profesor-form.component';
 import { NoResultsComponent } from './components/basic/no-results/no-results.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { FilterComponent } from './components/filter/filter.component';
@@ -56,7 +54,7 @@ import { AboutComponent } from './components/basic/about/about.component';
 import { DownloadComponent } from './components/download/download.component';
 import { ForbiddenComponent } from './components/basic/forbidden/forbidden.component';
 import { DevComponent } from './components/tools/dev/dev.component';
-import { ScamComponent } from './components/tools/scam/scam.component';
+import { LoggerComponent } from './components/tools/logger/logger.component';
 import { CommentBoxComponent } from './components/comment-box/comment-box.component';
 import { CommentComponent } from './components/comment/comment.component';
 import { AdminComponent } from './components/admin/admin.component';
@@ -66,10 +64,10 @@ import { TermsAndConditionsComponent } from './components/pdf/terms-and-conditio
 import { MainComponent } from './layouts/main/main.component';
 import { VersionsTableComponent } from './components/versions-table/versions-table.component';
 import { CookieConsentComponent } from './components/pdf/cookie-consent/cookie-consent.component';
-import { RouterComponent } from './components/router/router.component';
-import { TestDirDirective } from './directives/test-dir.directive';
 import { CountryFlagEmojiPipe } from './pipes/country-flag-emoji.pipe';
 import { UnauthorizedComponent } from './components/basic/unauthorized/unauthorized.component';
+import { MyRouterDirective } from './directives/my-router.directive';
+import { CustomTagComponent } from './components/tools/custom-tag/custom-tag.component';
 
 @NgModule({
   declarations: [
@@ -84,8 +82,6 @@ import { UnauthorizedComponent } from './components/basic/unauthorized/unauthori
     NotFoundComponent,
     AlumnoFormComponent,
     AlumnoListComponent,
-    ProfesorListComponent,
-    ProfesorFormComponent,
     NoResultsComponent,
     PaginatorComponent,
     FilterComponent,
@@ -99,7 +95,7 @@ import { UnauthorizedComponent } from './components/basic/unauthorized/unauthori
     DownloadComponent,
     ForbiddenComponent,
     DevComponent,
-    ScamComponent,
+    LoggerComponent,
     CommentBoxComponent,
     CommentComponent,
     AdminComponent,
@@ -109,10 +105,10 @@ import { UnauthorizedComponent } from './components/basic/unauthorized/unauthori
     MainComponent,
     VersionsTableComponent,
     CookieConsentComponent,
-    RouterComponent,
-    TestDirDirective,
     CountryFlagEmojiPipe,
     UnauthorizedComponent,
+    MyRouterDirective,
+    CustomTagComponent,
   ],
   imports: [
     BrowserModule,

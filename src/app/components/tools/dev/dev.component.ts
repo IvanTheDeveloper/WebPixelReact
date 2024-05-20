@@ -19,6 +19,7 @@ export class DevComponent {
 
   url = ''
   ping = ''
+  memory = ''
   fps: number = 0
   private lastFrameTime: number = 0
   private frameCount: number = 0
@@ -28,7 +29,9 @@ export class DevComponent {
   ngOnInit() {
     this.lastFrameTime = performance.now();
     this.updateFps()
+    this.getMemory()
     this.getSettings()
+    this.url = location.href
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.url = location.href
@@ -42,6 +45,14 @@ export class DevComponent {
         this.ping = time + ' ms'
       })
     }, 1000)
+  }
+
+  getMemory() {
+    navigator.storage.estimate().then((result) => {
+      if (result.usage) {
+        this.memory = (result.usage! / (1024 * 1024)).toFixed(2) + ' mb'
+      }
+    })
   }
 
   updateFps() {

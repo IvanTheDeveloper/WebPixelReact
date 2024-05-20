@@ -1,6 +1,6 @@
 <div class="container">
     <mat-card>
-        <mat-progress-bar mode="indeterminate" *ngIf="progressBar"></mat-progress-bar>
+        <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
         <mat-card-header class="centerer">
             <mat-card-title>Sign in</mat-card-title>
         </mat-card-header>
@@ -34,7 +34,7 @@
             </form>
 
             <div class="centerer">
-                <p>Don't have an account? <a routerLink="/register">¡Register now!</a></p>
+                <p>Don't have an account? <a [href]="routes.register">¡Register now!</a></p>
             </div>
         </mat-card-content>
     </mat-card>

@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { routingTable } from 'src/app/app-routing.module';
 
 @Component({
   selector: 'app-comment-box',
@@ -55,7 +56,7 @@ export class CommentBoxComponent {
       })
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.router.navigateByUrl('/login')
+          this.router.navigate([routingTable.login])
         }
       })
     } else if (this.formController.valid) {

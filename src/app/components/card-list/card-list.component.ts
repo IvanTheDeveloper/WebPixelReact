@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { AlumnosDataService } from 'src/app/services/alumnos-data.service';
-import { ProfesoresDataService } from 'src/app/services/profesores-data.service';
 import { Observable, catchError, forkJoin, map, throwError } from 'rxjs';
 
 @Component({
@@ -24,7 +23,7 @@ export class CardListComponent {
   id = ''
   nombre = ''
 
-  constructor(private alumnos: AlumnosDataService, private profesores: ProfesoresDataService) { }
+  constructor(private alumnos: AlumnosDataService) { }
 
   ngOnInit(): void {
     this.getObjectList()
@@ -72,11 +71,11 @@ export class CardListComponent {
   }
 
   getObjectList(): void {
-    forkJoin([this.getProfesores(), this.getAlumnos()]).subscribe(
-      ([profList, aluList]) => {
+    forkJoin([this.getAlumnos()]).subscribe(
+      ([aluList]) => {
         const list: any[] = []
-        if (profList && aluList) {
-          list.push(...profList, ...aluList)
+        if (aluList) {
+          list.push(...aluList)
         }
         this.objectList = list
       },
@@ -96,18 +95,6 @@ export class CardListComponent {
         return throwError(error)
       })
     ) //pillamos los alumnos de firebase
-  }
-
-  getProfesores(): Observable<any[]> {
-    return this.profesores.getObjectList().pipe(
-      map((response) => {
-        return response ? Object.values(response) : []
-      }),
-      catchError((error) => {
-        console.log(error)
-        return throwError(error)
-      })
-    ) //pillamos los profesores de firebase
   }
 
 }

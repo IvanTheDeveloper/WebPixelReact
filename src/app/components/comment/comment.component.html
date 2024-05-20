@@ -10,8 +10,8 @@
 
     <mat-card *ngIf="!isLoading && !isCommentDeleted ">
         <mat-card-header>
-            <img mat-card-avatar [src]="author?.images.avatarUrl ?? placeholderImg" onerror="this.src=placeholderImg">
-            <mat-card-title>{{author?.data.username ?? 'Deleted user'}}</mat-card-title>
+            <img mat-card-avatar [src]="author?.avatarUrl ?? placeholderImg" onerror="this.src=placeholderImg">
+            <mat-card-title>{{author?.username ?? 'Deleted user'}}</mat-card-title>
 
             <mat-card-subtitle>
                 {{comment?.createdAt | date:'dd-MM-yyyy'}}

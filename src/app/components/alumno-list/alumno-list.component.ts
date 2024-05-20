@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UploadFileService } from 'src/app/services/upload-file.service';
+import { StorageService } from 'src/app/services/storage.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { AlumnoFormComponent } from '../alumno-form/alumno-form.component';
 import { AlumnosDataService } from 'src/app/services/alumnos-data.service';
@@ -25,7 +25,7 @@ export class AlumnoListComponent {
   pageIndex: number = 0
 
   constructor(private dataService: AlumnosDataService, public dialog: MatDialog,
-    private snackBar: MatSnackBar, private uploadFileService: UploadFileService) {
+    private snackBar: MatSnackBar, private storage: StorageService) {
     this.dataSource = new MatTableDataSource<any>();
   }
 
@@ -69,7 +69,7 @@ export class AlumnoListComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const filePath = `images/${Date.now()}_${result.image.name}`
-        this.uploadFileService.uploadFile(filePath, result.image).then(
+        this.storage.uploadFile(result.image, filePath).then(
           (imagePath) => {
             result.image = imagePath;
             this.dataService.addObject(result).subscribe(
@@ -101,10 +101,10 @@ export class AlumnoListComponent {
         // Si se proporciona una nueva imagen, subirla a Firestore y actualizar la ruta en el objeto
         if (result.image && result.image !== obj.image) {
           const filePath = `images/${Date.now()}_${result.image.name}`;
-          this.uploadFileService.uploadFile(filePath, result.image).then(
+          this.storage.uploadFile(result.image, filePath).then(
             (imagePath) => {
               // Eliminar la imagen antigua
-              this.uploadFileService.deleteFile(obj.image).then(
+              this.storage.deleteFile(obj.image).then(
                 () => {
                   result.image = imagePath; // Asignar la nueva ruta de imagen
                   this.updateObject(result); // Actualizar el objeto en la base de datos
@@ -151,7 +151,7 @@ export class AlumnoListComponent {
       if (result) {
         this.dataService.deleteObject(obj.id).subscribe(
           (result) => {
-            this.uploadFileService.deleteFile(obj.image).then(
+            this.storage.deleteFile(obj.image).then(
               () => {
                 this.showSnackbar('eliminado correctamente', 'success-message')
                 let index = this.objectList.findIndex(p => p.id === obj.id)

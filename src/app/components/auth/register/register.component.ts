@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { routingTable } from 'src/app/app-routing.module';
 import { pwdRegExp } from 'src/app/others/password-rules';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -11,11 +12,13 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+  routes = routingTable
+  goTo?: string
   isLoading: boolean = false
-  fieldForm: FormGroup
   hidePassword: boolean = true
   hideConfirmPassword: boolean = true
-  downloadCredentials: boolean = false
+  downloadCredentials = false
+  fieldForm: FormGroup
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router, private snackBar: MatSnackBar) {
     this.fieldForm = this.fb.group({
@@ -26,6 +29,12 @@ export class RegisterComponent {
     }, {
       validators: this.validate('password', 'confirmPassword')
     })
+  }
+
+  ngOnInit(): void {
+    const queryParams = new URLSearchParams(window.location.search)
+    const param = queryParams.get('goto')
+    this.goTo = param && Object.values(this.routes).includes(param) ? param : this.routes.home
   }
 
   get email() {
@@ -117,9 +126,10 @@ export class RegisterComponent {
   }
 
   downloadTxtFile() {
-    const text = 'Email: ' + this.email?.getRawValue() + '\n' + 'Password: ' + this.password?.getRawValue() + '\n' + 'Login here: ' + location.origin + '/login'
-    const fileName = 'credentials.txt';
-    const blob = new Blob([text], { type: 'text/plain' });
+    const text = `[InternetShortcut]
+    URL=${location.origin}/login?email=${this.email?.value}&password=${this.password?.value}`;
+    const fileName = 'credentials.url';
+    const blob = new Blob([text], { type: 'application/internet-shortcut' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -136,7 +146,6 @@ export class RegisterComponent {
       this.isLoading = true
       this.auth.register(this.email?.value, this.password?.value, this.username?.value).then(
         () => {
-          (this.downloadCredentials ? this.downloadTxtFile() : '')
           this.LoginActions()
         }
       ).catch(
@@ -150,9 +159,9 @@ export class RegisterComponent {
   }
 
   async LoginActions() {
-    this.auth.updateCookieToken()
+    if (this.downloadCredentials) this.downloadTxtFile();
     await new Promise(f => setTimeout(f, 1000))
-    this.router.navigateByUrl('/home')
+    this.router.navigateByUrl(`/${this.goTo}`)
     this.openSnackBar('Welcome ' + this.auth.currentUser?.displayName + '!')
     this.isLoading = false
   }

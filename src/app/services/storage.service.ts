@@ -5,26 +5,38 @@ import { Storage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from
 @Injectable({
   providedIn: 'root'
 })
-export class UploadFileService {
+export class StorageService {
 
   constructor(private storage: Storage, private http: HttpClient) { }
 
-  uploadFileByUrl(filePath: string, url: string): Promise<any> {
+  deleteFile(path: string): Promise<void> {
+    const storageRef = ref(this.storage, path)
+    return deleteObject(storageRef)
+  }
+
+  uploadFile(fileOrUrl: any, path: string = `files/file_${Date.now()}`): Promise<string> {
+    if (fileOrUrl instanceof File) {
+      return this.storeByFile(fileOrUrl, path)
+    } else {
+      return this.storeByUrl(fileOrUrl, path)
+    }
+  }
+
+  private storeByUrl(url: string, path: string): Promise<string> {
     return this.http.get(url, { responseType: 'blob' }).toPromise().then(
       (blob) => {
         if (blob) {
-          return new File([blob], 'newFile', { type: blob.type });
+          return new File([blob], 'fileName', { type: blob.type });
         }
         return Promise.reject('error')
       }).then((file) => {
-        return this.uploadFile(filePath, file)
+        return this.storeByFile(file, path)
       })
   }
 
-  uploadFile(filePath: string, file: File): Promise<any> {
-    const storageRef = ref(this.storage, filePath)
+  private storeByFile(file: File, path: string): Promise<string> {
+    const storageRef = ref(this.storage, path)
     const uploadTask = uploadBytesResumable(storageRef, file)
-
     return new Promise<any>((resolve, reject) => {
       uploadTask.on('state_changed',
         (_snapshot) => { },
@@ -32,11 +44,6 @@ export class UploadFileService {
         () => getDownloadURL(uploadTask.snapshot.ref).then(url => resolve(url))
       )
     })
-  }
-
-  deleteFile(filePath: string): Promise<any> {
-    const storageRef = ref(this.storage, filePath)
-    return deleteObject(storageRef)
   }
 
 }

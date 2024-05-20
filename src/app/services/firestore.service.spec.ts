@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UploadFileService } from './upload-file.service';
+import { FirestoreService } from './firestore.service';
 
-describe('UploadFileService', () => {
-  let service: UploadFileService;
+describe('FirestoreService', () => {
+  let service: FirestoreService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(UploadFileService);
+    service = TestBed.inject(FirestoreService);
   });
 
   it('should be created', () => {

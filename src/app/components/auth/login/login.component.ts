@@ -62,14 +62,12 @@ export class LoginComponent {
   }
 
   loginGoogle() {
-    this.isLoading = true
     this.auth.signinWithGoogle().then(
       () => {
         this.LoginActions()
       }
     ).catch(
       error => {
-        this.isLoading = false
         const justCanceled = error.code == 'auth/cancelled-popup-request' || error.code == 'auth/popup-closed-by-user'
         justCanceled ? '' : this.openSnackBar('Error signing in with google: ' + error)
       }

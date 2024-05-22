@@ -45,8 +45,10 @@ export class HeaderComponent {
   }
 
   logout() {
-    this.router.navigate([this.routes.login])
-    this.auth.logout()
+    this.auth.logout().then(() => {
+      this.update()
+      this.router.navigate([this.routes.login])
+    })
   }
 
   scrollToBottom() {

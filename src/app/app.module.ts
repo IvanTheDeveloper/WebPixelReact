@@ -68,6 +68,7 @@ import { CountryFlagEmojiPipe } from './pipes/country-flag-emoji.pipe';
 import { UnauthorizedComponent } from './components/basic/unauthorized/unauthorized.component';
 import { MyRouterDirective } from './directives/my-router.directive';
 import { CustomTagComponent } from './components/tools/custom-tag/custom-tag.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -109,6 +110,7 @@ import { CustomTagComponent } from './components/tools/custom-tag/custom-tag.com
     UnauthorizedComponent,
     MyRouterDirective,
     CustomTagComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,

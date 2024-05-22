@@ -8,8 +8,8 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const login = inject(AuthService)
   const router = inject(Router)
 
-  return login.getHighestRole().then((result) => {
-    if (result == 'admin') {
+  return login.isAdmin().then((result) => {
+    if (result) {
       return true
     } else {
       router.navigate([routingTable.forbidden])
@@ -17,4 +17,4 @@ export const adminGuard: CanActivateFn = (route, state) => {
     }
   })
 
-};
+}

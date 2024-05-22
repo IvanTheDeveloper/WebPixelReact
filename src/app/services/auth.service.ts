@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Auth, GoogleAuthProvider, User, UserCredential, createUserWithEmailAndPassword, deleteUser, fetchSignInMethodsForEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateCurrentUser, updateEmail, updatePassword, updatePhoneNumber, updateProfile } from '@angular/fire/auth';
+import { Auth, GoogleAuthProvider, User, UserCredential, applyActionCode, confirmPasswordReset, createUserWithEmailAndPassword, deleteUser, fetchSignInMethodsForEmail, isSignInWithEmailLink, sendEmailVerification, sendPasswordResetEmail, sendSignInLinkToEmail, signInWithEmailAndPassword, signInWithEmailLink, signInWithPopup, signOut, updateCurrentUser, updateEmail, updatePassword, updatePhoneNumber, updateProfile } from '@angular/fire/auth';
 import { Firestore, collection, collectionData, getFirestore, doc, updateDoc, setDoc, getDoc, deleteDoc } from '@angular/fire/firestore';
 import { dump, generateRandomAvatar, getRandomHexColor, withTimeout } from '../others/utils';
 import { StorageService } from './storage.service';
@@ -8,6 +8,10 @@ import { MyUser } from '../models/user';
 const bcrypt = require('bcryptjs'); // wtf? que es esto me quiero morir
 
 export const COOKIE_KEY = 'auth_token'
+const actionCodeSettings = {
+  url: location.href + '/?email=user@example.com',
+  handleCodeInApp: true,
+}
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +30,6 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    //console.log(JSON.stringify(this.auth.currentUser?.toJSON()))
     return this.cookieService.check(COOKIE_KEY)
   }
 
@@ -77,6 +80,43 @@ export class AuthService {
     await this.deleteDbUserInfo()
   }
 
+  //no manda code
+  async resetPasswordSend(email: string): Promise<void> {
+    await sendPasswordResetEmail(this.auth, email, actionCodeSettings)
+  }
+
+  //no manda code
+  async resetPasswordCheck(code: string, password: string): Promise<void> {
+    await confirmPasswordReset(this.auth, code, password)
+  }
+
+  //no funca
+  async loginWithLinkSend(email: string) {
+    await sendSignInLinkToEmail(this.auth, email, actionCodeSettings)
+  }
+
+  //no funca
+  async loginWithLinkCheck(email: string, link: string): Promise<UserCredential> {
+    if (isSignInWithEmailLink(this.auth, link)) {
+      const userCredential = await signInWithEmailLink(this.auth, email, link)
+      this.updateCookieToken()
+      return userCredential
+    } else {
+      return Promise.reject()
+    }
+  }
+
+  //no se gestiona en la app
+  async sendVerificationEmail(user: any = this.auth.currentUser): Promise<void> {
+    //if (user.emailVerified)
+    await sendEmailVerification(user, actionCodeSettings)
+  }
+
+  //no se gestiona en la app
+  async verifyEmail(code: string): Promise<void> {
+    await applyActionCode(this.auth, code)
+  }
+
   async updateUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
     await this.updateAuthUser(newUserData, user)
     if (newUserData.password) newUserData.password = bcrypt.hashSync(newUserData.password, 10)
@@ -102,6 +142,7 @@ export class AuthService {
     if (me) {
       const token = await me.getIdToken()
       this.cookieService.set(COOKIE_KEY, token)
+      //window.localStorage.setItem(COOKIE_KEY, token)
     }
   }
 
@@ -143,9 +184,17 @@ export class AuthService {
 
   getHighestRole(): Promise<string> {
     return this.getDbCurrentUser().then((result) => {
-      return (result.admin ? 'admin' : (result.mod ? 'mod' : ''))
+      return (result.isAdmin ? 'admin' : (result.isMod ? 'mod' : ''))
     }).catch(() => {
-      return ''
+      return Promise.reject()
+    })
+  }
+
+  isAdmin(): Promise<boolean> {
+    return this.getDbCurrentUser().then((result) => {
+      return (result.isAdmin)
+    }).catch(() => {
+      return Promise.reject()
     })
   }
 

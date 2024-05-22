@@ -22,12 +22,12 @@ export class HeaderComponent {
   constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
+    this.delay()
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.update()
       }
     })
-    this.delay()
   }
 
   async delay() {
@@ -45,6 +45,7 @@ export class HeaderComponent {
   }
 
   logout() {
+    this.router.navigate([this.routes.login])
     this.auth.logout()
   }
 

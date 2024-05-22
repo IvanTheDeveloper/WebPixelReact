@@ -19,6 +19,7 @@ import { MainComponent } from './layouts/main/main.component';
 import { CookieConsentComponent } from './components/pdf/cookie-consent/cookie-consent.component';
 import { TestComponent } from './components/tools/test/test.component';
 import { UnauthorizedComponent } from './components/basic/unauthorized/unauthorized.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 
 export const routingTable = {
   landing: 'home', //when the user IS NOT logged in
@@ -31,6 +32,7 @@ export const routingTable = {
   termsAndConditions: 'legal/terms-and-conditions',
   login: 'login',
   register: 'register',
+  passwordReset: 'reset-password',
   userSettings: 'settings',
   download: 'download',
   about: 'about',
@@ -52,6 +54,7 @@ const routes: Routes = [
 
       { path: routingTable.login, title: 'Login', component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
       { path: routingTable.register, title: 'Register', component: RegisterComponent, canActivate: [unauthenticatedUsersGuard] },
+      { path: routingTable.passwordReset, title: 'Reset Password', component: ResetPasswordComponent, },
       { path: routingTable.userSettings, title: 'Settings', component: UserSettingsComponent, canActivate: [authenticatedUsersGuard] },
       { path: routingTable.admin, title: 'Admin', component: AdminComponent, canActivate: [adminGuard] },
 

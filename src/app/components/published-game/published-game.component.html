@@ -1,0 +1,59 @@
+<div *ngIf="isDetailedView()" class="wave-container">
+    <div class="wave down w1"></div>
+    <div class="wave down w2"></div>
+    <div class="wave up w3"></div>
+    <div class="wave up w4"></div>
+</div>
+
+<div class="comment">
+    <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" diameter="100"></mat-progress-spinner>
+
+    <mat-card *ngIf="!isLoading && !isDeleted"
+        [ngClass]="position == 0 ? 'first' : position == 1 ? 'second' : position == 2 ? 'third' : 'default'">
+        <mat-card-header>
+            <img mat-card-avatar [src]="author?.avatarUrl ?? placeholderImg" onerror="this.src=placeholderImg">
+            <mat-card-title>"{{data?.gameName}}"</mat-card-title>
+            <mat-card-subtitle>by {{author?.username ?? 'Deleted user'}}</mat-card-subtitle>
+
+            <mat-card-subtitle>
+                {{data?.createdAt | date:'dd-MM-yyyy'}}
+                <span *ngIf="data?.isEdited">(Edited: {{data?.editedAt | date:'dd-MM-yyyy'}})</span>
+            </mat-card-subtitle>
+
+            <div class="menu">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </div>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="column">
+                <span>Levels Unlocked: {{data?.levelsUnlocked}}</span>
+                <span>Deaths: {{data?.deathCount}}</span>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+            <div class="votes">
+                <button mat-icon-button *ngIf="isAuthor() || !data.isPrivate" (click)="download()">
+                    <mat-icon>download</mat-icon>
+                </button>
+                <button mat-icon-button (click)="share()" class="share">
+                    <mat-icon>share</mat-icon></button>
+            </div>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-menu #menu>
+        <button mat-menu-item *ngIf="isAuthor()" (click)="setPrivate(!data.isPrivate)">
+            <mat-icon>{{data.isPrivate ? 'public' : 'lock'}}</mat-icon>
+            <span>{{data.isPrivate ? 'Publish' : 'Make private'}}</span>
+        </button>
+        <button mat-menu-item *ngIf="isAuthor() || isModOrAdmin" (click)="remove()">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+        </button>
+    </mat-menu>
+
+</div>

@@ -66,14 +66,21 @@ export class CommentComponent {
   }
 
   initData() {
-    this.getUser()
-    this.auth.getHighestRole().then(result => {
-      this.isModOrAdmin = (result == 'admin' || result == 'mod')
-    })
-    this.currentUid = this.auth.currentUser?.uid ?? null
-    this.upvoted = this.comment.uidsUpvoted.includes(this.currentUid)
-    this.downvoted = this.comment.uidsDownvoted.includes(this.currentUid)
-    this.editedMessage = this.comment.message
+    if (this.comment.reports > this.comment.votes && this.comment.reports > 10) {
+      this.commentService.deleteObject(this.comment).subscribe(() => {
+        this.isCommentDeleted = true
+        this.openSnackBar('This comment has been banned')
+      })
+    } else {
+      this.getUser()
+      this.auth.getHighestRole().then(result => {
+        this.isModOrAdmin = (result == 'admin' || result == 'mod')
+      })
+      this.currentUid = this.auth.currentUser?.uid ?? null
+      this.upvoted = this.comment.uidsUpvoted.includes(this.currentUid)
+      this.downvoted = this.comment.uidsDownvoted.includes(this.currentUid)
+      this.editedMessage = this.comment.message
+    }
   }
 
   edit() {
@@ -103,9 +110,13 @@ export class CommentComponent {
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.commentService.deleteObject(this.comment).subscribe()
-        this.isCommentDeleted = true
-        this.openSnackBar('Comment removed successfully')
+        this.commentService.deleteObject(this.comment).subscribe(() => {
+          this.isCommentDeleted = true
+          this.openSnackBar('Comment removed successfully')
+        },
+          (error) => {
+            this.openSnackBar(error)
+          })
       }
     })
   }

@@ -6,18 +6,18 @@
 
 <div class="content">
 
-    <h1>How to play:</h1>
+    <h1>How <b>to</b> play:</h1>
     <div *ngIf="selectedTabIndex == 0" class="instructions">
         <div>
             <h3>Portable:</h3>
             <p>Press the relative download button and wait until process finishes, then open windows file explorer and
-                navigate to your <span>downloads</span> folder (Usually its "C:\users\you\downloads" by
+                navigate to your <b>downloads</b> folder (Usually its "C:\users\you\downloads" by
                 default).</p>
-            <p>After that, <span class="rclick">right click</span> on the file you just downloaded and select one of the
-                <span>extract</span>
+            <p>After that, <b class="rclick">right click</b> on the file you just downloaded and select one of the
+                <b>extract</b>
                 options (depending of your computer, you may need to have installed a compressor such as WinRar).
             </p>
-            <p>Lasty, open the new extracted folder and <span class="dclick">double click</span> the <span>.exe</span>
+            <p>Lasty, open the new extracted folder and <b class="dclick">double click</b> the <span>.exe</span>
                 file that has the
                 same name
                 as the game and the program will start.</p>
@@ -26,34 +26,34 @@
         <div>
             <h3>Installer:</h3>
             <p>Press the relative download button and wait until process finishes, then open windows file explorer and
-                navigate to your <span>downloads</span> folder (Usually its "C:\users\you\downloads" by
+                navigate to your <b>downloads</b> folder (Usually its "C:\users\you\downloads" by
                 default).</p>
-            <p>After that, <span class="dclick">double click</span> on the file you just downloaded and a window will
+            <p>After that, <b class="dclick">double click</b> on the file you just downloaded and a window will
                 pop-up (You may
                 first be prompted to run the program as administrator), so just follow
-                the <span class="wizard">install wizard</span> instrucions.
+                the <b class="wizard">install wizard</b> instrucions.
             </p>
         </div>
     </div>
 
     <div *ngIf="selectedTabIndex == 1">
-        <span> b Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil at sapiente reprehenderit rerum amet,
+        <p> b Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil at sapiente reprehenderit rerum amet,
             quo
             libero voluptate neque culpa totam nesciunt blanditiis ducimus suscipit doloremque et? Provident,
             distinctio.
-            Obcaecati, doloribus.</span>
+            Obcaecati, doloribus.</p>
     </div>
 
     <div *ngIf="selectedTabIndex == 2">
-        <span>c Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil at sapiente reprehenderit rerum amet, quo
+        <p>c Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil at sapiente reprehenderit rerum amet, quo
             libero voluptate neque culpa totam nesciunt blanditiis ducimus suscipit doloremque et? Provident,
             distinctio.
-            Obcaecati, doloribus.</span>
+            Obcaecati, doloribus.</p>
     </div>
 
     <mat-card>
         <mat-card-content>
-            <p>Device: <span>{{platform}}</span> (browser)</p>
+            <p>Device: <b>{{platform}}</b> (browser)</p>
             <p>Architecture: <button mat-button
                     [matMenuTriggerFor]="architectureMenu"><span>{{architecture}}</span><mat-icon>arrow_drop_down</mat-icon></button>
                 bits

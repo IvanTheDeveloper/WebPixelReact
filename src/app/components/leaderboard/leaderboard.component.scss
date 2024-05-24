@@ -42,8 +42,26 @@ form {
     padding: 50px;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 50px;
     width: 100%;
+
+    img {
+        height: 150px;
+    }
+}
+
+.position {
+    font-family: 'Pixel';
+    font-size: xx-large;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+
+    mat-divider {
+        width: 90%;
+        background-color: #ffffff;
+    }
 }
 
 @keyframes waveAnimation {

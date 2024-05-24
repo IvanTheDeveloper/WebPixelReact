@@ -20,6 +20,13 @@
 
     <mat-spinner *ngIf="progressSpinner" mode="indeterminate" [diameter]="100"></mat-spinner>
 
+    <div class="row sort">
+        <button mat-raised-button (click)="changeSortOption('votes')" [class.active]="sortOption == 'votes'">Most
+            voted</button>
+        <button mat-raised-button (click)="changeSortOption('date')" [class.active]="sortOption == 'date'">Most
+            recent</button>
+    </div>
+
     <div *ngIf="!progressSpinner" class="list">
         <div *ngFor="let item of objectList"> <!--matSort (matSortChange)="sortData($event)"-->
             <app-comment [comment]="item"></app-comment>

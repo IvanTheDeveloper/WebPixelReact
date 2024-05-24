@@ -17,6 +17,7 @@ export class CommentBoxComponent {
   progressSpinner = true
   formController!: FormGroup
   selected = false
+  sortOption = 'votes'
 
   constructor(private dataService: CommentService, private auth: AuthService, public dialog: MatDialog, private formBuilder: FormBuilder, private router: Router) { }
 
@@ -37,12 +38,27 @@ export class CommentBoxComponent {
     this.dataService.getObjectList().subscribe(
       (response) => {
         let list: any[] = Object.values(response)
-        this.objectList = list
+        this.objectList = this.sortComments(list)
       },
       (error) => {
         console.log(error)
       }
     )
+  }
+
+  sortComments(comments: any[]): any[] {
+    if (this.sortOption == 'date') {
+      return comments.sort((a, b) => b.createdAt - a.createdAt)
+    } else if (this.sortOption == 'votes') {
+      return comments.sort((a, b) => b.votes - a.votes)
+    } else {
+      return comments
+    }
+  }
+
+  changeSortOption(option: string) {
+    this.sortOption = option
+    this.objectList = this.sortComments(this.objectList)
   }
 
   get message() {

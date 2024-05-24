@@ -20,6 +20,8 @@ import { CookieConsentComponent } from './components/pdf/cookie-consent/cookie-c
 import { TestComponent } from './components/tools/test/test.component';
 import { UnauthorizedComponent } from './components/basic/unauthorized/unauthorized.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
+import { PublishedGameComponent } from './components/published-game/published-game.component';
 
 export const routingTable = {
   landing: 'home', //when the user IS NOT logged in
@@ -35,6 +37,7 @@ export const routingTable = {
   passwordReset: 'reset-password',
   userSettings: 'settings',
   download: 'download',
+  leaderborad: 'leaderboard',
   about: 'about',
   admin: 'admin',
   test: 'helloworld'
@@ -60,7 +63,9 @@ const routes: Routes = [
 
       { path: routingTable.about, title: 'About Us', component: AboutComponent },
       { path: routingTable.download, title: 'Download', component: DownloadComponent },
+      { path: routingTable.leaderborad, title: 'Leaderboard', component: LeaderboardComponent },
       { path: 'comment/:id', component: CommentComponent },
+      { path: 'game/:authorId/:name', component: PublishedGameComponent },
     ]
   },
   { //views with naked components

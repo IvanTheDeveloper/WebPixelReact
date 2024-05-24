@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,42 +7,27 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-
-const NAMES: string[] = [
-  'Maia',
-  'Asher',
-  'Olivia',
-  'Atticus',
-  'Amelia',
-];
-
-function createNewUser(id: number): any {
-  const name =
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))];
-  return {
-    id: id.toString(),
-    name: name,
-  };
-}
+import { AuthService } from 'src/app/services/auth.service';
+import { dump } from 'src/app/others/utils';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements AfterViewInit {
-  columns: string[] = ['select', 'id', 'name',];
-  displayedColumns: string[] = this.columns.slice();
-  dataSource: MatTableDataSource<any>;
-  selection = new SelectionModel<any>(true, []);
+export class TableComponent {
+  columns: string[] = ['select', 'id', 'username', 'email', 'password', 'isAdmin', 'isMod', 'phone', 'address', 'lastLoginAt', 'createdAt']
+  displayedColumns: string[] = this.columns.slice()
+  dataSource!: MatTableDataSource<any>
+  selection = new SelectionModel<any>(true, [])
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+  @ViewChild(MatSort) sort!: MatSort
 
-  constructor(public dialog: MatDialog,
-    private snackBar: MatSnackBar,) {
-    const users = Array.from({ length: 10 }, (_, k) => createNewUser(k + 1));
-    this.dataSource = new MatTableDataSource(users)
+  constructor(public dialog: MatDialog, private snackBar: MatSnackBar, private auth: AuthService) {
+    this.auth.getDbAllUsers().then(result => {
+      this.dataSource = new MatTableDataSource(result)
+    })
   }
 
   ngAfterViewInit() {

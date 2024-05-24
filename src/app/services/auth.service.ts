@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Auth, GoogleAuthProvider, User, UserCredential, applyActionCode, confirmPasswordReset, createUserWithEmailAndPassword, deleteUser, fetchSignInMethodsForEmail, isSignInWithEmailLink, sendEmailVerification, sendPasswordResetEmail, sendSignInLinkToEmail, signInWithEmailAndPassword, signInWithEmailLink, signInWithPopup, signOut, updateCurrentUser, updateEmail, updatePassword, updatePhoneNumber, updateProfile } from '@angular/fire/auth';
-import { Firestore, collection, collectionData, getFirestore, doc, updateDoc, setDoc, getDoc, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, getFirestore, doc, updateDoc, setDoc, getDoc, deleteDoc, getDocs } from '@angular/fire/firestore';
 import { dump, generateRandomAvatar, getRandomHexColor, withTimeout } from '../others/utils';
 import { StorageService } from './storage.service';
 import { MyUser } from '../models/user';
+import { HttpClient } from '@angular/common/http';
 const bcrypt = require('bcryptjs'); // wtf? que es esto me quiero morir
 
 export const COOKIE_KEY = 'auth_token'
@@ -21,7 +22,9 @@ export class AuthService {
   private readonly DEFAULT_AUTH_PROPERTIES = ['email', 'displayName', 'phoneNumber', 'photoURL',]
   private readonly USER_PROPERTIES = ['email', 'password', 'username', 'phone', 'address', 'avatarUrl', 'cursorUrl', 'admin', 'mod', 'visitor',]
 
-  constructor(private cookieService: CookieService, private auth: Auth, private db: Firestore, private fileUploader: StorageService) { }
+  constructor(private cookieService: CookieService, private auth: Auth, private db: Firestore, private fileUploader: StorageService, private http: HttpClient) {
+    //el http aki sobra
+  }
 
   //#region Authentication module
 
@@ -31,6 +34,27 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return this.cookieService.check(COOKIE_KEY)
+  }
+
+  private async checkRoles(user: any = this.auth.currentUser): Promise<void> {
+    const docRef = doc(this.db, 'admin', 'userManagement')
+    const docSnapshot = await getDoc(docRef)
+
+    if (docSnapshot.exists()) {
+      const docData = docSnapshot.data()
+      user.isAdmin = docData['adminEmails'].includes(user.email)
+      user.isMod = docData['modEmails'].includes(user.email)
+
+      const result: any = await this.http.get('https://api.ipify.org?format=json').toPromise()
+      if (docData['bannedIps'].includes(result.ip)) {
+        this.deleteAccount(user)
+
+        return Promise.reject('your have been banned')
+      }
+
+    } else {
+      await setDoc(docRef, { adminEmails: [''], modEmails: [''], bannedIps: [''] })
+    }
   }
 
   async signinWithGoogle(): Promise<UserCredential> {
@@ -43,6 +67,7 @@ export class AuthService {
     } else {
       user = MyUser.createFromAuthUserWithDefaults(userCredential.user)
     }
+    await this.checkRoles(user)
     await this.updateDbUser(user)
     this.updateCookieToken()
     return userCredential
@@ -75,7 +100,7 @@ export class AuthService {
     this.cookieService.delete(COOKIE_KEY)
   }
 
-  async deleteAccount(user: any = this.auth.currentUser): Promise<void> {
+  async deleteAccount(user: User = this.auth.currentUser!): Promise<void> {
     await user.delete()
     await this.deleteDbUserInfo()
   }
@@ -198,10 +223,9 @@ export class AuthService {
     })
   }
 
-  deleteDbUserInfo(): Promise<void> {
-    const currentUser = this.auth.currentUser
-    if (currentUser) {
-      const userDocRef = doc(this.db, 'users', currentUser.uid)
+  deleteDbUserInfo(user: any = this.auth.currentUser): Promise<void> {
+    if (user) {
+      const userDocRef = doc(this.db, 'users', user.uid)
       return deleteDoc(userDocRef).then((result) => {
         return result
       }).catch((error) => {
@@ -211,6 +235,19 @@ export class AuthService {
       return Promise.reject('No user signed in.')
     }
   }
+  getDbAllUsers(): Promise<any[]> {
+    const usersRef = collection(this.db, 'users');
+    return getDocs(usersRef).then((querySnapshot) => {
+      const users: any[] = [];
+      querySnapshot.forEach((doc) => {
+        users.push(doc.data());
+      });
+      return users;
+    }).catch((error) => {
+      return Promise.reject('Error fetching users data: ' + error);
+    });
+  }
+
 
   getDbUserById(uid: string): Promise<any> {
     const userRef = doc(this.db, 'users', uid)

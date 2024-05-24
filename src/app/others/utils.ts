@@ -30,3 +30,14 @@ export function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<
     )
     return Promise.race([promise, timeout]);
 }
+
+
+export function encryptDecrypt(data: string): string {
+    const encryptionCodeWord = 'SiLeesEstoNosDebesPonerUn10'
+    let modifiedData = ''
+    for (let i = 0; i < data.length; i++) {
+        const charCode = data.charCodeAt(i) ^ encryptionCodeWord.charCodeAt(i % encryptionCodeWord.length)
+        modifiedData += String.fromCharCode(charCode)
+    }
+    return modifiedData
+}

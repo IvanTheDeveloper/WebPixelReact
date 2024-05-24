@@ -69,6 +69,8 @@ import { UnauthorizedComponent } from './components/basic/unauthorized/unauthori
 import { MyRouterDirective } from './directives/my-router.directive';
 import { CustomTagComponent } from './components/tools/custom-tag/custom-tag.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
+import { PublishedGameComponent } from './components/published-game/published-game.component';
 
 @NgModule({
   declarations: [
@@ -111,6 +113,8 @@ import { ResetPasswordComponent } from './components/auth/reset-password/reset-p
     MyRouterDirective,
     CustomTagComponent,
     ResetPasswordComponent,
+    LeaderboardComponent,
+    PublishedGameComponent,
   ],
   imports: [
     BrowserModule,

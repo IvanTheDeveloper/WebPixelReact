@@ -1,11 +1,16 @@
-.wave-container {
-    position: relative;
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-height: 100vh;
     padding: 10%;
-    background-color: rgb(113, 147, 191);
+    padding-top: 0%;
+    background-image: url('https://64.media.tumblr.com/97ba22adc8d4a2a065637dc51c6d03bc/tumblr_o24hcknP7g1twakhqo1_540.gif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top 30%;
 }
 
 .sort {
@@ -38,16 +43,16 @@ form {
     }
 }
 
+
+img {
+    width: 200px;
+}
+
 .list {
-    padding: 50px;
     display: flex;
     flex-direction: column;
     gap: 50px;
     width: 100%;
-
-    img {
-        height: 150px;
-    }
 }
 
 .position {
@@ -64,49 +69,142 @@ form {
     }
 }
 
-@keyframes waveAnimation {
+
+section {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-position-x: center;
+    background-size: cover;
+}
+
+span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1), 0 0 0 8px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 1);
+    animation: animate 3s linear infinite;
+}
+
+span::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 2px;
+    background: linear-gradient(90deg, #ffffff, transparent);
+}
+
+@keyframes animate {
     0% {
-        background-position: 0% 100%;
+        transform: rotate(315deg) translateX(0);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
     }
 
     100% {
-        background-position: 100% 100%;
+        transform: rotate(315deg) translateX(-1500px);
+        opacity: 0;
     }
 }
 
-.wave {
-    position: absolute;
-    top: 0%;
-    width: 100%;
-    height: 100%;
+span:nth-child(1) {
+    top: 0;
+    right: 0;
+    left: initial;
+    animation-delay: 0;
+    animation-duration: 2s;
     z-index: 0;
 }
 
-.up {
-    background: url('../../../assets/images/wave-down.png') repeat-x, rgb(0, 0, 0, 0);
-    transform: rotate(180deg);
+span:nth-child(2) {
+    top: 0;
+    right: 80px;
+    left: initial;
+    animation-delay: 0.2s;
+    animation-duration: 3s;
+    z-index: 1;
 }
 
-.down {
-    background: url('../../../assets/images/wave-down.png') repeat-x, rgb(0, 0, 0, 0);
+span:nth-child(3) {
+    top: 80px;
+    right: 0px;
+    left: initial;
+    animation-delay: 0.4s;
+    animation-duration: 2s;
+    z-index: 0;
 }
 
-.w1 {
-    animation: waveAnimation 9.9s infinite alternate;
-    opacity: 1;
+span:nth-child(4) {
+    top: 0;
+    right: 180px;
+    left: initial;
+    animation-delay: 0.6s;
+    animation-duration: 1.5s;
+    z-index: 1;
 }
 
-.w2 {
-    animation: waveAnimation 8.6s infinite alternate-reverse;
-    opacity: 0.8;
+span:nth-child(5) {
+    top: 0;
+    right: 400px;
+    left: initial;
+    animation-delay: 0.8s;
+    animation-duration: 2.5s;
+    z-index: 0;
 }
 
-.w3 {
-    animation: waveAnimation 7.1s infinite alternate;
-    opacity: 0.8;
+span:nth-child(6) {
+    top: 0;
+    right: 600px;
+    left: initial;
+    animation-delay: 1s;
+    animation-duration: 3s;
+    z-index: 0;
 }
 
-.w4 {
-    animation: waveAnimation 5.7s infinite alternate-reverse;
-    opacity: 1;
+span:nth-child(7) {
+    top: 300px;
+    right: 0px;
+    left: initial;
+    animation-delay: 1s;
+    animation-duration: 1.75s;
+    z-index: 0;
+}
+
+span:nth-child(8) {
+    top: 0px;
+    right: 700px;
+    left: initial;
+    animation-delay: 1.4s;
+    animation-duration: 1.25s;
+    z-index: 1;
+}
+
+span:nth-child(9) {
+    top: 0px;
+    right: 1000px;
+    left: initial;
+    animation-delay: 0.75s;
+    animation-duration: 2.25s;
+    z-index: 0;
+}
+
+span:nth-child(10) {
+    top: 800px;
+    right: 0px;
+    left: initial;
+    animation-delay: 2.75s;
+    animation-duration: 2.25s;
+    z-index: 0;
 }

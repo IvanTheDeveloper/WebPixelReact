@@ -1,23 +1,28 @@
-<div class="wave-container">
-    <div class="wave down w1"></div>
-    <div class="wave down w2"></div>
-    <div class="wave up w3"></div>
-    <div class="wave up w4"></div>
-    <!--</div>
+<div class="container">
 
-<div class="container">-->
+    <section>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </section>
 
     <mat-spinner *ngIf="progressSpinner" mode="indeterminate" [diameter]="100"></mat-spinner>
 
+    <div class="row ">
+        <img
+            src="https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F963729504445038592.gif%3Fv%3D1&w=64&q=75">
+    </div>
+
     <div *ngIf="!progressSpinner" class="list">
-
         <div *ngFor="let item of objectList; let i = index">
-            <div class="row img">
-                <img *ngIf="i == 0"
-                    src="https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F963729504445038592.gif%3Fv%3D1&w=64&q=75">
-            </div>
-
-            <div class="position"><span>#{{i+1}}</span><mat-divider></mat-divider></div>
+            <div class="position"><b>#{{i+1}}</b><mat-divider></mat-divider></div>
             <app-published-game [position]="i" [data]="item"></app-published-game>
         </div>
 

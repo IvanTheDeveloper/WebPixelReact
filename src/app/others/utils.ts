@@ -17,20 +17,31 @@ export function getRandomHexColor(): string {
     return color
 }
 
-export function generateRandomAvatar(name: string): string {
-    name = encodeURIComponent(name)
-    const color = getRandomHexColor()
-    return `https://ui-avatars.com/api/?background=${color}&name=${name}`
-    //return 'https://source.boringavatars.com'
+export function generateRandomAvatar(name: string | null = null): string {
+    if (name) {
+        name = encodeURIComponent(name)
+        const color = getRandomHexColor()
+        return `https://ui-avatars.com/api/?background=${color}&name=${name}`
+    } else {
+        return 'https://source.boringavatars.com'
+    }
+}
+
+export function generateQrCode(text: string): string {
+    text = encodeURIComponent(text)
+    return `https://api.qrserver.com/v1/create-qr-code/?data=${text}`
 }
 
 export function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
     const timeout = new Promise<never>((_, reject) =>
         setTimeout(() => reject("operation timed out"), timeoutMs)
     )
-    return Promise.race([promise, timeout]);
+    return Promise.race([promise, timeout])
 }
 
+export async function delay(ms: number) {
+    await new Promise(f => setTimeout(f, ms))
+}
 
 export function encryptDecrypt(data: string): string {
     const encryptionCodeWord = 'SiLeesEstoNosDebesPonerUn10'
@@ -41,3 +52,4 @@ export function encryptDecrypt(data: string): string {
     }
     return modifiedData
 }
+

@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { routingTable } from 'src/app/app-routing.module';
 import { pwdRegExp } from 'src/app/others/password-rules';
+import { delay } from 'src/app/others/utils';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -17,6 +18,8 @@ export class LoginComponent {
   hidePassword: boolean = true
   _goTo: string
   fieldForm: FormGroup
+  qrCode: string | null = null
+  time = 0
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router, private snackBar: MatSnackBar) {
     this.fieldForm = this.fb.group({
@@ -44,7 +47,7 @@ export class LoginComponent {
       const password = this.fieldForm.get('password')?.value
       this.auth.login(email, password).then(
         () => {
-          this.LoginActions()
+          this.loginActions()
         }
       ).catch(
         error => {
@@ -64,7 +67,7 @@ export class LoginComponent {
   loginGoogle() {
     this.auth.signinWithGoogle().then(
       () => {
-        this.LoginActions()
+        this.loginActions()
       }
     ).catch(
       error => {
@@ -74,19 +77,37 @@ export class LoginComponent {
     )
   }
 
-  private async LoginActions() {
+  private async loginActions() {
     await new Promise(f => setTimeout(f, 1000))
     this.router.navigateByUrl(`/${this._goTo}`)
-    this.openSnackBar('Welcome ' + this.auth.currentUser?.displayName + '!')
+    this.openSnackBar(`Welcome ${this.auth.currentUser?.displayName} !`)
     this.isLoading = false
   }
 
-  openSnackBar(text: string) {
+  private openSnackBar(text: string) {
     this.snackBar.open(text, 'Ok', {
       duration: 5000,
       horizontalPosition: 'center',
       verticalPosition: 'bottom'
     })
+  }
+
+  async loginQr() {
+    this.qrCode = await this.auth.loginWithQrInitial()
+    this.timeout()
+  }
+
+  async timeout() {
+    for (this.time = 60; this.time > 0; this.time--) {
+      await delay(1000)
+      this.auth.loginWithQrComplete().then(
+        () => {
+          this.loginActions()
+        }
+      ).catch((error) => error)
+    }
+    this.qrCode = null
+    this.openSnackBar('QR code operation timed out')
   }
 
 }

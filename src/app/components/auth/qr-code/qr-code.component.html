@@ -1,0 +1,5 @@
+<div class="container">
+    <mat-progress-spinner *ngIf="success == null" mode="indeterminate"></mat-progress-spinner>
+    <img *ngIf="success == true" src="assets/images/auth_success.svg">
+    <img *ngIf="success == false" src="assets/images/auth_error.svg">
+</div>

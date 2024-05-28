@@ -17,6 +17,13 @@ body {
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Game';
+    src: url('assets/fonts/PixelifySans-Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .column {
     display: flex;
     flex-direction: column;

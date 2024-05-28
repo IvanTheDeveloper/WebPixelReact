@@ -1,6 +1,7 @@
 <div class="container">
     <mat-card>
         <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
         <mat-card-header class="centerer">
             <mat-card-title>Sign in</mat-card-title>
         </mat-card-header>
@@ -30,13 +31,25 @@
                 </mat-form-field>
 
                 <button mat-raised-button color="primary" type="submit">Login</button>
-                <button mat-raised-button color="primary" (click)="loginGoogle()">Login with Google</button>
             </form>
 
+            <div class="column">
+                <button mat-raised-button color="primary" (click)="loginGoogle()">Login with Google</button>
+                <button mat-icon-button color="primary" *ngIf="!qrCode"
+                    (click)="loginQr()"><mat-icon>qr_code</mat-icon></button>
+                <div *ngIf="qrCode" class="column separator">
+                    <img [src]="qrCode">
+                    <span>{{time}} seconds remaining</span>
+                </div>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions class="column">
             <div class="centerer">
                 <p>Don't have an account? <a [href]="routes.register">¡Register now!</a></p>
                 <p>Forgot your password? <a [href]="routes.passwordReset">¡Click here!</a></p>
             </div>
-        </mat-card-content>
+        </mat-card-actions>
+
     </mat-card>
 </div>

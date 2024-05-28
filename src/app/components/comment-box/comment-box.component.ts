@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { routingTable } from 'src/app/app-routing.module';
+import { dump } from 'src/app/others/utils';
 
 @Component({
   selector: 'app-comment-box',
@@ -95,7 +96,7 @@ export class CommentBoxComponent {
           this.formController.reset()
         },
         (error) => {
-          alert(error)
+          dump(error)
         }
       )
     }

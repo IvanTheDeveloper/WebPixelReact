@@ -37,11 +37,13 @@ export class HeaderComponent {
 
   update() {
     this.userAuthenticated = this.auth.isAuthenticated()
-    this.username = this.auth.currentUser?.displayName ?? 'You'
-    this.avatar = this.auth.currentUser?.photoURL ?? null
-    this.auth.getHighestRole().then(result => {
-      this.role = result
-    })
+    if (this.userAuthenticated) {
+      this.username = this.auth.currentUser?.displayName ?? 'You'
+      this.avatar = this.auth.currentUser?.photoURL ?? null
+      this.auth.getHighestRole().then(result => {
+        this.role = result
+      })
+    }
   }
 
   logout() {

@@ -28,7 +28,7 @@
     </div>
 
     <div *ngIf="!progressSpinner" class="list">
-        <div *ngFor="let item of objectList"> <!--matSort (matSortChange)="sortData($event)"-->
+        <div *ngFor="let item of objectList">
             <app-comment [comment]="item"></app-comment>
         </div>
     </div>

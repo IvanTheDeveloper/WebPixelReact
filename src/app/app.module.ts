@@ -71,6 +71,10 @@ import { CustomTagComponent } from './components/tools/custom-tag/custom-tag.com
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
 import { PublishedGameComponent } from './components/published-game/published-game.component';
+import { RegisterTestComponent } from './components/auth/register-test/register-test.component';
+import { QrCodeComponent } from './components/auth/qr-code/qr-code.component';
+import { KeyboardComponent } from './components/tools/keyboard/keyboard.component';
+import { ArrowComponent } from './components/arrow/arrow.component';
 
 @NgModule({
   declarations: [
@@ -115,6 +119,10 @@ import { PublishedGameComponent } from './components/published-game/published-ga
     ResetPasswordComponent,
     LeaderboardComponent,
     PublishedGameComponent,
+    RegisterTestComponent,
+    QrCodeComponent,
+    KeyboardComponent,
+    ArrowComponent,
   ],
   imports: [
     BrowserModule,

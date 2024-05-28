@@ -1,0 +1,119 @@
+.key {
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    transition: all ease 0.2s;
+    height: 50px;
+    width: 50px;
+    border-radius: 10%;
+    border: 2px solid black;
+    background-color: rgb(150, 150, 255);
+    color: black;
+
+    &.hover {
+        transform: scale(1.1);
+        background-color: rgb(0, 255, 255);
+    }
+
+    div {
+        text-align: center;
+        justify-items: center;
+        transition: all ease 0.5s;
+        border-radius: inherit;
+        margin-top: 2px;
+        width: calc(100% - 10px);
+        height: 36px;
+        padding-top: 4px;
+        font-size: large;
+        background-color: rgb(220, 220, 255);
+
+        //temp
+        kbd {
+            font-family: 'Game';
+        }
+    }
+}
+
+.empty {
+    background-color: rgba(0, 0, 0, 0) !important;
+    border: 0 !important;
+    width: 30px !important;
+}
+
+.big {
+    width: 70px !important;
+    border-radius: 5%/7% !important;
+}
+
+.double {
+    width: 100px !important;
+    border-radius: 5%/10% !important;
+}
+
+.space {
+    width: 380px !important;
+    border-radius: 1%/8% !important;
+}
+
+.movement {
+    background-color: rgb(255, 150, 150) !important;
+
+    div {
+        background-color: rgb(255, 220, 220) !important;
+
+        //temp
+        kbd {
+            font-weight: bold;
+            font-size: larger;
+        }
+    }
+
+    &.hover {
+        background-color: rgb(255, 0, 0) !important;
+    }
+}
+
+.action {
+    background-color: rgb(150, 255, 150) !important;
+
+    div {
+        background-color: rgb(220, 255, 220) !important;
+    }
+
+    &.hover {
+        background-color: rgb(0, 255, 0) !important;
+    }
+}
+
+.spacer {
+    gap: 5px;
+}
+
+.keyboard {
+    padding: 40px;
+    background-color: #343434;
+    border: 2px solid black;
+    border-radius: 5%/12%;
+}
+
+#arrow {
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.origin {
+    z-index: 2;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: fit-content;
+    padding: 1%;
+    border: 2px solid black;
+    background-color: #343434;
+}

@@ -37,7 +37,7 @@ export class ResetPasswordComponent {
   onSubmitEmail() {
     this.timeout()
     if (this.email.valid) {
-      this.auth.sendVerificationEmail(this.email.value).then(
+      this.auth.sendVerificationEmail().then(
         () => {
           this.step++
           this.openSnackBar('Email sent, check your inbox!')
@@ -47,7 +47,6 @@ export class ResetPasswordComponent {
           alert(error)
         }
       )
-
     }
   }
 

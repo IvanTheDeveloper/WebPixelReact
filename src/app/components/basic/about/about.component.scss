@@ -1,3 +1,151 @@
+.cube {
+    border-radius: 0%;
+    border: solid 2px #142cb0;
+    width: 10px;
+    height: 10px;
+}
+
+.circle {
+    border-radius: 50%;
+    border: solid 2px #142cb0;
+    width: 10px;
+    height: 10px;
+}
+
+.cross {
+    --color: #142cb0;
+    --l: 2px;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(to top right, transparent calc(50% - var(--l) / 2), var(--color) calc(50% - var(--l) / 2) calc(50% + var(--l) / 2), transparent calc(50% + var(--l) / 2)),
+        linear-gradient(to bottom right, transparent calc(50% - var(--l) / 2), var(--color) calc(50% - var(--l) / 2) calc(50% + var(--l) / 2), transparent calc(50% + var(--l) / 2));
+
+    --clip-path: polygon(var(--l) 0%, calc(100% - var(--l)) 0%, 100% var(--l), 100% calc(100% - var(--l)), calc(100% - var(--l)) 100%, var(--l) 100%, 0% calc(100% - var(--l)), 0% var(--l));
+    -webkit-clip-path: var(--clip-path);
+    clip-path: var(--clip-path);
+}
+
+.triangle {
+    scale: 0.4;
+    --b: 10px !important;
+    width: 40px !important;
+    aspect-ratio: 1/cos(30deg) !important;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%, 50% 0, 50% var(--b), calc(var(--b)*cos(30deg)) calc(100% - var(--b)/2), calc(100% - var(--b)*cos(30deg)) calc(100% - var(--b)/2), 50% var(--b)) !important;
+    background: #142cb0 !important;
+}
+
+
+.shape {
+    overflow: hidden;
+    position: absolute;
+    top: 80vh;
+    left: 45vw;
+    transform-origin: top left;
+    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+    animation: cube 12s ease-in forwards infinite;
+    z-index: 1;
+
+    &:nth-child(1) {
+        animation-delay: 1s;
+        left: 50vw;
+        top: 80vh;
+    }
+
+    &:nth-child(2) {
+        animation-delay: 2s;
+        left: 25vw;
+        top: 40vh;
+    }
+
+    &:nth-child(3) {
+        animation-delay: 3s;
+        left: 75vw;
+        top: 50vh;
+    }
+
+    &:nth-child(4) {
+        animation-delay: 4s;
+        left: 90vw;
+        top: 10vh;
+    }
+
+    &:nth-child(5) {
+        animation-delay: 5s;
+        left: 10vw;
+        top: 85vh;
+    }
+
+    &:nth-child(6) {
+        animation-delay: 6s;
+        left: 50vw;
+        top: 10vh;
+    }
+
+    &:nth-child(7) {
+        animation-delay: 7s;
+        left: 90vw;
+        top: 80vh;
+    }
+
+    &:nth-child(8) {
+        animation-delay: 8s;
+        left: 10vw;
+        top: 5vh;
+    }
+}
+
+@keyframes cube {
+    from {
+        transform: scale(0) rotate(0deg) translate(-50%, -50%);
+        opacity: 1;
+    }
+
+    to {
+        transform: scale(20) rotate(960deg) translate(-50%, -50%);
+        opacity: 0;
+    }
+}
+
+
+.wave {
+    position: fixed;
+    width: 1500px;
+    height: 1300px;
+    margin-left: -1100px;
+    margin-top: -250px;
+    border-radius: 43%;
+    z-index: 0;
+
+    &:nth-child(1n) {
+        animation: drift 6000ms infinite linear;
+        background: #0af;
+        opacity: 0.6;
+    }
+
+    &:nth-child(2n) {
+        animation: drift 3000ms infinite linear;
+        background: black;
+        opacity: 0.4;
+    }
+
+    &:nth-child(3n) {
+        animation: drift 7500ms infinite linear;
+        background-color: #77daff;
+        opacity: 0.6;
+    }
+}
+
+@keyframes drift {
+    from {
+        transform: rotate(0deg);
+    }
+
+    from {
+        transform: rotate(360deg);
+    }
+}
+
+
 .content {
     display: flex;
     flex-direction: column;
@@ -6,7 +154,6 @@
     padding: 100px;
     gap: 100px;
     position: relative;
-    z-index: 2;
 
     h1 {
         font-family: 'Pixel';

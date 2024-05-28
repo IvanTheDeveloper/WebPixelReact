@@ -22,6 +22,8 @@ import { UnauthorizedComponent } from './components/basic/unauthorized/unauthori
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
 import { PublishedGameComponent } from './components/published-game/published-game.component';
+import { RegisterTestComponent } from './components/auth/register-test/register-test.component';
+import { QrCodeComponent } from './components/auth/qr-code/qr-code.component';
 
 export const routingTable = {
   landing: 'home', //when the user IS NOT logged in
@@ -56,7 +58,7 @@ const routes: Routes = [
       { path: routingTable.unauthorized, title: 'Unauthorized', component: UnauthorizedComponent },
 
       { path: routingTable.login, title: 'Login', component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
-      { path: routingTable.register, title: 'Register', component: RegisterComponent, canActivate: [unauthenticatedUsersGuard] },
+      { path: routingTable.register, title: 'Register', component: RegisterTestComponent, canActivate: [unauthenticatedUsersGuard] },
       { path: routingTable.passwordReset, title: 'Reset Password', component: ResetPasswordComponent, },
       { path: routingTable.userSettings, title: 'Settings', component: UserSettingsComponent, canActivate: [authenticatedUsersGuard] },
       { path: routingTable.admin, title: 'Admin', component: AdminComponent, canActivate: [adminGuard] },
@@ -66,6 +68,7 @@ const routes: Routes = [
       { path: routingTable.leaderborad, title: 'Leaderboard', component: LeaderboardComponent },
       { path: 'comment/:id', component: CommentComponent },
       { path: 'game/:authorId/:name', component: PublishedGameComponent },
+      { path: 'auth/:code', component: QrCodeComponent, canActivate: [authenticatedUsersGuard] },
     ]
   },
   { //views with naked components

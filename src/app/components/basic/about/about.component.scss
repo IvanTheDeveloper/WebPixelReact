@@ -34,7 +34,6 @@
     background: #142cb0 !important;
 }
 
-
 .shape {
     overflow: hidden;
     position: absolute;
@@ -42,8 +41,8 @@
     left: 45vw;
     transform-origin: top left;
     transform: scale(0) rotate(0deg) translate(-50%, -50%);
-    animation: cube 12s ease-in forwards infinite;
-    z-index: 1;
+    animation: spin-grow 12s ease-in forwards infinite;
+    z-index: 2;
 
     &:nth-child(1) {
         animation-delay: 1s;
@@ -59,13 +58,13 @@
 
     &:nth-child(3) {
         animation-delay: 3s;
-        left: 75vw;
+        left: 85vw;
         top: 50vh;
     }
 
     &:nth-child(4) {
         animation-delay: 4s;
-        left: 90vw;
+        left: 70vw;
         top: 10vh;
     }
 
@@ -83,7 +82,7 @@
 
     &:nth-child(7) {
         animation-delay: 7s;
-        left: 90vw;
+        left: 80vw;
         top: 80vh;
     }
 
@@ -92,68 +91,65 @@
         left: 10vw;
         top: 5vh;
     }
+
+    @keyframes spin-grow {
+        from {
+            transform: scale(0) rotate(0deg) translate(-50%, -50%);
+            opacity: 1;
+        }
+
+        to {
+            transform: scale(20) rotate(960deg) translate(-50%, -50%);
+            opacity: 0;
+        }
+    }
 }
 
-@keyframes cube {
-    from {
-        transform: scale(0) rotate(0deg) translate(-50%, -50%);
-        opacity: 1;
-    }
-
-    to {
-        transform: scale(20) rotate(960deg) translate(-50%, -50%);
-        opacity: 0;
-    }
-}
-
-
-.wave {
-    position: fixed;
-    width: 1500px;
+.waves>div {
+    position: absolute;
+    width: 1300px;
     height: 1300px;
     margin-left: -1100px;
-    margin-top: -250px;
+    margin-top: -0px;
     border-radius: 43%;
-    z-index: 0;
+    z-index: 1;
 
-    &:nth-child(1n) {
+    &:nth-child(1) {
         animation: drift 6000ms infinite linear;
-        background: #0af;
-        opacity: 0.6;
+        background: rgba(0, 68, 255, 0.6);
     }
 
-    &:nth-child(2n) {
+    &:nth-child(2) {
         animation: drift 3000ms infinite linear;
-        background: black;
-        opacity: 0.4;
+        background: rgba(0, 0, 0, 0.4);
     }
 
-    &:nth-child(3n) {
+    &:nth-child(3) {
         animation: drift 7500ms infinite linear;
-        background-color: #77daff;
-        opacity: 0.6;
+        background: rgb(48, 183, 255, 0.6);
+    }
+
+    @keyframes drift {
+        from {
+            transform: rotate(0deg);
+        }
+
+        from {
+            transform: rotate(360deg);
+        }
     }
 }
-
-@keyframes drift {
-    from {
-        transform: rotate(0deg);
-    }
-
-    from {
-        transform: rotate(360deg);
-    }
-}
-
 
 .content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 100px;
+    padding: 5%;
     gap: 100px;
     position: relative;
+    background: linear-gradient(to right, rgb(52, 113, 181), rgb(16, 47, 112));
+    z-index: 0;
 
     h1 {
         font-family: 'Pixel';
@@ -172,12 +168,6 @@
         text-shadow: -4px 4px 10px rgb(0, 0, 0);
     }
 
-    iframe {
-        --iframe-height: 500px;
-        height: var(--iframe-height);
-        width: calc((560/315) * var(--iframe-height));
-    }
-
     .description {
         display: flex;
         flex-direction: column;
@@ -185,6 +175,7 @@
         color: #ffffff;
         text-shadow: -4px 4px 0px rgb(0, 0, 0);
         gap: 100px;
+        z-index: 3;
 
         div {
             display: flex;
@@ -196,7 +187,7 @@
             h2 {
                 font-size: xx-large;
                 color: rgb(252, 147, 201);
-                font-family: 'Pixel'; //wtf
+                font-family: 'Pixel';
                 transition: all 0.5s;
             }
 
@@ -217,16 +208,6 @@
                 text-shadow: -4px 4px 4px rgb(0, 0, 0);
             }
         }
-    }
-
-    button {
-        margin-bottom: 150px;
-        scale: 2;
-        transition: all 1s;
-    }
-
-    button:hover {
-        transform: scale(1.5);
     }
 
 }

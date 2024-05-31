@@ -51,6 +51,7 @@ export class KeyboardComponent {
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
+    event.preventDefault();
     const key = event.keyCode == 32 ? 'space' : event.key.toLowerCase()
     //alert(key)
     if (!this.list.includes(key)) {

@@ -21,20 +21,32 @@
         top: 1685px;
         right: 500px;
         z-index: 1;
+
+        img {
+            height: 50vh;
+        }
     }
 
     #left {
         position: absolute;
-        top: 1180px;
+        top: 1200px;
         left: -300px;
         z-index: 1;
+
+        img {
+            height: 10vh;
+        }
     }
 
     #right {
         position: absolute;
-        top: 1720px;
+        top: 1710px;
         right: -800px;
         z-index: 1;
+
+        img {
+            height: 10vh;
+        }
     }
 
 }

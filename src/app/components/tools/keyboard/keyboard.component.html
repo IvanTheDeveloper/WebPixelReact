@@ -1,4 +1,4 @@
-<div class="column spacer keyboard">
+<div class="column spacer board">
 
     <div class="row spacer">
 
@@ -268,7 +268,7 @@
 
         <div class="double key" [class.hover]="isKeyActive('capslock')">
             <div>
-                <kbd>Caps Lock</kbd>
+                <kbd>Caps</kbd>
             </div>
         </div>
 
@@ -510,32 +510,12 @@
     </div>
 </div>
 
-
-
-
-
-<!--
-
-<svg #svgElement id="arrow">
-    <line [attr.x1]="lineX1" [attr.y1]="lineY1" [attr.x2]="lineX2" [attr.y2]="lineY2" stroke="black" stroke-width="1" />
-</svg>
-
-<div id="origin">
-    <span>Jump</span>
+<div class="character">
+    <ng-template #idle><img src="assets/images/character/idle.gif"></ng-template>
+    <img *ngIf="isKeyActive('shift')" src="assets/images/character/dash.gif">
+    <img *ngIf="isKeyActive('e')" src="assets/images/character/special-attack.gif">
+    <img *ngIf="isKeyActive('space')" src="assets/images/character/basic-attack.gif">
+    <img *ngIf="isKeyActive('w')" src="assets/images/character/jump.gif">
+    <img *ngIf="isKeyActive('a')" src="assets/images/character/reverse.gif">
+    <img *ngIf="isKeyActive('d')" src="assets/images/character/forward.gif">
 </div>
-
-<div>
-    <span>Dash</span>
-</div>
-
-<div>
-    <span>Movement</span>
-</div>
-
-<div>
-    <span>Basic attack</span>
-</div>
-
-<div>
-    <span>Special attack</span>
-</div>-->

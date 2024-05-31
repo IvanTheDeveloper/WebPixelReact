@@ -8,7 +8,7 @@
 
         <mat-card-content>
             <form [formGroup]="fieldForm" (ngSubmit)="onSubmit()">
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="outline">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" placeholder="Introduce your email">
                     <mat-icon matSuffix></mat-icon>
@@ -16,7 +16,7 @@
                     <mat-error *ngIf="email?.hasError('email')">Invalid email</mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="outline">
                     <mat-label>Password</mat-label>
                     <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'"
                         placeholder="Introduce your password">
@@ -30,12 +30,12 @@
                             have a length between 8 and 30 characters</mat-error></ng-template>
                 </mat-form-field>
 
-                <button mat-raised-button color="primary" type="submit">Login</button>
+                <button mat-raised-button color="accent" type="submit">Login</button>
             </form>
 
             <div class="column">
-                <button mat-raised-button color="primary" (click)="loginGoogle()">Login with Google</button>
-                <button mat-icon-button color="primary" *ngIf="!qrCode"
+                <button mat-raised-button color="accent" (click)="loginGoogle()">Login with Google</button>
+                <button mat-icon-button color="accent" *ngIf="!qrCode"
                     (click)="loginQr()"><mat-icon>qr_code</mat-icon></button>
                 <div *ngIf="qrCode" class="column separator">
                     <img [src]="qrCode">

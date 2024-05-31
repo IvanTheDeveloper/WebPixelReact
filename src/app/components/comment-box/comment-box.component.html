@@ -7,7 +7,7 @@
 
 <div class="container">-->
     <form [formGroup]="formController">
-        <mat-form-field appearance="outline" color="accent">
+        <mat-form-field appearance="fill" color="accent">
             <mat-label>Leave a comment</mat-label>
             <textarea matInput cdkTextareaAutosize formControlName="message" required="false" (focus)="selected = true"
                 (blur)="selected = false"></textarea>

@@ -1,3 +1,10 @@
+.board {
+    padding: 40px;
+    background-color: #343434;
+    border: 2px solid black;
+    border-radius: 5%/12%;
+}
+
 .key {
     z-index: 1;
     display: flex;
@@ -27,7 +34,6 @@
         font-size: large;
         background-color: rgb(220, 220, 255);
 
-        //temp
         kbd {
             font-family: 'Game';
         }
@@ -56,44 +62,31 @@
 }
 
 .movement {
-    background-color: rgb(255, 150, 150) !important;
+    background-color: rgb(252, 147, 201) !important;
 
     div {
-        background-color: rgb(255, 220, 220) !important;
-
-        //temp
-        kbd {
-            font-weight: bold;
-            font-size: larger;
-        }
+        background-color: rgb(255, 211, 234) !important;
     }
 
     &.hover {
-        background-color: rgb(255, 0, 0) !important;
+        background-color: rgb(255, 71, 134) !important;
     }
 }
 
 .action {
-    background-color: rgb(150, 255, 150) !important;
+    background-color: rgb(0, 116, 116) !important;
 
     div {
-        background-color: rgb(220, 255, 220) !important;
+        background-color: rgb(172, 255, 233) !important;
     }
 
     &.hover {
-        background-color: rgb(0, 255, 0) !important;
+        background-color: rgb(54, 200, 200) !important;
     }
 }
 
 .spacer {
     gap: 5px;
-}
-
-.keyboard {
-    padding: 40px;
-    background-color: #343434;
-    border: 2px solid black;
-    border-radius: 5%/12%;
 }
 
 #arrow {
@@ -116,4 +109,15 @@
     padding: 1%;
     border: 2px solid black;
     background-color: #343434;
+}
+
+.character {
+    position: relative;
+    height: 10vh;
+    left: 105vh;
+    top: -50vh;
+
+    img {
+        height: 100%;
+    }
 }

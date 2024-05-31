@@ -6,7 +6,7 @@
 }
 
 .key {
-    z-index: 1;
+    z-index: 0;
     display: flex;
     justify-content: center;
     transition: all ease 0.2s;
@@ -90,7 +90,6 @@
 }
 
 #arrow {
-    z-index: 1;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -99,7 +98,7 @@
 }
 
 .origin {
-    z-index: 2;
+    z-index: 1;
     position: relative;
     display: flex;
     align-items: center;

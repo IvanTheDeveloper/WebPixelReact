@@ -10,18 +10,21 @@ import { RealtimeDatabaseService } from 'src/app/services/realtime-database.serv
   styleUrls: ['./form-dialog.component.scss']
 })
 export class FormDialogComponent {
-  checkoutForm: FormGroup;
-
+  checkoutForm: FormGroup
   latestVersion = 1
 
   constructor(private formBuilder: FormBuilder, public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { info: any }, private firebaseDB: RealtimeDatabaseService) {
     this.checkoutForm = this.formBuilder.group({
       platform: [this.data.info.platform, [Validators.required]],
+      architecture: [this.data.info.architecture, [Validators.required]],
+      language: [this.data.info.language, [Validators.required]],
       version: [this.data.info.version, [Validators.required, Validators.min(this.latestVersion)]],
       changelog: [this.data.info.changelog, [Validators.required]],
-      file: [null]
+      file: [null, [Validators.required]]
     })
+    this.architecture?.setValue('x64')
+    this.language?.setValue('en-us')
   }
 
   getLatestVersion() {
@@ -29,7 +32,7 @@ export class FormDialogComponent {
     if (!isNullOrEmpty(selectedPlatform)) {
       this.firebaseDB.get(`releases/${selectedPlatform}/latestVersion`).subscribe(
         (result) => {
-          this.latestVersion = result
+          this.latestVersion = result + 0.01 || 1
           this.version?.setValue(this.latestVersion)
         })
     }
@@ -37,6 +40,14 @@ export class FormDialogComponent {
 
   get platform() {
     return this.checkoutForm.get('platform')
+  }
+
+  get architecture() {
+    return this.checkoutForm.get('architecture')
+  }
+
+  get language() {
+    return this.checkoutForm.get('language')
   }
 
   get version() {
@@ -55,6 +66,8 @@ export class FormDialogComponent {
     const obj: any = {
       version: this.version?.value,
       platform: this.platform?.value,
+      architecture: this.architecture?.value,
+      language: this.language?.value,
       changelog: this.changelog?.value,
       file: this.file?.value
     }

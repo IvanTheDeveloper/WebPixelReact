@@ -9,9 +9,10 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
 
-//import { environment } from 'src/environments/environment'; //prod
-import { environment } from 'src/environments/environment.development'; //dev
-export const firebaseConfig = environment.firebaseConfig;
+import { environment as dev } from 'src/environments/environment.development';
+import { environment as prod } from 'src/environments/environment';
+import { devModeEnabled } from '../others/globalProperties';
+export const firebaseConfig = devModeEnabled ? dev.firebaseConfig : prod.firebaseConfig
 
 @NgModule({
   declarations: [],

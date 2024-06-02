@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { VersionsTableComponent } from '../versions-table/versions-table.component';
 import { RealtimeDatabaseService } from 'src/app/services/realtime-database.service';
-import { isNullOrEmpty } from 'src/app/others/utils';
 
 @Component({
   selector: 'app-download',
@@ -13,10 +12,10 @@ import { isNullOrEmpty } from 'src/app/others/utils';
 export class DownloadComponent {
   protected language = ''
   protected architecture = ''
-  protected platform = ''
-  private selectedPlatform = ''
+  protected currentPlatform = ''
+  protected selectedPlatform = ''
   protected version: string | null = null
-  private latestVersion = ''
+  protected latestVersion = ''
   protected selectedTabIndex: number = 0
   protected url = ''
 
@@ -27,16 +26,16 @@ export class DownloadComponent {
     this.architecture = navigator.userAgent.includes("x64") ? 'x64' : 'x32'
     const platform = navigator.platform.toLowerCase()
     if (platform == 'win32') {
-      this.platform = 'Windows'
+      this.currentPlatform = 'Windows'
       this.selectedTabIndex = 0
     } else if (platform == 'macintel') {
-      this.platform = 'MacOS'
+      this.currentPlatform = 'MacOS'
       this.selectedTabIndex = 1
     } else if (platform == 'linux x86_64') {
-      this.platform = 'Linux'
+      this.currentPlatform = 'Linux'
       this.selectedTabIndex = 2
     }
-    this.selectedPlatform = this.platform
+    this.selectedPlatform = this.currentPlatform
 
     this.getLatestVersion()
   }
@@ -73,14 +72,14 @@ export class DownloadComponent {
 
   dialogTable() {
     const dialogRef = this.dialog.open(VersionsTableComponent, {
-      data: { platform: this.selectedPlatform, }
+      data: { platform: this.selectedPlatform, architecture: this.architecture, language: this.language }
     })
     dialogRef.afterClosed().subscribe(
       (result) => {
         if (result) {
-          this.url = result.fileUrl;
-          this.version = result.id;
-          (this.latestVersion == this.version ? this.version += ' (latest)' : '');
+          this.url = result.fileUrl
+          this.version = result.id
+            (this.latestVersion == this.version ? this.version += ' (latest)' : '')
         }
       }
     )

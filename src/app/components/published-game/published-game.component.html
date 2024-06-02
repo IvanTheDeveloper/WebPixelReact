@@ -15,11 +15,6 @@
             <mat-card-title>"{{data?.gameName}}"</mat-card-title>
             <mat-card-subtitle>by {{author?.username ?? 'Deleted user'}}</mat-card-subtitle>
 
-            <mat-card-subtitle>
-                {{data?.createdAt | date:'dd-MM-yyyy'}}
-                <span *ngIf="data?.isEdited">(Edited: {{data?.editedAt | date:'dd-MM-yyyy'}})</span>
-            </mat-card-subtitle>
-
             <div class="menu">
                 <button mat-icon-button [matMenuTriggerFor]="menu">
                     <mat-icon>more_vert</mat-icon>
@@ -28,7 +23,7 @@
         </mat-card-header>
 
         <mat-card-content>
-            <div class="column">
+            <div class="column spacer">
                 <span>Levels Unlocked: {{data?.levelsUnlocked}}</span>
                 <span>Deaths: {{data?.deathCount}}</span>
             </div>

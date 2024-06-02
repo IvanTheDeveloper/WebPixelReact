@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { routingTable } from 'src/app/app-routing.module';
 import { pwdRegExp } from 'src/app/others/password-rules';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'app-register-test',
-  templateUrl: './register-test.component.html',
-  styleUrls: ['./register-test.component.scss']
+  selector: 'app-register-with-verification',
+  templateUrl: './register-with-verification.component.html',
+  styleUrls: ['./register-with-verification.component.scss']
 })
-export class RegisterTestComponent {
+export class RegisterWithVerificationComponent {
   routes = routingTable
   isLoading: boolean = false
   hidePassword: boolean = true
@@ -42,7 +42,9 @@ export class RegisterTestComponent {
   }
 
   ngOnDestroy() {
-    this.foo()
+    if (this.time != -1) {
+      this.cancel()
+    }
   }
 
   get email() {
@@ -155,14 +157,14 @@ export class RegisterTestComponent {
       this.auth.registerWithConfirmationInitial(this.email?.value, this.password?.value).then(() => {
         this.step++
         this.time = 0
-        this.timeout()
+        this.awaitVerification()
       }).catch((error) => {
         this.openSnackBar(error)
       })
     }
   }
 
-  foo() {
+  cancel() {
     if (!this.auth.currentUser?.emailVerified) {
       this.auth.deleteAccount()
       this.isLoading = false
@@ -172,19 +174,21 @@ export class RegisterTestComponent {
     }
   }
 
-  async timeout() {
+  async awaitVerification() {
     for (this.time = 60; this.time > 0; this.time--) {
       await new Promise(f => setTimeout(f, 1000))
       this.auth.registerWithConfirmationComplete(this.auth.currentUser!, this.password?.value, this.username?.value).then(
         () => {
-          this.LoginActions()
+          this.time = -1
+          this.loginActions()
+          return
         }
       )
     }
-    this.foo()
+    this.cancel()
   }
 
-  async LoginActions() {
+  async loginActions() {
     if (this.downloadCredentials) this.downloadTxtFile();
     await new Promise(f => setTimeout(f, 1000))
     this.router.navigateByUrl(`/${this._goTo}`)

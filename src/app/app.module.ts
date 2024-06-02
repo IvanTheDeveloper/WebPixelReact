@@ -71,10 +71,10 @@ import { CustomTagComponent } from './components/tools/custom-tag/custom-tag.com
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
 import { PublishedGameComponent } from './components/published-game/published-game.component';
-import { RegisterTestComponent } from './components/auth/register-test/register-test.component';
+import { RegisterWithVerificationComponent } from './components/auth/register-with-verification/register-with-verification.component';
 import { QrCodeComponent } from './components/auth/qr-code/qr-code.component';
 import { KeyboardComponent } from './components/tools/keyboard/keyboard.component';
-import { ArrowComponent } from './components/arrow/arrow.component';
+import { ArrowComponent } from './components/tools/arrow/arrow.component';
 
 @NgModule({
   declarations: [
@@ -119,7 +119,7 @@ import { ArrowComponent } from './components/arrow/arrow.component';
     ResetPasswordComponent,
     LeaderboardComponent,
     PublishedGameComponent,
-    RegisterTestComponent,
+    RegisterWithVerificationComponent,
     QrCodeComponent,
     KeyboardComponent,
     ArrowComponent,

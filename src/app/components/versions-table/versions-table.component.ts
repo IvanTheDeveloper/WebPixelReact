@@ -11,7 +11,7 @@ import { RealtimeDatabaseService } from 'src/app/services/realtime-database.serv
   styleUrls: ['./versions-table.component.scss']
 })
 export class VersionsTableComponent {
-  displayedColumns: string[] = ['id', 'changelog', 'date']
+  displayedColumns: string[] = ['version', 'changelog', 'date']
   dataSource: MatTableDataSource<any>
   @ViewChild(MatSort) sort!: MatSort
   @ViewChild(MatPaginator) paginator!: MatPaginator

@@ -1,7 +1,7 @@
 <mat-tab-group (selectedTabChange)="tabChanged($event)" [selectedIndex]="selectedTabIndex" backgroundColor="primary">
-    <mat-tab label="Windows {{platform == 'Windows' ? '(Current Platform)' : ''}}"></mat-tab>
-    <mat-tab label="MacOS {{platform == 'MacOS' ? '(Current Platform)' : ''}}"></mat-tab>
-    <mat-tab label="Linux {{platform == 'Linux' ? '(Current Platform)' : ''}}"></mat-tab>
+    <mat-tab label="Windows {{currentPlatform == 'Windows' ? '(Current Platform)' : ''}}"></mat-tab>
+    <mat-tab label="MacOS {{currentPlatform == 'MacOS' ? '(Current Platform)' : ''}}"></mat-tab>
+    <mat-tab label="Linux {{currentPlatform == 'Linux' ? '(Current Platform)' : ''}}"></mat-tab>
 </mat-tab-group>
 
 <div class="content">
@@ -34,6 +34,10 @@
                 the <b class="wizard">install wizard</b> instrucions.
             </p>
         </div>
+        <div>
+            <h3>Controls:</h3>
+            <p>Use your <b>keyboard</b> to try them out!</p>
+        </div>
     </div>
 
     <div *ngIf="selectedTabIndex == 1">
@@ -51,36 +55,41 @@
             Obcaecati, doloribus.</p>
     </div>
 
+    <app-keyboard></app-keyboard>
+
     <mat-card>
         <mat-card-content>
-            <p>Device: <b>{{platform}}</b> (browser)</p>
+
+            <p>Platform: <button mat-button
+                    [matMenuTriggerFor]="platformMenu"><span>{{selectedPlatform}}</span><mat-icon>arrow_drop_down</mat-icon></button>
+            </p>
+            <mat-menu #platformMenu>
+                <button mat-menu-item (click)="selectedPlatform = 'Windows'">Windows</button>
+                <button mat-menu-item (click)="selectedPlatform = 'MacOS'">MacOS</button>
+                <button mat-menu-item (click)="selectedPlatform = 'Linux'">Linux</button>
+            </mat-menu>
+
             <p>Architecture: <button mat-button
                     [matMenuTriggerFor]="architectureMenu"><span>{{architecture}}</span><mat-icon>arrow_drop_down</mat-icon></button>
-                bits
+                bits </p>
+            <mat-menu #architectureMenu>
+                <button mat-menu-item (click)="architecture = 'x64'">x64</button>
+                <button mat-menu-item (click)="architecture = 'x32'">x32</button>
+            </mat-menu>
 
-                <mat-menu #architectureMenu>
-                    <button mat-menu-item>x64</button>
-                    <button mat-menu-item>x32</button>
-                </mat-menu>
-
+            <p>Language: <button mat-button [matMenuTriggerFor]="languageMenu"><span>{{language}} {{ language | slice:-2
+                        | countryFlagEmoji }}</span><mat-icon>arrow_drop_down</mat-icon></button>
             </p>
-            <p>Language: <button mat-button
-                    [matMenuTriggerFor]="languageMenu"><span>{{language}}</span><mat-icon>arrow_drop_down</mat-icon></button>
+            <mat-menu #languageMenu>
+                <button mat-menu-item (click)="language = 'ES-ES'">ES-ES</button>
+                <button mat-menu-item (click)="language = 'EN-US'">EN-US</button>
+            </mat-menu>
 
-                <mat-menu #languageMenu>
-                    <button mat-menu-item>English</button>
-                    <button mat-menu-item>French</button>
-                    <button mat-menu-item>Spanish</button>
-                </mat-menu>
-
-
-            </p>
             <p>Version: <button mat-button
                     (click)="dialogTable()"><span>{{version}}</span><mat-icon>arrow_drop_down</mat-icon></button></p>
+
         </mat-card-content>
     </mat-card>
-
-    <app-keyboard></app-keyboard>
 
     <div class="buttons">
         <a [href]="url" download="game.zip">

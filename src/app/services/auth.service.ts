@@ -85,7 +85,7 @@ export class AuthService {
     return userCredential
   }
 
-  async registerWithConfirmationComplete(userCredential: User, password: string, username: string): Promise<void> {
+  async registerWithConfirmationComplete(userCredential: User, password: string, username: string = 'user'): Promise<void> {
     if (userCredential.emailVerified) {
       const generatedImg = generateRandomAvatar(username)
       const path = `images/${userCredential.uid}_${Date.now()}`

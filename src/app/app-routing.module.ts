@@ -1,5 +1,7 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { devModeEnabled } from './others/globalProperties';
+
 import { unauthenticatedUsersGuard } from './guards/unauthenticated-users.guard';
 import { authenticatedUsersGuard } from './guards/authenticated-users.guard';
 import { NotFoundComponent } from './components/basic/not-found/not-found.component';
@@ -22,8 +24,9 @@ import { UnauthorizedComponent } from './components/basic/unauthorized/unauthori
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
 import { PublishedGameComponent } from './components/published-game/published-game.component';
-import { RegisterTestComponent } from './components/auth/register-test/register-test.component';
+import { RegisterWithVerificationComponent } from './components/auth/register-with-verification/register-with-verification.component';
 import { QrCodeComponent } from './components/auth/qr-code/qr-code.component';
+
 
 export const routingTable = {
   landing: 'home', //when the user IS NOT logged in
@@ -31,9 +34,9 @@ export const routingTable = {
   notFound: '404',
   forbidden: '403',
   unauthorized: '401',
-  cookieConsent: 'legal/cookie-consent',
+  cookieConsent: 'legal/cookies',
   privacyPolicy: 'legal/privacy-policy',
-  termsAndConditions: 'legal/terms-and-conditions',
+  termsAndConditions: 'legal/tos',
   login: 'login',
   register: 'register',
   passwordReset: 'reset-password',
@@ -58,7 +61,7 @@ const routes: Routes = [
       { path: routingTable.unauthorized, title: 'Unauthorized', component: UnauthorizedComponent },
 
       { path: routingTable.login, title: 'Login', component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
-      { path: routingTable.register, title: 'Register', component: RegisterTestComponent, canActivate: [unauthenticatedUsersGuard] },
+      { path: routingTable.register, title: 'Register', component: devModeEnabled ? RegisterComponent : RegisterWithVerificationComponent, canActivate: [unauthenticatedUsersGuard] },
       { path: routingTable.passwordReset, title: 'Reset Password', component: ResetPasswordComponent, },
       { path: routingTable.userSettings, title: 'Settings', component: UserSettingsComponent, canActivate: [authenticatedUsersGuard] },
       { path: routingTable.admin, title: 'Admin', component: AdminComponent, canActivate: [adminGuard] },
@@ -66,18 +69,18 @@ const routes: Routes = [
       { path: routingTable.about, title: 'About Us', component: AboutComponent },
       { path: routingTable.download, title: 'Download', component: DownloadComponent },
       { path: routingTable.leaderborad, title: 'Leaderboard', component: LeaderboardComponent },
-      { path: 'comment/:id', component: CommentComponent },
-      { path: 'game/:authorId/:name', component: PublishedGameComponent },
-      { path: 'auth/:code', component: QrCodeComponent, canActivate: [authenticatedUsersGuard] },
+      { path: 'comment/:id', title: 'Comment', component: CommentComponent },
+      { path: 'game/:authorId/:name', title: 'Saved Game', component: PublishedGameComponent },
+      { path: 'auth/:code', title: 'QR', component: QrCodeComponent, canActivate: [authenticatedUsersGuard] },
     ]
   },
   { //views with naked components
-    path: '',
+    path: '', //legal
     children: [
-      { path: routingTable.cookieConsent, component: CookieConsentComponent },
-      { path: routingTable.privacyPolicy, component: PrivacyPolicyComponent },
-      { path: routingTable.termsAndConditions, component: TermsAndConditionsComponent },
-      { path: routingTable.test, component: TestComponent },
+      { path: routingTable.cookieConsent, title: 'Cookies', component: CookieConsentComponent },
+      { path: routingTable.privacyPolicy, title: 'Privacy Policy', component: PrivacyPolicyComponent },
+      { path: routingTable.termsAndConditions, title: 'TOS', component: TermsAndConditionsComponent },
+      { path: routingTable.test, title: 'Test', component: TestComponent },
     ],
   },
   { path: '**', redirectTo: routingTable.notFound }, //view when the url is invalid

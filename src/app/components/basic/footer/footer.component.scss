@@ -27,5 +27,18 @@ mat-divider {
 }
 
 .socials {
-    gap: 20px
+    gap: 20px;
+
+    a {
+        /*padding: 10px;
+        background-color: rgb(99, 126, 143);
+        border-radius: 50%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);*/
+
+        img {
+            height: 30px;
+            filter: brightness(0); //invert(1)
+
+        }
+    }
 }

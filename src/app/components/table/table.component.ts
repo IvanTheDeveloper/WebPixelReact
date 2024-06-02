@@ -27,12 +27,9 @@ export class TableComponent {
   constructor(public dialog: MatDialog, private snackBar: MatSnackBar, private auth: AuthService) {
     this.auth.getDbAllUsers().then(result => {
       this.dataSource = new MatTableDataSource(result)
+      this.dataSource.paginator = this.paginator
+      this.dataSource.sort = this.sort
     })
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator
-    this.dataSource.sort = this.sort
   }
 
   deleteSelected(): void {
@@ -89,17 +86,17 @@ export class TableComponent {
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    const numSelected = this.selection.selected.length
+    const numRows = this.dataSource?.data.length
+    return numSelected === numRows
   }
 
   toggleAllRows() {
     if (this.isAllSelected()) {
-      this.selection.clear();
+      this.selection.clear()
       return;
     }
-    this.selection.select(...this.dataSource.data);
+    this.selection.select(...this.dataSource.data)
   }
 
   checkboxLabel(row?: any): string {

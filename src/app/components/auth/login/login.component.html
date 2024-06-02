@@ -30,12 +30,12 @@
                             have a length between 8 and 30 characters</mat-error></ng-template>
                 </mat-form-field>
 
-                <button mat-raised-button color="accent" type="submit">Login</button>
+                <button mat-raised-button color="primary" type="submit">Login</button>
             </form>
 
             <div class="column">
-                <button mat-raised-button color="accent" (click)="loginGoogle()">Login with Google</button>
-                <button mat-icon-button color="accent" *ngIf="!qrCode"
+                <button mat-raised-button color="primary" (click)="loginGoogle()">Login with Google</button>
+                <button mat-icon-button color="primary" *ngIf="!qrCode"
                     (click)="loginQr()"><mat-icon>qr_code</mat-icon></button>
                 <div *ngIf="qrCode" class="column separator">
                     <img [src]="qrCode">

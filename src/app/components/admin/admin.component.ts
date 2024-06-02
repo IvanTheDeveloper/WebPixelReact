@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RealtimeDatabaseService } from 'src/app/services/realtime-database.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { FormDialogComponent } from '../form-dialog/form-dialog.component';
+import { dump } from 'src/app/others/utils';
 
 @Component({
   selector: 'app-admin',
@@ -29,7 +30,10 @@ export class AdminComponent {
         this.task.then((fileUrl) => {
           const version = resultObj.version.toString().replace('.', ',')
           const release = {
-            id: resultObj.version,
+            version: resultObj.version,
+            platform: resultObj.platform,
+            architecture: resultObj.architecture,
+            language: resultObj.language,
             fileUrl: fileUrl,
             changelog: resultObj.changelog,
             date: Date.now(),

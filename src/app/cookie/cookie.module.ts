@@ -4,6 +4,7 @@ import { OnDestroy, OnInit } from '@angular/core';
 import { NgcCookieConsentConfig, NgcCookieConsentModule } from 'ngx-cookieconsent';
 import { NgcCookieConsentService, NgcInitializationErrorEvent, NgcInitializingEvent, NgcNoCookieLawEvent, NgcStatusChangeEvent } from 'ngx-cookieconsent';
 import { Subscription } from 'rxjs';
+import { routingTable } from '../app-routing.module';
 
 const cookieConfig: NgcCookieConsentConfig = {
   cookie: {
@@ -29,7 +30,7 @@ const cookieConfig: NgcCookieConsentConfig = {
     dismiss: 'Got it!',
     deny: 'Refuse cookies',
     link: 'Learn more',
-    href: 'legal/cookie-consent',
+    href: routingTable.cookieConsent,
     policy: 'Cookie Policy'
   }
 }

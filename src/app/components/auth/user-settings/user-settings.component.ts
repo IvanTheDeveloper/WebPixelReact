@@ -3,9 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { StorageService } from 'src/app/services/storage.service';
-import { isNullOrEmpty } from 'src/app/others/utils';
+import { dump, isNullOrEmpty } from 'src/app/others/utils';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { pwdRegExp } from 'src/app/others/password-rules';
+import { Router } from '@angular/router';
+import { routingTable } from 'src/app/app-routing.module';
+import { MyUser } from 'src/app/models/user';
 
 @Component({
   selector: 'app-user-settings',
@@ -13,18 +16,16 @@ import { pwdRegExp } from 'src/app/others/password-rules';
   styleUrls: ['./user-settings.component.scss']
 })
 export class UserSettingsComponent {
-  image: any
-  newImage: any
+  username: any
+  newUsername: any
   password = ''
   hidePassword = true
-  username: any
-  phone: any
-  email: any
-  newDisplayName: any
-  newPhoneNumber: any
-  newEmail: any
+  profilePicture: any
+  newProfilePicture: any
+  cursorIcon: any
+  newCursorIcon: any
 
-  constructor(private auth: AuthService, private storage: StorageService, public dialog: MatDialog, private snackBar: MatSnackBar) { }
+  constructor(private auth: AuthService, private storage: StorageService, private router: Router, public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.delay()
@@ -35,15 +36,12 @@ export class UserSettingsComponent {
     this.refresh()
   }
 
-  refresh() {
-    this.image = this.auth.currentUser?.photoURL
-    this.username = this.auth.currentUser?.displayName
-    this.phone = this.auth.currentUser?.phoneNumber
-    this.email = this.auth.currentUser?.email
-  }
-
-  isUndefined(any: any) {
-    return isNullOrEmpty(any)
+  async refresh() {
+    const user = await this.auth.getDbCurrentUser()
+    this.username = user.username
+    this.profilePicture = user.avatarUrl
+    this.cursorIcon = user.cursorUrl
+    //this.password = user.password
   }
 
   updateDisplayName() {
@@ -53,51 +51,18 @@ export class UserSettingsComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.auth.setAuthCurrentUserProperty('displayName', this.newDisplayName)
-        this.refresh()
-        this.newDisplayName = ''
-        this.snackBar.open('Username successfully updated')
-      }
-    })
-  }
-
-  onFileSelected(event: any): void {
-    const img = event.target.files[0]
-    if (img.name.match(/\.(jpeg|jpg|gif|png|webp|svg)$/) == null) {
-      this.showSnackbar('The selected file is not an image')
-      this.newImage = ''
-    } else {
-      this.newImage = URL.createObjectURL(img)
-    }
-  }
-
-  updateImage() {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: { title: 'Change profile picture', text: 'Are you sure?' }
-    })
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const filePath = `images/${Date.now()}_${this.username}`
-        this.storage.uploadFile(this.newImage, filePath).then(
-          (url) => {
-            this.auth.setAuthCurrentUserProperty('photoURL', url)
-            this.refresh()
-            this.newImage = ''
-          }
-        ).catch((error) => {
-          console.log("Ha habido un error: " + error)
+        const user = new MyUser()
+        user.username = this.newUsername
+        this.auth.updateUser(user).then(() => {
+          this.refresh()
+          this.newUsername = ''
+          this.showSnackbar('Username successfully updated')
         })
-
       }
     })
   }
 
-  isValidPwd(): boolean {
-    return (pwdRegExp.test(this.password) && this.password.length >= 8 && this.password.length <= 30)
-  }
-
-  changePassword() {
+  updatePassword() {
     if (!this.isValidPwd()) {
       this.showSnackbar('Invalid password')
       return
@@ -109,10 +74,111 @@ export class UserSettingsComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.auth.changePassword(this.password)
-        this.snackBar.open('Password successfully updated')
+        const user = new MyUser()
+        user.password = this.password
+        this.auth.updateUser(user).then(() => {
+          this.password = ''
+          this.showSnackbar('Password successfully updated')
+        })
       }
     })
+  }
+
+  isValidPwd(): boolean {
+    return (pwdRegExp.test(this.password) && this.password.length >= 8 && this.password.length <= 30)
+  }
+
+  onAvatarFileSelected(event: any): void {
+    const img = event.target.files[0]
+    if (img.name.match(/\.(jpeg|jpg|gif|png|webp|svg)$/) == null) {
+      this.showSnackbar('The selected file is not an image')
+      this.newProfilePicture = ''
+    } else {
+      this.newProfilePicture = URL.createObjectURL(img)
+    }
+  }
+
+  updateProfilePicture() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: { title: 'Change profile picture', text: 'Are you sure?' }
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const filePath = `images/${Date.now()}_${this.username}`
+        this.storage.uploadFile(this.newProfilePicture, filePath).then(
+          (url) => {
+            const user = new MyUser()
+            user.avatarUrl = url
+            this.auth.updateUser(user).then(() => {
+              this.storage.deleteFile(this.profilePicture)
+              this.refresh()
+              this.newProfilePicture = ''
+              this.showSnackbar('Profile picture successfully updated')
+            })
+          }
+        ).catch((error) => {
+          console.log("Error: " + error)
+        })
+
+      }
+    })
+  }
+
+  onCursorFileSelected(event: any): void {
+    const img = event.target.files[0]
+    if (img.name.match(/\.(jpeg|jpg|gif|png|webp|svg)$/) == null) {
+      this.showSnackbar('The selected file is not an image')
+      this.newCursorIcon = ''
+    } else {
+      this.newCursorIcon = URL.createObjectURL(img)
+    }
+  }
+
+  updateCursorIcon() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: { title: 'Change profile picture', text: 'Are you sure?' }
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const filePath = `images/${Date.now()}_${this.username}`
+        this.storage.uploadFile(this.newCursorIcon, filePath).then(
+          (url) => {
+            const user = new MyUser()
+            user.cursorUrl = url
+            this.auth.updateUser(user).then(() => {
+              this.storage.deleteFile(this.cursorIcon)
+              this.refresh()
+              this.newCursorIcon = ''
+              this.showSnackbar('Cursor icon successfully updated')
+            })
+          }
+        ).catch((error) => {
+          console.log("Error: " + error)
+        })
+
+      }
+    })
+  }
+
+  deleteAccount() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: { title: 'Delete account', text: 'Are you sure?' }
+    })
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.auth.deleteAccount().then(() => {
+          this.router.navigate([routingTable.landing])
+          this.showSnackbar('Goodbye!')
+        })
+      }
+    })
+  }
+
+  isUndefined(any: any) {
+    return isNullOrEmpty(any)
   }
 
   showSnackbar(mensaje: string): void {

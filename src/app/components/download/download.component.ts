@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { VersionsTableComponent } from '../versions-table/versions-table.component';
 import { RealtimeDatabaseService } from 'src/app/services/realtime-database.service';
+import { dump } from 'src/app/others/utils';
 
 @Component({
   selector: 'app-download',
@@ -52,7 +53,7 @@ export class DownloadComponent {
     this.getLatestVersion()
   }
 
-  getLatestVersion(): void {
+  getLatestVersion() {
     this.dataService.get(`releases/${this.selectedPlatform.toLowerCase()}`).subscribe(
       (response) => {
         if (response) {
@@ -77,9 +78,9 @@ export class DownloadComponent {
     dialogRef.afterClosed().subscribe(
       (result) => {
         if (result) {
-          this.url = result.fileUrl
-          this.version = result.id
-            (this.latestVersion == this.version ? this.version += ' (latest)' : '')
+          this.url = result.fileUrl;
+          this.version = result.version;
+          this.latestVersion == this.version ? this.version += ' (latest)' : '';
         }
       }
     )

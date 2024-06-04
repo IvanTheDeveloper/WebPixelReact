@@ -152,9 +152,9 @@ export class AuthService {
   }
 
   async deleteAccount(user: User = this.auth.currentUser!): Promise<void> {
+    await this.deleteDbUserInfo()
     await user.delete()
     this.cookieService.delete(COOKIE_TOKEN)
-    await this.deleteDbUserInfo()
   }
 
   //no manda code
@@ -195,7 +195,6 @@ export class AuthService {
 
   async updateUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
     await this.updateAuthUser(newUserData, user)
-    //if (newUserData.password) newUserData.password = bcrypt.hashSync(newUserData.password, 10)
     await this.updateDbUser(newUserData, user)
   }
 
@@ -209,6 +208,7 @@ export class AuthService {
   }
 
   private async updateDbUser(newUserData: any, user: any = this.auth.currentUser): Promise<void> {
+    //if (newUserData.password) newUserData.password = bcrypt.hashSync(newUserData.password, 10);
     const userDocRef = doc(this.db, 'users', user.uid)
     await setDoc(userDocRef, { ...newUserData }, { merge: true })
   }
@@ -244,16 +244,6 @@ export class AuthService {
     const docSnapshot = await getDoc(userDocRef)
     const exists = docSnapshot.exists()
     return exists
-  }
-
-  //esta funcion se tiene que ir
-  changePassword(password: string) {
-    const currentUser = this.auth.currentUser
-    if (currentUser) {
-      return updatePassword(currentUser, password)
-    } else {
-      return Promise.reject('No user signed in.')
-    }
   }
 
   //esta funcion se tiene que ir

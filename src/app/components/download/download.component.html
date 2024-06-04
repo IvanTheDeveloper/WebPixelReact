@@ -40,22 +40,21 @@
         </div>
     </div>
 
-    <div *ngIf="selectedTabIndex == 1">
-        <p> b Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil at sapiente reprehenderit rerum amet,
-            quo
-            libero voluptate neque culpa totam nesciunt blanditiis ducimus suscipit doloremque et? Provident,
-            distinctio.
-            Obcaecati, doloribus.</p>
+    <div *ngIf="selectedTabIndex == 1" class="instructions">
+        <div>
+            <h3>Hello!</h3>
+            <p>MacOS version is not available yet, stay tuned for updates!</p>
+        </div>
     </div>
 
-    <div *ngIf="selectedTabIndex == 2">
-        <p>c Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil at sapiente reprehenderit rerum amet, quo
-            libero voluptate neque culpa totam nesciunt blanditiis ducimus suscipit doloremque et? Provident,
-            distinctio.
-            Obcaecati, doloribus.</p>
+    <div *ngIf="selectedTabIndex == 2" class="instructions">
+        <div>
+            <h3>Hello!</h3>
+            <p>Linux version is not available yet, stay tuned for updates!</p>
+        </div>
     </div>
 
-    <app-keyboard></app-keyboard>
+    <app-keyboard *ngIf="selectedTabIndex == 0"></app-keyboard>
 
     <mat-card>
         <mat-card-content>

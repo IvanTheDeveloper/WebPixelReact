@@ -10,44 +10,15 @@
         <mat-card-content>
             <mat-form-field appearance="outline">
                 <mat-label>{{username}}</mat-label>
-                <input matInput [(ngModel)]="newDisplayName" type="text" placeholder="Your new name here">
+                <input matInput [(ngModel)]="newUsername" type="text" placeholder="Your new name here">
             </mat-form-field>
         </mat-card-content>
 
         <mat-card-actions>
-            <button mat-stroked-button color="warn" (click)="newDisplayName = ''"
-                [disabled]="!(newDisplayName?.length! > 0)">Discard</button>
+            <button mat-stroked-button color="warn" (click)="newUsername = ''"
+                [disabled]="!(newUsername?.length! > 0)">Cancel</button>
             <button mat-flat-button color="primary" (click)="updateDisplayName()"
-                [disabled]="!(newDisplayName?.length! > 0)">Update</button>
-        </mat-card-actions>
-    </mat-card>
-
-    <mat-divider></mat-divider>
-
-    <mat-card class="mat-elevation-z8">
-        <mat-card-header>
-            <mat-card-title>Change Profile Picture</mat-card-title>
-            <mat-card-subtitle>This is your current public user avatar, which is visible by everyone in this
-                platform.</mat-card-subtitle>
-        </mat-card-header>
-
-        <mat-card-content>
-            <mat-form-field appearance="outline" class="img">
-                <mat-label>Image</mat-label>
-                <input matInput [(ngModel)]="newImage" placeholder="Upload a file or paste an url">
-                <button mat-icon-button matSuffix (click)="fileInput.click()" matTooltip="Upload from file explorer">
-                    <mat-icon>upload</mat-icon>
-                </button>
-                <input hidden (change)="onFileSelected($event)" #fileInput type="file">
-            </mat-form-field>
-            <img [src]="isUndefined(newImage) ? image : newImage">
-        </mat-card-content>
-
-        <mat-card-actions>
-            <button mat-stroked-button color="warn" (click)="newImage = ''"
-                [disabled]="isUndefined(newImage)">Discard</button>
-            <button mat-flat-button color="primary" (click)="updateImage()"
-                [disabled]="isUndefined(newImage)">Update</button>
+                [disabled]="!(newUsername?.length! > 0)">Update</button>
         </mat-card-actions>
     </mat-card>
 
@@ -74,12 +45,88 @@
 
         <mat-card-actions>
             <button mat-stroked-button color="warn" (click)="password = ''"
-                [disabled]="!(password.length > 0)">Discard</button>
-            <button mat-flat-button color="primary" (click)="changePassword()"
+                [disabled]="!(password.length > 0)">Cancel</button>
+            <button mat-flat-button color="primary" (click)="updatePassword()"
                 [disabled]="!isValidPwd()">Update</button>
         </mat-card-actions>
     </mat-card>
 
     <mat-divider></mat-divider>
+
+    <mat-card class="mat-elevation-z8">
+        <mat-card-header>
+            <mat-card-title>Change Profile Picture</mat-card-title>
+            <mat-card-subtitle>This is your current public user avatar, which is visible by everyone in this
+                platform.</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <mat-form-field appearance="outline" class="img">
+                <mat-label>Image</mat-label>
+                <input matInput [(ngModel)]="newProfilePicture" placeholder="Upload a file or paste an url">
+                <button mat-icon-button matSuffix (click)="avatarFileInput.click()"
+                    matTooltip="Upload from file explorer">
+                    <mat-icon>upload</mat-icon>
+                </button>
+                <input hidden (change)="onAvatarFileSelected($event)" #avatarFileInput type="file">
+            </mat-form-field>
+            <img [src]="isUndefined(newProfilePicture) ? profilePicture : newProfilePicture">
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-stroked-button color="warn" (click)="newProfilePicture = ''"
+                [disabled]="isUndefined(newProfilePicture)">Cancel</button>
+            <button mat-flat-button color="primary" (click)="updateProfilePicture()"
+                [disabled]="isUndefined(newProfilePicture)">Update</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-divider></mat-divider>
+
+    <mat-card class="mat-elevation-z8">
+        <mat-card-header>
+            <mat-card-title>Change Cursor Icon</mat-card-title>
+            <mat-card-subtitle>This is your current mouse pointer's image on this website, which is only visible by
+                you.</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <mat-form-field appearance="outline" class="img">
+                <mat-label>Image</mat-label>
+                <input matInput [(ngModel)]="newCursorIcon" placeholder="Upload a file or paste an url">
+                <button mat-icon-button matSuffix (click)="cursorFileInput.click()"
+                    matTooltip="Upload from file explorer">
+                    <mat-icon>upload</mat-icon>
+                </button>
+                <input hidden (change)="onCursorFileSelected($event)" #cursorFileInput type="file">
+            </mat-form-field>
+            <img [src]="isUndefined(newCursorIcon) ? cursorIcon : newCursorIcon">
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-stroked-button color="warn" (click)="newCursorIcon = ''"
+                [disabled]="isUndefined(newCursorIcon)">Cancel</button>
+            <button mat-flat-button color="primary" (click)="updateCursorIcon()"
+                [disabled]="isUndefined(newCursorIcon)">Update</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-divider></mat-divider>
+
+    <mat-card class="mat-elevation-z8">
+        <mat-card-header>
+            <mat-card-title>Delete Account</mat-card-title>
+            <mat-card-subtitle>This will permanently delete your account and user data. You will lose access to some
+                functions that require being
+                registered.</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-flat-button color="primary" (click)="deleteAccount()">Delete</button>
+        </mat-card-actions>
+    </mat-card>
 
 </div>

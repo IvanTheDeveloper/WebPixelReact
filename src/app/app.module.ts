@@ -75,6 +75,7 @@ import { RegisterWithVerificationComponent } from './components/auth/register-wi
 import { QrCodeComponent } from './components/auth/qr-code/qr-code.component';
 import { KeyboardComponent } from './components/tools/keyboard/keyboard.component';
 import { ArrowComponent } from './components/tools/arrow/arrow.component';
+import { PopupComponent } from './components/tools/popup/popup.component';
 
 @NgModule({
   declarations: [
@@ -123,6 +124,7 @@ import { ArrowComponent } from './components/tools/arrow/arrow.component';
     QrCodeComponent,
     KeyboardComponent,
     ArrowComponent,
+    PopupComponent,
   ],
   imports: [
     BrowserModule,

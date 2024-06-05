@@ -38,7 +38,7 @@ export class PublishedGameComponent {
   async wait() {
     this.isLoading = true
     await new Promise(f => setTimeout(f, 1000))
-    this.auth.getDbCurrentUser().then(() => {
+    this.auth.getDbUser().then(() => {
       this.getGame()
     })
   }

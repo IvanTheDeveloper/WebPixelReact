@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class PopupComponent {
 
   async ngOnInit() {
-    for (let index = 0; index < 2; index++) {
+    for (let index = 0; index < 1; index++) {
       await this.openPopupWithDelay(`assets/images/popups/${index}.jpg`);
     }
   }

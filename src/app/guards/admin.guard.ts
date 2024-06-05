@@ -8,9 +8,10 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const login = inject(AuthService)
   const router = inject(Router)
 
-  return login.getHighestRole().then(
+
+  return login.getDbUser().then(
     (result) => {
-      if (result == 'admin') {
+      if (result.isAdmin) {
         return true
       } else {
         router.navigate([routingTable.forbidden])

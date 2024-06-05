@@ -37,7 +37,7 @@ export class UserSettingsComponent {
   }
 
   async refresh() {
-    const user = await this.auth.getDbCurrentUser()
+    const user = await this.auth.getDbUser()
     this.username = user.username
     this.profilePicture = user.avatarUrl
     this.cursorIcon = user.cursorUrl

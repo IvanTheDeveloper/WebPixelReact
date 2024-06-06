@@ -26,6 +26,7 @@ import { LeaderboardComponent } from './components/leaderboard/leaderboard.compo
 import { PublishedGameComponent } from './components/published-game/published-game.component';
 import { RegisterWithVerificationComponent } from './components/auth/register-with-verification/register-with-verification.component';
 import { QrCodeComponent } from './components/auth/qr-code/qr-code.component';
+import { ChatBubbleComponent } from './components/chat-bubble/chat-bubble.component';
 
 
 export const routingTable = {
@@ -45,6 +46,7 @@ export const routingTable = {
   leaderborad: 'leaderboard',
   about: 'about',
   admin: 'admin',
+  support: 'chat',
   test: 'helloworld'
 };
 
@@ -62,16 +64,18 @@ const routes: Routes = [
 
       { path: routingTable.login, title: 'Login', component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
       { path: routingTable.register, title: 'Register', component: devModeEnabled ? RegisterComponent : RegisterWithVerificationComponent, canActivate: [unauthenticatedUsersGuard] },
+      { path: 'auth/:code', title: 'QR', component: QrCodeComponent, canActivate: [authenticatedUsersGuard] },
       { path: routingTable.passwordReset, title: 'Reset Password', component: ResetPasswordComponent, },
       { path: routingTable.userSettings, title: 'Settings', component: UserSettingsComponent, canActivate: [authenticatedUsersGuard] },
       { path: routingTable.admin, title: 'Admin', component: AdminComponent, canActivate: [adminGuard] },
+      { path: routingTable.support, title: 'Support', component: ChatBubbleComponent },
 
       { path: routingTable.about, title: 'About Us', component: AboutComponent },
       { path: routingTable.download, title: 'Download', component: DownloadComponent },
       { path: routingTable.leaderborad, title: 'Leaderboard', component: LeaderboardComponent },
-      { path: 'comment/:id', title: 'Comment', component: CommentComponent },
       { path: 'game/:authorId/:name', title: 'Saved Game', component: PublishedGameComponent },
-      { path: 'auth/:code', title: 'QR', component: QrCodeComponent, canActivate: [authenticatedUsersGuard] },
+      { path: 'my-games', title: 'My games', component: LeaderboardComponent, canActivate: [authenticatedUsersGuard] },
+      { path: 'comment/:id', title: 'Comment', component: CommentComponent },
     ]
   },
   { //views with naked components

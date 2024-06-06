@@ -4,5 +4,14 @@
     align-items: center;
     justify-content: center;
     padding: 5%;
-    gap: 5%;
+
+    div {
+        padding: 5%;
+    }
+}
+
+.spacer {
+    margin-top: 20px;
+    border-radius: 10%;
+    gap: 20px;
 }

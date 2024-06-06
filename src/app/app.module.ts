@@ -36,14 +36,8 @@ import { FooterComponent } from './components/basic/footer/footer.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
-import { CardComponent } from './components/card/card.component';
-import { CardListComponent } from './components/card-list/card-list.component';
 import { NotFoundComponent } from './components/basic/not-found/not-found.component';
-import { AlumnoFormComponent } from './components/alumno-form/alumno-form.component';
-import { AlumnoListComponent } from './components/alumno-list/alumno-list.component';
 import { NoResultsComponent } from './components/basic/no-results/no-results.component';
-import { PaginatorComponent } from './components/paginator/paginator.component';
-import { FilterComponent } from './components/filter/filter.component';
 import { TableComponent } from './components/table/table.component';
 import { UserSettingsComponent } from './components/auth/user-settings/user-settings.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
@@ -76,6 +70,7 @@ import { QrCodeComponent } from './components/auth/qr-code/qr-code.component';
 import { KeyboardComponent } from './components/tools/keyboard/keyboard.component';
 import { ArrowComponent } from './components/tools/arrow/arrow.component';
 import { PopupComponent } from './components/tools/popup/popup.component';
+import { ChatBubbleComponent } from './components/chat-bubble/chat-bubble.component';
 
 @NgModule({
   declarations: [
@@ -85,14 +80,8 @@ import { PopupComponent } from './components/tools/popup/popup.component';
     LoginComponent,
     RegisterComponent,
     DeleteDialogComponent,
-    CardComponent,
-    CardListComponent,
     NotFoundComponent,
-    AlumnoFormComponent,
-    AlumnoListComponent,
     NoResultsComponent,
-    PaginatorComponent,
-    FilterComponent,
     TableComponent,
     UserSettingsComponent,
     ConfirmationDialogComponent,
@@ -125,6 +114,7 @@ import { PopupComponent } from './components/tools/popup/popup.component';
     KeyboardComponent,
     ArrowComponent,
     PopupComponent,
+    ChatBubbleComponent,
   ],
   imports: [
     BrowserModule,

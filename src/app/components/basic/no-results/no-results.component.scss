@@ -8,8 +8,17 @@
     font-weight: bold;
     padding: 5%;
     gap: 50px;
-}
 
-img {
-    height: 300px;
+    span {
+        color: white;
+        text-shadow: -2px -2px 0 #000,
+            2px -2px 0 #000,
+            -2px 2px 0 #000,
+            2px 2px 0 #000;
+        line-height: 50px;
+    }
+
+    img {
+        height: 300px;
+    }
 }

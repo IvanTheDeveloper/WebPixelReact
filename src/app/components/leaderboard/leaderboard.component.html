@@ -19,12 +19,22 @@
             src="https://discords.com/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Femojis%2F963729504445038592.gif%3Fv%3D1&w=64&q=75">
     </div>
 
-    <div *ngIf="!progressSpinner" class="list">
+    <div class="row sort">
+        <button mat-raised-button (click)="changeSortOption('levelsUnlocked')"
+            [class.active]="sortOption == 'levelsUnlocked'">Most
+            levels unlocked</button>
+        <button mat-raised-button (click)="changeSortOption('deathCount')"
+            [class.active]="sortOption == 'deathCount'">Least
+            deaths</button>
+    </div>
+
+    <div *ngIf="!progressSpinner && objectList.length > 0" class="list">
         <div *ngFor="let item of objectList; let i = index">
             <div class="position"><b>#{{i+1}}</b><mat-divider></mat-divider></div>
             <app-published-game [position]="i" [data]="item"></app-published-game>
         </div>
-
     </div>
+
+    <app-no-results *ngIf="!progressSpinner && objectList.length == 0"></app-no-results>
 
 </div>

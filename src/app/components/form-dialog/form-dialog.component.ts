@@ -32,7 +32,9 @@ export class FormDialogComponent {
     if (!isNullOrEmpty(selectedPlatform)) {
       this.firebaseDB.get(`releases/${selectedPlatform}/latestVersion`).subscribe(
         (result) => {
-          this.latestVersion = result + 0.01 || 1
+          result = result ? result + 0.01 : 1;
+          result = parseFloat(result.toFixed(2))
+          this.latestVersion = result
           this.version?.setValue(this.latestVersion)
         })
     }

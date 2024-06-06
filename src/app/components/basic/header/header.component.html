@@ -51,6 +51,10 @@
         <mat-icon>logout</mat-icon>
         <span>Logout</span>
     </button>
+    <button mat-menu-item routerLink="my-games" *ngIf="userAuthenticated">
+        <mat-icon>sports_esports</mat-icon>
+        <span>My games</span>
+    </button>
     <button mat-menu-item (click)="scrollToBottom()">
         <mat-icon>info</mat-icon>
         <span>Contact</span>

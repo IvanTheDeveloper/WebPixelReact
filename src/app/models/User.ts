@@ -17,6 +17,8 @@ export class MyUser {
     lastLoginAt?: number
     createdAt?: number
 
+    [key: string]: any
+
     constructor(data: Partial<MyUser> = {}) {
         if (data.id) this.id = data.id;
         if (data.email) this.email = data.email;

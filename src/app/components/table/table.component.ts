@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,7 +9,7 @@ import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
-import { dump } from 'src/app/others/utils';
+import { MyUser } from 'src/app/models/user';
 
 @Component({
   selector: 'app-table',
@@ -20,6 +21,10 @@ export class TableComponent {
   displayedColumns: string[] = this.columns.slice()
   dataSource!: MatTableDataSource<any>
   selection = new SelectionModel<any>(true, [])
+
+  editingElement: any = null
+  editingColumn: string | null = null
+  editControl = new FormControl()
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
   @ViewChild(MatSort) sort!: MatSort
@@ -33,32 +38,40 @@ export class TableComponent {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value
+    this.dataSource.filter = filterValue.trim().toLowerCase()
 
     if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+      this.dataSource.paginator.firstPage()
     }
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.columns, event.previousIndex, event.currentIndex)
   }
 
-  private isVisible(column: string) {
-    return this.displayedColumns.includes(column)
+  startEdit(element: any, column: string) {
+    this.editingElement = element
+    this.editingColumn = column
+    this.editControl.setValue(element[column])
   }
 
-  private toggleColumn(column: string) {
-    console.log(this.displayedColumns.includes(column))
-    if (this.displayedColumns.includes(column)) {
-      const index = this.displayedColumns.indexOf(column);
-      if (index != -1) {
-        this.displayedColumns.splice(index, 1);
-      }
-    } else {
-      this.displayedColumns.push(column);
+  confirmEdit(element: any, column: string) {
+    const newValue = this.editControl.value
+    if (element[column] != newValue) {
+      element[column] = newValue
+
+      const user = new MyUser()
+      user[column] = newValue
+      this.auth.updateUser(user)
+      this.showSnackbar('Successfully edited user')
     }
+    this.cancelEdit();
+  }
+
+  cancelEdit() {
+    this.editingElement = null
+    this.editingColumn = null
   }
 
   isAllSelected() {
@@ -69,24 +82,6 @@ export class TableComponent {
 
   toggleAllRows() {
     this.isAllSelected() ? this.selection.clear() : this.selection.select(...this.dataSource.data)
-  }
-
-  deleteSelected(): void {
-    const length = this.selection.selected.length
-    if (length > 0) {
-      const dialogRef = this.dialog.open(DeleteDialogComponent, {
-        data: { title: 'users', quantity: length }
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.dataSource.data = this.dataSource.data.filter(item => !this.selection.selected.includes(item))
-          this.selection.clear()
-          this.showSnackbar('Successfully deleted ' + length + ' users')
-        }
-      })
-    } else {
-      this.showSnackbar('No users selected')
-    }
   }
 
   private showSnackbar(message: string) {

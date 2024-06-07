@@ -1,0 +1,53 @@
+https://tree.nathanfriend.io
+
+
+administration/
+  adminEmails: string[]
+  modEmails: string[]
+  bannedIps: string[]
+
+users/{id}/
+  id: string
+  email: string
+  password: string
+  username: string
+  phone: string
+  address: string
+  avatarUrl: string
+  cursorUrl: string
+  admin: false
+  mod: false
+  accountCreatedOn: number
+  lastLoginOn: number
+  
+comments/{id}/
+  id: string
+  authorId: string
+  message: string
+  votes: number
+  uidsUpvoted: string[]
+  uidsDownvoted: string[]
+  reports: number
+  uidsReported: string[]
+  isEdited: boolean
+  editedAt: number
+  createdAt: number
+  
+releases/{platform}/
+      latestVersion: number
+      {id}/
+        id: string
+        fileUrl: string
+        changelog: string
+        date: Date
+  
+GameData/{id}/
+   {saveSlotName}/
+     gameName: string
+     isPrivate: boolean
+     time: number
+     deathCount: number
+     levelsUnlocked: number
+     updatedAt: number
+     createdAt: number
+ 

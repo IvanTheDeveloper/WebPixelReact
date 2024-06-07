@@ -13,6 +13,37 @@ export class FormDialogComponent {
   checkoutForm: FormGroup
   latestVersion = 1
 
+  onFileSelect(event: any): void {
+    const file = event.target.files[0]
+    this.checkoutForm.patchValue({ file: file })
+  }
+
+  onFileDrop(event: DragEvent): void {
+    event.preventDefault();
+    const droppedFile = event.dataTransfer?.files[0];
+    if (droppedFile) {
+      this.checkoutForm.patchValue({ file: droppedFile })
+    }
+    this.removeDragData(event);
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    const dropArea = event.currentTarget as HTMLElement;
+    dropArea.classList.add('dragover');
+  }
+
+  onDragLeave(event: DragEvent): void {
+    const dropArea = event.currentTarget as HTMLElement;
+    dropArea.classList.remove('dragover');
+  }
+
+  removeDragData(event: DragEvent): void {
+    if (event.dataTransfer) {
+      event.dataTransfer.clearData();
+    }
+  }
+
   constructor(private formBuilder: FormBuilder, public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { info: any }, private firebaseDB: RealtimeDatabaseService) {
     this.checkoutForm = this.formBuilder.group({
@@ -80,11 +111,5 @@ export class FormDialogComponent {
   cancelClick(): void {
     this.dialogRef.close(false)
   }
-
-  onFileSelected(event: any): void {
-    const file = event.target.files[0]
-    this.checkoutForm.patchValue({ file: file })
-  }
-
 
 }

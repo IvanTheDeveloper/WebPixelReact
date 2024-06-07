@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { routingTable } from 'src/app/app-routing.module';
 import { pwdRegExp } from 'src/app/others/password-rules';
+import { dump } from 'src/app/others/utils';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -37,14 +38,14 @@ export class ResetPasswordComponent {
   onSubmitEmail() {
     this.timeout()
     if (this.email.valid) {
-      this.auth.sendVerificationEmail().then(
+      this.auth.resetPasswordSend(this.email.value).then(
         () => {
           this.step++
           this.openSnackBar('Email sent, check your inbox!')
           this.timeout()
         },
         (error) => {
-          alert(error)
+          dump(error)
         }
       )
     }
@@ -52,7 +53,28 @@ export class ResetPasswordComponent {
 
   onSubmitCode() {
     if (this.code.valid) {
-      this.step++
+      this.code.setValue(this.extractOobCode(this.code.value))
+      dump(this.code.value + ' a')
+      this.auth.resetPasswordCheck(this.code.value, this.password.value).then(
+        () => { dump('fatal error') },
+        (error) => {
+          if (error.code != 'auth/invalid-action-code' && error.code == 'auth/weak-password') {
+            this.step++
+          } else {
+            this.openSnackBar('Wrong code, try again')
+          }
+        }
+      )
+    }
+  }
+
+  private extractOobCode(url: string): string {
+    try {
+      const parsedUrl = new URL(url);
+      const oobCode = parsedUrl.searchParams.get('oobCode');
+      return oobCode ? oobCode : url;
+    } catch (error) {
+      return url;
     }
   }
 
@@ -60,10 +82,12 @@ export class ResetPasswordComponent {
     if (this.code.valid) {
       this.auth.resetPasswordCheck(this.code.value, this.password.value).then(
         () => {
-          this.openSnackBar('Password has been reset!')
+          this.openSnackBar('Password has been reset! Welcome')
+          this.auth.login(this.email.value, this.password.value)
+          this.router.navigate([routingTable.home])
         },
         (error) => {
-          alert(error)
+          dump(error)
         }
       )
     }

@@ -41,8 +41,10 @@ export class AdminComponent {
           }
           this.releasesDB.put(`releases/${resultObj.platform}/${version}`, release).subscribe()
           this.releasesDB.put(`releases/${resultObj.platform}/latestVersion`, resultObj.version).subscribe()
-          this.isUploading = false
-          this.openSnackBar('Uploaded successfully')
+          if (this.isUploading) {
+            this.openSnackBar('Uploaded successfully')
+            this.isUploading = false
+          }
         }).catch((error) => {
           console.log(error)
           this.isUploading = false
@@ -52,10 +54,10 @@ export class AdminComponent {
   }
 
   cancelUpload() {
+    this.openSnackBar('Upload canceled')
     this.task.then(
       (result) => {
         this.storage.deleteFile(result)
-        this.openSnackBar('Upload canceled')
       }
     ).catch((error) => {
       console.log("error: " + error)

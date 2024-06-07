@@ -45,18 +45,23 @@
             <mat-error *ngIf="changelog?.hasError('required')">Required</mat-error>
         </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>{{file?.value ? file?.value.name : 'File'}}</mat-label>
-            <input matInput disabled required>
-            <input #fileInput hidden type="file" (change)="onFileSelected($event)">
-            <button mat-icon-button matSuffix (click)="fileInput.click()">
+        <div class="file-drop-area" (drop)="onFileDrop($event)" (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)">
+
+            <input #fileInput hidden type="file" (change)="onFileSelect($event)">
+
+            <button mat-stroked-button matSuffix (click)="fileInput.click()">
+                <span>Select file</span>
                 <mat-icon>cloud_upload</mat-icon>
             </button>
-        </mat-form-field>
+            <span>Or drag and drop the file here</span>
+            <b *ngIf="file?.value">{{file?.value ? file?.value.name : 'File'}}</b>
+        </div>
 
         <div mat-dialog-actions>
-            <button mat-button (click)="cancelClick()">Cancel</button>
-            <button mat-button [disabled]="!checkoutForm.valid" (click)="onSubmit()">Submit</button>
+            <button mat-raised-button (click)="cancelClick()" color="warn">Cancel</button>
+            <button mat-raised-button [disabled]="!checkoutForm.valid" (click)="onSubmit()"
+                color="primary">Submit</button>
         </div>
 
     </form>

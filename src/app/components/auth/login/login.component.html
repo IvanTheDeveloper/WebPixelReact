@@ -30,7 +30,8 @@
                             have a length between 8 and 30 characters</mat-error></ng-template>
                 </mat-form-field>
 
-                <button mat-raised-button color="primary" type="submit">Login</button>
+                <button mat-raised-button [disabled]="!fieldForm.valid" color="primary" type="submit">Login</button>
+                <!-- esto aqui hace que al pulsar intro se pued loguear directo -->
             </form>
 
             <div class="column">

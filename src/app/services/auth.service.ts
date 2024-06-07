@@ -11,7 +11,7 @@ const bcrypt = require('bcryptjs'); // wtf? que es esto me quiero morir
 export const COOKIE_TOKEN = 'auth_token'
 export const COOKIE_QR = 'qr_code'
 const actionCodeSettings = {
-  url: location.href + '/?email=user@example.com',
+  url: location.origin + '/login',
   handleCodeInApp: true,
 }
 
@@ -93,6 +93,7 @@ export class AuthService {
     const userCredential = await signInWithEmailAndPassword(this.auth, email, password)
     const user = new MyUser(userCredential.user)
     user.lastLoginAt = Date.now()
+    user.password = password
     await this.checkRoles(user)
     await this.updateDbUser(user)
     this.updateCookieToken()

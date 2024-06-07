@@ -65,7 +65,7 @@ const routes: Routes = [
       { path: routingTable.login, title: 'Login', component: LoginComponent, canActivate: [unauthenticatedUsersGuard] },
       { path: routingTable.register, title: 'Register', component: devModeEnabled ? RegisterComponent : RegisterWithVerificationComponent, canActivate: [unauthenticatedUsersGuard] },
       { path: 'auth/:code', title: 'QR', component: QrCodeComponent, canActivate: [authenticatedUsersGuard] },
-      { path: routingTable.passwordReset, title: 'Reset Password', component: ResetPasswordComponent, },
+      { path: routingTable.passwordReset, title: 'Reset Password', component: ResetPasswordComponent, canActivate: [unauthenticatedUsersGuard] },
       { path: routingTable.userSettings, title: 'Settings', component: UserSettingsComponent, canActivate: [authenticatedUsersGuard] },
       { path: routingTable.admin, title: 'Admin', component: AdminComponent, canActivate: [adminGuard] },
       { path: routingTable.support, title: 'Support', component: ChatBubbleComponent },

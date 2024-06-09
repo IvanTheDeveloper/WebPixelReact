@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 
-
-
 @Component({
   selector: 'app-test',
   templateUrl: './test.component.html',
@@ -10,6 +8,12 @@ import { Component } from '@angular/core';
 export class TestComponent {
 
   constructor() { }
+
+  ngOnInit() { }
+
+  ngAfterViewInit() { }
+
+  ngOnDestroy() { }
 
   test() {
     let a: any = 1 //true

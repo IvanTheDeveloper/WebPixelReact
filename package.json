@@ -31,7 +31,6 @@
     "firebase": "^10.8.1",
     "ngx-cookie-service": "^17.1.0",
     "ngx-cookieconsent": "^6.0.0",
-    "ngx-extended-pdf-viewer": "^20.0.1",
     "ngx-mail-sender": "^1.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

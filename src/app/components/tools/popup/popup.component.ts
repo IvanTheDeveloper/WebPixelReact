@@ -9,7 +9,7 @@ export class PopupComponent {
 
   async ngOnInit() {
     for (let index = 0; index < 2; index++) {
-      await this.openPopupWithDelay(`assets/images/popups/${index}.jpg`);
+      await this.openPopupWithDelay(`assets/images/popup/${index}.jpg`);
     }
   }
 
@@ -19,8 +19,8 @@ export class PopupComponent {
       img.src = imageUrl;
 
       img.onload = () => {
-        const popupWidth = img.width * 0.72 / 2;
-        const popupHeight = img.height / 2;
+        const popupWidth = img.width * 0.72;
+        const popupHeight = img.height;
 
         const left = Math.random() * (screen.width - popupWidth);
         const top = Math.random() * (screen.height - popupHeight);

@@ -27,7 +27,7 @@ export class EasterEggComponent {
 
   async easterEgg() {
     this.video = true
-    await new Promise(f => setTimeout(f, 18000))
+    await new Promise(f => setTimeout(f, 4 * 1000))
     this.video = false
   }
 

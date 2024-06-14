@@ -59,8 +59,12 @@
         <mat-icon>info</mat-icon>
         <span>Contact</span>
     </button>
-    <button mat-menu-item (click)="onToggle()">
+    <button mat-menu-item (click)="toggleTheme()">
         <mat-icon>{{darkModeEnabled ? 'light_mode' : 'dark_mode'}}</mat-icon>
         <span>{{darkModeEnabled ? 'Light mode' : 'Dark mode'}}</span>
+    </button>
+    <button mat-menu-item (click)="toggleDevMode()">
+        <mat-icon>{{devModeEnabled ? 'undo' : 'build'}}</mat-icon>
+        <span>{{devModeEnabled ? 'Disable dev mode' : 'Enable dev mode'}}</span>
     </button>
 </mat-menu>

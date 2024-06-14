@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { DevModeService } from 'src/app/services/dev-mode.service';
 
 @Component({
   selector: 'app-main',
@@ -7,12 +9,18 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent {
-  cursorUrl = '../../../assets/pointers/default.png'
+  devModeEnabled = this.devMode.devModeEnabled
+  cursorUrl: string = '../../../assets/pointers/default.png'
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private devMode: DevModeService, private router: Router) { }
 
   ngOnInit() {
     this.delay()
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.devModeEnabled = this.devMode.devModeEnabled
+      }
+    })
   }
 
   private async delay() {

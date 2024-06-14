@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { routingTable } from 'src/app/app-routing.module';
-import { darkModeEnabled } from 'src/app/others/globalProperties';
 import { MatTabNavPanel } from '@angular/material/tabs';
+import { DarkModeService } from 'angular-dark-mode';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -12,16 +13,18 @@ import { MatTabNavPanel } from '@angular/material/tabs';
 })
 export class HeaderComponent {
   routes = routingTable
-  darkMode = darkModeEnabled
+  darkModeEnabled!: boolean
   any: MatTabNavPanel = new MatTabNavPanel()
   userAuthenticated = false
   username: string | null = null
   role: string | null = null
   avatar: string | null = null
 
-  constructor(private auth: AuthService, private router: Router) { }
+  darkMode$: Observable<boolean> = this.darkModeService.darkMode$;
+  constructor(private auth: AuthService, private router: Router, private darkModeService: DarkModeService) { }
 
   ngOnInit() {
+    this.refreshTheme()
     this.delay()
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -44,6 +47,17 @@ export class HeaderComponent {
         this.role = result
       })
     }
+  }
+
+  onToggle() {
+    this.darkModeService.toggle();
+    this.refreshTheme()
+  }
+
+  refreshTheme() {
+    this.darkModeService.darkMode$.subscribe((result) => {
+      this.darkModeEnabled = result
+    })
   }
 
   logout() {

@@ -59,8 +59,8 @@
         <mat-icon>info</mat-icon>
         <span>Contact</span>
     </button>
-    <button mat-menu-item (click)="darkMode = !darkMode">
-        <mat-icon>{{darkMode ? 'light_mode' : 'dark_mode'}}</mat-icon>
-        <span>{{darkMode ? 'Light mode' : 'Dark mode'}}</span>
+    <button mat-menu-item (click)="onToggle()">
+        <mat-icon>{{darkModeEnabled ? 'light_mode' : 'dark_mode'}}</mat-icon>
+        <span>{{darkModeEnabled ? 'Light mode' : 'Dark mode'}}</span>
     </button>
 </mat-menu>

@@ -35,7 +35,8 @@
               "node_modules/cookieconsent/build/cookieconsent.min.css"
             ],
             "scripts": [
-              "node_modules/cookieconsent/build/cookieconsent.min.js"
+              "node_modules/cookieconsent/build/cookieconsent.min.js",
+              "./node_modules/angular-dark-mode/angular-dark-mode.js"
             ]
           },
           "configurations": {
@@ -108,7 +109,8 @@
               "node_modules/cookieconsent/build/cookieconsent.min.css"
             ],
             "scripts": [
-              "node_modules/cookieconsent/build/cookieconsent.min.js"
+              "node_modules/cookieconsent/build/cookieconsent.min.js",
+              "./node_modules/angular-dark-mode/angular-dark-mode.js"
             ]
           }
         }

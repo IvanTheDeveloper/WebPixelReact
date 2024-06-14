@@ -1,12 +1,11 @@
 <!--main.component.html-->
-<app-header></app-header>
-<div class="router-container" ngClass="darkmode">
-    <app-easter-egg></app-easter-egg>
-    <router-outlet></router-outlet>
-</div>
-<app-footer></app-footer>
-<app-dev></app-dev>
 
-<!--
-[ngClass]="{'darkmode': darkmodeEnabled, 'lightmode': !darkmodeEnabled}">
--->
+<div [ngStyle]="{'cursor': 'url(' + cursorUrl + '), auto'}">
+    <app-header></app-header>
+    <div class="router-container">
+        <app-easter-egg></app-easter-egg>
+        <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+    <app-dev></app-dev>
+</div>

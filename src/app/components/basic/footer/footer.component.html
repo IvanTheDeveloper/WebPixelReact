@@ -71,4 +71,37 @@
             width="350" height="200" style="border:0;" allowfullscreen="true" loading="lazy"></iframe>
     </div>
 
+    <div class="column">
+        <h1>Send us an email!</h1>
+
+        <!-- <mat-divider></mat-divider> -->
+
+        <form [formGroup]="fieldForm" (ngSubmit)="sendEmail()">
+
+            <mat-form-field>
+                <mat-label>Your email</mat-label>
+                <input matInput formControlName="email" placeholder="We will reply to this email">
+                <mat-error *ngIf="email?.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="email?.hasError('email')">Invalid email</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Subject</mat-label>
+                <input matInput formControlName="subject" placeholder="Title">
+                <mat-error *ngIf="subject?.hasError('required')">Required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Message</mat-label>
+                <textarea matInput formControlName="message" placeholder="Your issue/suggestion here"></textarea>
+                <mat-error *ngIf="message?.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="message?.hasError('minlength') || message?.hasError('maxlength')">Message must
+                    have a length between 50 and 500 characters</mat-error>
+            </mat-form-field>
+
+            <button mat-raised-button [disabled]="!fieldForm.valid" color="primary" type="submit">Send</button>
+        </form>
+
+    </div>
+
 </footer>

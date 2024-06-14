@@ -13,6 +13,11 @@ mat-divider {
     height: 100%;
 }
 
+form {
+    display: flex;
+    flex-direction: column;
+}
+
 .column {
     display: flex;
     flex: 1;

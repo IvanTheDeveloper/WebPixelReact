@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "ivandevwebsite"
-  }
+  },
+  "targets": {
+    "ivandevwebsite": {
+      "hosting": {
+        "ivandev": [
+          "ivandev"
+        ],
+        "pixel-react-game": [
+          "pixel-react-game"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
